@@ -2,7 +2,8 @@ import os
 import discord
 import traceback
 from discord.ext.commands import has_permissions
-from dislash import SelectMenu, SelectOption    
+from dislash import SelectMenu, SelectOption
+import web        
 #dislash.py
 from discord.ext import commands
 import subprocess
@@ -3043,7 +3044,7 @@ async def add_dev(ctx, user:discord.Member=None):
     else:
         add_Mod(user.id)
         await ctx.send(f"{user} added as a Dev!")  
-import web         
+     
 web.keep_alive()
 client.run(os.environ['token'],reconnect=True)
 
