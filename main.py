@@ -34,9 +34,9 @@ from datetime import datetime, timedelta
 import logging
  
 # Create and configure logger
-logging.basicConfig(filename="logs.txt",
+logging.basicConfig(
                     format='%(asctime)s %(message)s',
-                    filemode='a')
+                    )
  
 # Creating an object
 logger = logging.getLogger()
