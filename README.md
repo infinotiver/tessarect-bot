@@ -10,7 +10,7 @@ Invite : [CLICK !](https://discord.com/api/oauth2/authorize?client_id=9166303477
 
 Support Server: [Join  ! ](https://discord.gg/avpet3NjTE)
 
-<p align="center">
+
   <a href="https://discord.gg/avpet3NjTE">
     <img src="https://discordapp.com/api/guilds/912569937116147772/widget.png?style=shield" alt="Discord Server">
   </a>
@@ -20,7 +20,7 @@ Support Server: [Join  ! ](https://discord.gg/avpet3NjTE)
      <img src="https://img.shields.io/badge/discord-py-blue.svg" alt="discord.py">
   </a>
 
-</p>
+
 
 
   <a href="https://github.com/psf/black">
