@@ -67,13 +67,13 @@ It is my First bot but very advanced and designed for all your needs , from Mode
     <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white">
   </a>
   </p>
+  <h6>Github Stats </h6>
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/prakarsh17/tessarect-bot.svg)](https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE)
 
 [![Stargazers over time](https://starchart.cc/prakarsh17/tessarect-bot.svg)](https://starchart.cc/prakarsh17/tessarect-bot)
 
-[![Contributor over time](https://contributor-overtime-api.apiseven.com/contributors-svg?chart=contributorOverTime&repo=prakarsh17/tessarect-bot)](https://www.apiseven.com/en/contributor-graph?chart=contributorOverTime&repo=prakarsh17/tessarect-bot)
 # Features
 - [x] Economy Bot
 - [x] Utility Commands
