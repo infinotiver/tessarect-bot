@@ -9,6 +9,7 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 Invite : [CLICK !](https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands)
 
 Support Server: [Join  ! ](https://discord.gg/avpet3NjTE)
+
 <p align="center">
 
   <a href="https://discord.gg/avpet3NjTE">
@@ -27,10 +28,42 @@ Support Server: [Join  ! ](https://discord.gg/avpet3NjTE)
   <a href="http://makeapullrequest.com">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg">
   </a>
+  <br>
+  </p>
+  <h4> Services Used In the Project</h4>
+  <p align="center">
   <a href="https://www.mongodb.com/">
     <img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white">
   </a>
-</p>
+  <a href="https:wikipedia.org">
+    <img src="https://img.shields.io/badge/Wikipedia-%23000000.svg?style=for-the-badge&logo=wikipedia&logoColor=white">
+  </a>
+  <a href="https:wikipedia.org">
+    <img src="https://img.shields.io/badge/Repl.it-%230D101E.svg?style=for-the-badge&logo=replit&logoColor=white">
+  </a>
+  <a href="#">
+    <img src="https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white">
+  </a>
+  <a href="#">
+    <img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54">
+  </a>
+  <a href="#">
+    <img src="https://img.shields.io/badge/Spotify-1ED760?style=for-the-badge&logo=spotify&logoColor=white">
+  </a>
+  <a href="google.com">
+    <img src="https://img.shields.io/badge/google-4285F4?style=for-the-badge&logo=google&logoColor=white">
+  </a>
+  <a href="https://discord.gg/avpet3NjTE">
+    <img src="https://img.shields.io/badge/%3CTessarect Official%3E-%237289DA.svg?style=for-the-badge&logo=discord&logoColor=white">
+  </a>
+  <h6>Operating Systems </h6>
+  <a href="#">
+    <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black">
+  </a>
+  <a href="#">
+    <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white">
+  </a>
+  </p>
 
 # Features
 - [x] Economy Bot
