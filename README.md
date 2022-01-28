@@ -38,5 +38,10 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 | [`level`](./cogs/level.py) | Levelling Sytem 🥇|
 | [`Loan`](./cogs/loan.py) | 💰 Take Loans |
 | [`Logging`](./cogs/logging.py) | 📜Keep and Eye on your member's activity |
+| [`Lottery`](./cogs/lottery.py) | Another Economy Plugins for buying lottery tickets when there is an event  |
+| [`Madlibs`](./cogs/madlibs.py) | PLay and Test|
+| [`Mod`](./cogs/mod.py) | 🔨 Moderators Commands ( New and under development )|
+| [`Music`](./cogs/music.py) | 🎶 Listen to some Music Dude|
+| [`Much MORE`](./cogs) | 10 + Cogs in the cogs Folder |
 ###### And Much more cogs hidden for making your experience Better Note : All cogs arent Listed here go to the cogs folder to see all the cogs
 
