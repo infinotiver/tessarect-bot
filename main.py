@@ -4,7 +4,7 @@ import traceback
 from discord.ext.commands import has_permissions
 from dislash import SelectMenu, SelectOption
 import web        
-#dislash.py
+#dislash.py 
 from discord.ext import commands
 import subprocess
 import requests, urllib, re
@@ -2377,6 +2377,15 @@ async def chat(ctx,msg):
   source = json.loads(page.content)
   res = source["response"]  
   await ctx.send(res)
+@client.command()
+@commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
+async def fact(ctx): 
+
+  page = requests.get(f'https://api.eriner.repl.co/fun/uselessfact')
+  source = json.loads(page.content)
+  ft = source["fact"] 
+  em=discord.Embed(title="A Fact...",description=ft,color=discord.Colr.random())
+  await ctx.send(embed=em)
 @client.command(help="Shows info about a color by its hex")
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
 async def colorhex(ctx,hex): 
