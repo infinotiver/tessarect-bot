@@ -9,9 +9,7 @@ from dislash import SelectMenu, SelectOption
 from discord.ext import commands
 import subprocess
 import requests, urllib, re
-
 import praw 
-
 import pyjokes
 import json
 from dislash import InteractionClient, ActionRow, Button, ButtonStyle
@@ -740,7 +738,7 @@ async def google(ctx, *, query):
 @has_permissions(administrator=True)
 async def dm(ctx,member: discord.User, *, text):
   try:
-    em = discord.Embed(title=(f"Direct Message via Tessarect (Formely Tessarect (Formely Amteor)) DM Services . Sent by  {ctx.author.display_name} in  {ctx.message.guild.name}"), description=(text), color=discord.Color.blue())
+    em = discord.Embed(title=(f"Direct Message via Tessarect  DM Services . Sent by  {ctx.author.display_name} in  {ctx.message.guild.name}"), description=(text), color=discord.Color.blue())
     
     channel=await member.create_dm()
     await channel.send(embed = em) 
