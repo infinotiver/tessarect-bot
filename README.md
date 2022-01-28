@@ -56,6 +56,8 @@ Support Server: [Join  ! ](https://discord.gg/avpet3NjTE)
   <a href="https://discord.gg/avpet3NjTE">
     <img src="https://img.shields.io/badge/%3CTessarect Official%3E-%237289DA.svg?style=for-the-badge&logo=discord&logoColor=white">
   </a>
+
+
   <h6>Operating Systems </h6>
   <a href="#">
     <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black">
@@ -64,6 +66,12 @@ Support Server: [Join  ! ](https://discord.gg/avpet3NjTE)
     <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white">
   </a>
   </p>
+
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+[![GitHub license](https://img.shields.io/github/license/prakarsh17/tessarect-bot.svg)](https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE)
+
+[![Stargazers over time](https://starchart.cc/prakarsh17/tessarect-bot.svg)](https://starchart.cc/prakarsh17/tessarect-bot)
+
 
 # Features
 - [x] Economy Bot
