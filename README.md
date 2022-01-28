@@ -6,9 +6,10 @@ ___
 # TESSARECT 
 It is my First bot but very advanced and designed for all your needs , from Moderation to cool Economy Features .
 
-Invite : [CLICK !](https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands)
-
-Support Server: [Join  ! ](https://discord.gg/avpet3NjTE)
+| Link Name | Link |
+|----|-----|
+|Invite | [CLICK !](https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands) |
+| Support Server | [Join  ! ](https://discord.gg/avpet3NjTE) |
 
 <p align="center">
 
@@ -72,7 +73,7 @@ Support Server: [Join  ! ](https://discord.gg/avpet3NjTE)
 
 [![Stargazers over time](https://starchart.cc/prakarsh17/tessarect-bot.svg)](https://starchart.cc/prakarsh17/tessarect-bot)
 
-
+[![Contributor over time](https://contributor-overtime-api.apiseven.com/contributors-svg?chart=contributorOverTime&repo=prakarsh17/tessarect-bot)](https://www.apiseven.com/en/contributor-graph?chart=contributorOverTime&repo=prakarsh17/tessarect-bot)
 # Features
 - [x] Economy Bot
 - [x] Utility Commands
