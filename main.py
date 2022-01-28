@@ -1,8 +1,6 @@
 import os
 import discord
 import traceback
-
-
 from discord.ext.commands import has_permissions
 from dislash import SelectMenu, SelectOption    
 #dislash.py
@@ -16,7 +14,6 @@ from dislash import InteractionClient, ActionRow, Button, ButtonStyle
 import time
 import asyncio 
 import jishaku
-
 #from load import  printProgressBar, printProgressBar2
 import googletrans
 
