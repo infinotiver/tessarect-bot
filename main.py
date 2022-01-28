@@ -2384,7 +2384,7 @@ async def fact(ctx):
   page = requests.get(f'https://api.eriner.repl.co/fun/uselessfact')
   source = json.loads(page.content)
   ft = source["fact"] 
-  em=discord.Embed(title="A Fact...",description=ft,color=discord.Colr.random())
+  em=discord.Embed(title="A Fact...",description=ft,color=discord.Color.random())
   await ctx.send(embed=em)
 @client.command(help="Shows info about a color by its hex")
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
@@ -2397,8 +2397,9 @@ async def colorhex(ctx,hex):
   name = source["name"]
   clean =source["clean"]
   img = source["image"]
-
-  emb = discord.Embed(title=name,description=f"Hex {hexx}")
+  c = f"0x{clean}"
+  print(c)
+  emb = discord.Embed(title=name,description=f"Hex: {hexx}")
   emb.add_field(name="rgb",value=rgb,inline=False)
   emb.add_field(name="Clean Hex",value=clean)
   emb.set_thumbnail(url=img)
