@@ -31,7 +31,7 @@ It is my First bot but very advanced and designed for all your needs , from Mode
   </a>
   <br>
   </p>
-  <h4> Services Used In the Project</h4>
+  <h6> Services Used In the Project</h6>
   <p align="center">
   <a href="https://www.mongodb.com/">
     <img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white">
@@ -118,4 +118,9 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 | [`Music`](./cogs/music.py) | 🎶 Listen to some Music Dude|
 | [`Much MORE`](./cogs) | 10 + Cogs in the cogs Folder |
 ###### And Much more cogs hidden for making your experience Better Note : All cogs arent Listed here go to the cogs folder to see all the cogs
+## Contributors
 
+###### People who made Tessarect Possible 
+  <a href="https://github.com/prakarsh17/tessarect-bot">
+    <img src="https://contrib.rocks/image?repo=prakarsh17/tessarect-bot">
+  </a>
