@@ -16,7 +16,7 @@ import asyncio
 import jishaku
 #from load import  printProgressBar, printProgressBar2
 import googletrans
-
+import sys
 import sys
 try:
 
@@ -27,12 +27,10 @@ except:
 import motor.motor_asyncio
 #import nest_asyncio
 #import datetime
-
+import socket   
 from datetime import datetime, timedelta
 # Create a translator object
 #from discord_slash import SlashCommand, SlashContext
-
-# importing module
 import logging
  
 # Create and configure logger
@@ -2570,7 +2568,7 @@ async def verify(ctx):
     image = ImageCaptcha(width = 280, height = 90)
     captcha_text = str(random.randint(20000,300000))
     ## importing socket module
-    import socket    
+ 
     host_name = socket.gethostname()    
     IPAddress = socket.gethostbyname(host_name)    
     print("Your Computer Name is:" + host_name)    
@@ -2653,37 +2651,7 @@ async def search(ctx):
             await ctx.send('Bruh')    
     except asyncio.TimeoutError:
         await ctx.send('Dumbass you ran out of time')
-  
-'''from discord import ui
-class Buttons(discord.ui.View):
-    def __init__(self, *, timeout=180):
-        super().__init__(timeout=timeout)
-    @discord.ui.button(label="Blurple Button",style=discord.ButtonStyle.blurple,emoji="🎁") # or .primary
-    async def blurple_button(self,button:discord.ui.Button,interaction:discord.Interaction):
-        button.disabled=True
-        await interaction.response.edit_message(view=self)
-    @discord.ui.button(label="Gray Button",style=discord.ButtonStyle.gray,emoji="\U0001f974") # or .secondary/.grey
-    async def gray_button(self,button:discord.ui.Button,interaction:discord.Interaction):
-        button.disabled=True
-        await interaction.response.edit_message(view=self)
-    @discord.ui.button(label="Green Button",style=discord.ButtonStyle.green,emoji="<:FD_pepeyay:878854266012438549>") # or .success
-    async def green_button(self,button:discord.ui.Button,interaction:discord.Interaction):
-        button.disabled=True
-        await interaction.response.edit_message(view=self)
-    @discord.ui.button(label="Red Button",style=discord.ButtonStyle.red,emoji="<a:PomRun:869781523971317811>") # or .danger
-    async def red_button(self,button:discord.ui.Button,interaction:discord.Interaction):
-        button.disabled=True
-        await interaction.response.edit_message(view=self)
-
-@client.command()
-async def button(ctx):
-    view=Buttons()
-    view.add_item(discord.ui.Button(label="URL Button",style=discord.ButtonStyle.link,url="https://github.com/lykn",emoji="<a:kannaWink:909791444661850132>"))
-    await ctx.send("This message has buttons!",view=view)
-'''
-         
-
-
+ 
 
 # Responds to commands
 @client.command(pass_context=True)
@@ -2861,7 +2829,7 @@ async def nasa( ctx):
       #jsonFile = open("./api/nasa_used.json", "w")
       #jsonFile.write(jsonString)
       #jsonFile.close()
-import sys
+
 def restart_bot(): 
   os.execv(sys.executable, ['python'] + sys.argv)
 @client.command()
