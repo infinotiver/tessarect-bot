@@ -37,13 +37,15 @@ class Dev(commands.Cog):
             "discord": discord,
             "commands": commands,
             "bot": ctx.bot,
+            "client":ctx.bot,
             "__import__": __import__
         }
         if "bot.http.token" in code or "client.http.token" in code:
             return await ctx.send(f"You can't take my token , huh {ctx.author.name}")
+        code = code.replace("```py", "")
+        code = code.replace("```", "")
         splitcode = []
-        
-        for line in code.splitlines():
+        for line in code.splitlines():            
             splitcode.append(line)
         
         try:
