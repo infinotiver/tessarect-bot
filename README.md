@@ -9,7 +9,7 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 Invite : [CLICK !](https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands)
 
 Support Server: [Join  ! ](https://discord.gg/avpet3NjTE)
-
+<p align="center">
 
   <a href="https://discord.gg/avpet3NjTE">
     <img src="https://discordapp.com/api/guilds/912569937116147772/widget.png?style=shield" alt="Discord Server">
@@ -23,13 +23,13 @@ Support Server: [Join  ! ](https://discord.gg/avpet3NjTE)
 
 
 
-  <a href="https://github.com/psf/black">
-    <img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code Style: Black">
-  </a>
+
   <a href="http://makeapullrequest.com">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg">
   </a>
-
+  <a href="https://www.mongodb.com/">
+    <img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white">
+  </a>
 </p>
 
 # Features
