@@ -147,7 +147,7 @@ class Spotify(commands.Cog, description="A category for viewing information rela
             name, artist_id, artist_url, picture, genres, followers = search_artist(str(search_term))
         except ValueError:
             return await ctx.send(f"Oops! Looks like **{search_term}** doesn't exist in Spotify's database!")
-        embed = discord.Embed(title=f"Found artist - {name}", color=(ctx.author))
+        embed = discord.Embed(title=f"Found artist - {name}", color=get_color(ctx.author))
         embed.description = "__**Genres**__\n" + ", ".join(genres)
         embed.add_field(name="Spotify URL", value=f"__[Link]({artist_url})__", inline=True)
         embed.add_field(name="Followers", value=followers, inline=True)
@@ -206,7 +206,7 @@ class Spotify(commands.Cog, description="A category for viewing information rela
             return await ctx.send(f"Uh-oh! Looks like **{artist_name}** doesn't exist in Spotify's database!")
         top_result_text = f"Top Result: __[{top_artist.get('name')}]({top_artist.get('url')})__"
         embed = discord.Embed(title=f"Results for {artist_name}", description=top_result_text,
-                              color=get_color(ctx.author))
+                              color=discord.Color.random())
 
         result_text = ""
         n = 0  # count number of artists

@@ -38,6 +38,7 @@ import logging
 # Create and configure logger
 logging.basicConfig(
                     format='%(asctime)s %(message)s',
+                    
                     )
  
 # Creating an object

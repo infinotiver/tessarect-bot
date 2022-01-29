@@ -4,6 +4,7 @@ from dislash import InteractionClient, ActionRow, Button, ButtonStyle
 from discord.ext import commands
 from discord.ext.commands import BucketType, cooldown
 import datetime
+from datetime import timedelta 
 x = datetime.datetime.now()
 
 
@@ -14,8 +15,8 @@ class Suggestion(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print("Suggestion cog loaded successfully")
-        em = discord.Embed(title ="Monitor Up",description=f"Tessarect Monitor Up At(GMT) ",color =discord.Color.blue())
-        em.add_field(name="Time",value=x.strftime("%X"))
+        em = discord.Embed(title ="Monitor Up",description=f"Tessarect Monitor Up At(GMT+ 5:30) ",color =discord.Color.blue())
+        em.add_field(name="Time",value=datetime.datetime.now()+timedelta(hours=5,minutes=30))
         channel = self.client.get_channel(929333501101215794)
 
         await channel.send(embed=em)
