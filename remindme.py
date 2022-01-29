@@ -8,12 +8,16 @@ from discord.ext import commands
 from discord.ext.commands import BucketType, cooldown
 import motor.motor_asyncio
 import nest_asyncio
+try:
+  import apscheduler
+except:
+  os.system('pip install apscheduler')
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 
 nest_asyncio.apply()
 
-import os
+
 
 mongo_url = os.environ['remindmongo']
 cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)

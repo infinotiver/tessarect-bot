@@ -136,13 +136,13 @@ for filename in os.listdir("./cogs"):
 @client.event
 async def on_ready():
     #DiscordComponents(client) 
-    print(f'{client.user} - Tessarect (Formerly Amteor) has connected to Discord! Enjoy ')  
+    print(f'{client.user} - Tessarect  has connected to Discord! Enjoy ')  
 
     await client.change_presence(
 
             activity=discord.Activity(
-                type=discord.ActivityType.listening,
-                name= f"8.0"
+                type=discord.ActivityType.watching,
+                name= f"👀{len(client.users)} users on {len(client.guilds)} servers"
             ))
 
 
