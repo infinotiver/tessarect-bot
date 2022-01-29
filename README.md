@@ -121,9 +121,9 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 | [`Music`](./cogs/music.py) | 🎶 Listen to some Music Dude|
 | [`Much MORE`](./cogs) | 10 + Cogs in the cogs Folder |
 ###### And Much more cogs hidden for making your experience Better Note : All cogs arent Listed here go to the cogs folder to see all the cogs
-# Wanna Like Making Tessarect Better ?
-###### Contribute now to tessarect see 
-[This](CONTRIBUTE.md)
+### Wanna Like Making Tessarect Better ?
+###### Contribute now to tessarect see  👇🏻
+[Contributing Guide](CONTRIBUTE.md)
 ## Contributors
 
 ###### People who made Tessarect Possible 
