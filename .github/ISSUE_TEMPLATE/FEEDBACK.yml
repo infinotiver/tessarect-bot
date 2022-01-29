@@ -47,12 +47,7 @@ body:
         - Utility
         - Ticket Sys
         - Other than these
-  - type: Hows our New Feature of Tickets 
-    id: logs
-    attributes:
-      label: Add your experience
-     
- 
+
   - type: checkboxes
     id: check
     attributes:
