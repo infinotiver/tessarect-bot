@@ -1,7 +1,7 @@
 
 # TESSARECT 
 
-                 ![Tessarect Logo](Tessarect.png "Tessarect Logo")
+ ![Tessarect Logo](Tessarect.png "Tessarect Logo")
 
 TESSARECT  A Powerful Bot you'll ever need for anything
 ___
