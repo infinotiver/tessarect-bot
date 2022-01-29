@@ -1,15 +1,18 @@
-# Tessarect 
+
+# TESSARECT 
+
+![Tessarect Logo](Tessarect.png "Tessarect Logo")
 
 TESSARECT  A Powerful Bot you'll ever need for anything
 ___
-![Tessarect Logo](Tessarect.png "Tessarect Logo")
-# TESSARECT 
 It is my First bot but very advanced and designed for all your needs , from Moderation to cool Economy Features .
 
+
 | Link Name | Link |
-|----|-----|
+|:---|        ---:|
 |Invite | [CLICK !](https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands) |
 | Support Server | [Join  ! ](https://discord.gg/avpet3NjTE) |
+
 
 <p align="center">
 

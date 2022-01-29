@@ -8,21 +8,16 @@ from discord.ext import commands
 from discord.ext.commands import BucketType, cooldown
 import motor.motor_asyncio
 import nest_asyncio
-import subprocess
-import sys
-try:
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-  from apscheduler.schedulers.asyncio import AsyncIOScheduler
-except:
-  subprocess.check_call([sys.executable, '-m', 'pip', 'install','apscheduler'])
 
 nest_asyncio.apply()
 
+import os
 
-
-mongo_url = 'mongodb+srv://prakarsh17:Prakarsh_262@remindercog.yjf1z.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+mongo_url = os.environ['remindmongo']
 cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
-rem = cluster["bot"]["reminder"]
+rem = cluster["discord"]["reminder"]
 
 class Reminder(commands.Cog):
     """ Reminder cog """
@@ -54,7 +49,7 @@ class Reminder(commands.Cog):
         fT = cT + datetime.timedelta(seconds=t)
 
         stats = await rem.find_one({"id": ctx.author.id})
-        embed = discord.Embed(title="Reminder", description=f"\u200b", color=0x1a1aff)
+        embed = discord.Embed(title="Reminder", description=f"\u200b", color=0x00ff00)
         if stats is None:
             await rem.insert_one({'id' : ctx.author.id, 'reminders' : [{'time' : fT, 'message' : message}]})
             embed = discord.Embed(title="Reminder", description=f"{ctx.author.mention} will be reminded at {fT.strftime('%d/%m/%Y %H:%M:%S')}", color=0xff0000)
@@ -64,7 +59,7 @@ class Reminder(commands.Cog):
             return await ctx.send("You have reached the maximum amount of reminders")
         
         await rem.update_one({"id": ctx.author.id}, {"$push": {"reminders": {'time' : fT, 'message' : message}}})
-        embed = discord.Embed(title="Reminder", description=f"{ctx.author.mention} will be reminded at {fT.strftime('%d/%m/%Y %H:%M:%S')}", color=0x007f)
+        embed = discord.Embed(title="Reminder", description=f"{ctx.author.mention} will be reminded at {fT.strftime('%d/%m/%Y %H:%M:%S')}", color=0xff0000)
         await ctx.send(embed=embed)
 
     @commands.command(name='reminders', aliases=['reminds'])
@@ -74,7 +69,7 @@ class Reminder(commands.Cog):
         stats = await rem.find_one({"id": ctx.author.id})
         if stats is None:
             return await ctx.send("You have no reminders")
-        embed = discord.Embed(title="Reminders", description=f"\u200b", color=0xc8ffff)
+        embed = discord.Embed(title="Reminders", description=f"\u200b", color=0xff0000)
         if len(stats['reminders']) == 0:
             return await ctx.send("You have no reminders")
         for i in stats['reminders']:

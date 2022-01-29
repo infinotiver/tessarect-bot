@@ -12,6 +12,7 @@ import praw
 import pyjokes
 import json
 from dislash import InteractionClient, ActionRow, Button, ButtonStyle
+from dislash import ContextMenuInteraction
 import time
 import asyncio 
 import jishaku
@@ -2170,7 +2171,7 @@ inter_client = InteractionClient(client)
 @inter_client.slash_command(description="Test command")
 async def test(inter):
     await inter.reply("Test")
-from dislash import Option, OptionType, ContextMenuInteraction
+
 
 @inter_client.slash_command(
     description="Shows the avatar of the user",
