@@ -1,0 +1,63 @@
+name: Feedback Report
+description: Send your feedback
+title: "[⭐]: "
+labels: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feedback report!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com or your discord id SniperXi199#2209
+    validations:
+      required: false
+  - type: textarea
+    id: Your experience 
+    attributes:
+      label: Overall
+      description: Overall Experience
+      placeholder: Tell your whole out we love to hear it
+      value: "Great things etc"
+    validations:
+      required: true
+  - type: dropdown
+    id: ss
+    attributes:
+      label: In Support server ?
+      description: Are you in our Support server
+      options:
+        - Yes
+        - No
+    validations:
+      required: true
+  - type: dropdown
+    id: fav
+    attributes:
+      label: Favourite Features
+      multiple: true
+      options:
+        - Economy
+        - Moderation
+        - Fun
+        - Utility
+        - Ticket Sys
+        - Other than these
+  - type: Hows our New Feature of Tickets 
+    id: logs
+    attributes:
+      label: Add your experience
+     
+ 
+  - type: checkboxes
+    id: check
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
