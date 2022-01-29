@@ -21,7 +21,7 @@ body:
     attributes:
       label: Overall
       description: Overall Experience
-      placeholder: Tell your whole out we love to hear it
+      placeholder: T"ell your whole out we love to hear it"
       value: "Great things etc"
     validations:
       required: true
@@ -31,8 +31,8 @@ body:
       label: In Support server ?
       description: Are you in our Support server
       options:
-        - Yes
-        - No
+        - "Yes"
+        - "No"
     validations:
       required: true
   - type: dropdown
