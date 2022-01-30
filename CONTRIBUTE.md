@@ -19,7 +19,7 @@ To Report any bug or please open a new issue in the [issues](https://github.com/
 To Suggest any Enhancement use discussion page ( github )or use [p]suggest in your server
 ## Contribute by solving issues or adding new features 😇
 
-To contribute firstly fork this repo (GitHub account needed) and then clone this repository using `git clone` or any other method you perfer.
+To contribute firstly fork this repo (GitHub account needed) and then clone this repository using `git clone` or any other method you perfer you can also submit a pull request , we will review it and give you credit for your contribution too !
 
 find if there are any [issues](https://github.com/prakarsh17/tessarect-bot/issues) that you would like to resolve and get started coding, or get started coding the feature you would like to add.
 
