@@ -1,7 +1,13 @@
 
-# TESSARECT 
+#  ESSARECT 
 
- ![Tessarect Logo](Tessarect.png "Tessarect Logo")
+
+<p align="center">
+
+  <a href="https://discord.gg/avpet3NjTE">
+    <img src="https://raw.githubusercontent.com/prakarsh17/tessarect-bot/main/Tessarect.png" alt="Tessarect Logo">
+  </a>
+</p>
 
 TESSARECT  A Powerful Bot you'll ever need for anything
 ___

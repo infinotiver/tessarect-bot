@@ -83,7 +83,8 @@ def get_prefix(client, message):
         print("Not ok")
         return 'a!' 
 #-----------------------------------------------------------------------------------------------------------------------
-
+import aiohttp
+import warnings
 from discord.ext.commands import AutoShardedBot
 #from pretty_help import DefaultMenu, PrettyHelp
 
@@ -124,7 +125,11 @@ from discord.ext import  tasks
 
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
-        client.load_extension(f"cogs.{filename[:-3]}")
+        try:
+
+          client.load_extension(f"cogs.{filename[:-3]}")
+        except Exception as e:
+          print(f"{filename} - {traceback.print_exc()}") 
 
 
 
@@ -158,110 +163,8 @@ async def translate(ctx, lang, *, thing):
 
 status= cycle([" a!help in {n}  servers ",'Tessarect (Formely Tessarect (Formely Amteor)) BOT','Try my New Economy Bots','Try me new leveling sys by using<prefix>level','Wanna advertise your server go to my repo(<prefix>src) and go to the discussions and make a topic in Website category details are there'.format(n=len(client.guilds))])
 er = 0xFF0000
-'''
-@client.event
-async def on_command_error(ctx, error): 
-    if hasattr(ctx.command, "on_error"):
-      return
-    #test
-    if isinstance(error, commands.MissingRequiredArgument):
-      embed=discord.Embed(title="ERROR", description=f"""```diff
--You are missing an argument
-Correct Usage - 
-{ctx.prefix}{ctx.command.name} {ctx.command.signature}
-```""", color=er)
-      embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/922468797108080660.png")
-      await ctx.send(embed= embed)
-    elif isinstance(error, commands.CommandNotFound):
-      x = ctx.message.content
-      print(f"""
-    
-███╗░░██╗░█████╗░████████╗  ███████╗░█████╗░██╗░░░██╗███╗░░██╗██████╗░
-████╗░██║██╔══██╗╚══██╔══╝  ██╔════╝██╔══██╗██║░░░██║████╗░██║██╔══██╗
-██╔██╗██║██║░░██║░░░██║░░░  █████╗░░██║░░██║██║░░░██║██╔██╗██║██║░░██║
-██║╚████║██║░░██║░░░██║░░░  ██╔══╝░░██║░░██║██║░░░██║██║╚████║██║░░██║
-██║░╚███║╚█████╔╝░░░██║░░░  ██║░░░░░╚█████╔╝╚██████╔╝██║░╚███║██████╔╝
-╚═╝░░╚══╝░╚════╝░░░░╚═╝░░░  ╚═╝░░░░░░╚════╝░░╚═════╝░╚═╝░░╚══╝╚═════╝░\nCommand Name {x}  ```""")
-
-    elif isinstance(error, MissingPermissions):
-      embed=discord.Embed(title="ERROR", description=f"""```diff
-- {error}
-```""", color=er)
-      embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/922468797108080660.png")
-      await ctx.send(embed= embed)
-    elif isinstance(error , commands.CommandOnCooldown):
-      embed=discord.Embed(title="Whoa Slow It Down", description=f"Command On Cooldown. Hold your horses . Wait  **{display_time(error.retry_after)}** Seconds", color=0x303236)
-
-      await ctx.send(embed= embed)  
-    elif isinstance(error, discord.errors.Forbidden):
-        try:
-            embed = discord.Embed(
-                title="Forbidden",
-                description=f"Error - 403 - Forbidden | Missing perms",
-                color=0xFF0000,
-            )
-            await ctx.send(embed=embed)
-        except:
-            print("Failed forbidden")
-        return      
-    elif isinstance(error, commands.BotMissingPermissions):
-        missing = [
-            perm.replace("_", " ").replace("guild", "server").title()
-            for perm in error.missing_perms
-        ]
-        if len(missing) > 2:
-            fmt = "{}, and {}".format("**, **".join(missing[:-1]), missing[-1])
-        else:
-            fmt = " and ".join(missing)
-
-        embed = discord.Embed(
-            title="Missing Permissions",
-            description=f"I am missing **{fmt}** permissions to run this command :(",
-            color=0xFF0000,
-        )
-        return   
-    elif isinstance(error, commands.CheckFailure):
-        embed = discord.Embed(
-            title="Permissions Not Satisfied",
-            description=f"You do not have permissions to use this command",
-            color=0xFF0000,
-        )          
-    elif isinstance(error,commands.BadArgument):
-
-      embed=discord.Embed(title="Incorrect Argument ", description=f"You have entered a incorrect/Bad Argument\n{error}", color=er)
-      embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/922468797108080660.png")
-      await ctx.send(embed= embed)   
-    elif isinstance(error, commands.MaxConcurrencyReached):
-        await ctx.send('{} Bot is busy! Please retry after some time'.format(ctx.author.mention))
-        return
-    elif isinstance(error, commands.errors.NSFWChannelRequired):
-      embed=discord.Embed(title="Whoa , No nsfw here", description=f"NSFW CHANNELS ONLY \n{error}", color=er)
-      embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/922468797108080660.png")     
-    elif isinstance(error, commands.CheckFailure):
-        embed = discord.Embed(
-            title="Permissions Not Satisfied",
-            description=f"You do not have permissions to use this command",
-            color=0xFF0000,
-        )
-        await ctx.send(embed=embed)
-        return
 
 
-
-    else:
-        erx = discord.Embed(title="An Error Occured",description=f"""```diff
--{error}
-```""")
-        await ctx.send(embed=erx)
-        print(error)
-    print("Ignoring exception in command {}:".format(ctx.command), file=sys.stderr)
-
-    traceback.print_exception(
-        type(error), error, error.__traceback__, file=sys.stderr
-    )
-'''
-import aiohttp
-import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 client.session = aiohttp.ClientSession()
 client.load_extension('jishaku')
@@ -601,8 +504,8 @@ async def on_member_join(member):
     
     channel = client.get_channel(wel[str(member.guild.id)])
     if not channel:
-      return print('not set ')
-    embed = discord.Embed(colour=discord.Colour.green())
+      return print('not set')
+    embed = discord.Embed(colour=discord.Colour.blue())
     req = PreparedRequest()
     req.prepare_url(
         url='https://api.xzusfin.repl.co/card?',
@@ -611,13 +514,14 @@ async def on_member_join(member):
             'middle': 'Welcome ',
             'name': str(member.name),
             'bottom': str('to  ' + member.guild.name),
-            'text': '#3333ff',
-            'avatarborder': '#3333ff',
+            'text': '#120A8F',
+            'avatarborder': '#34363A',
             'avatarbackground': 'https://replit.com/@AyushSehrawat/Prakash#bg.png',
-            'background': 'https://images4.alphacoders.com/936/thumbbig-936378.webp' #or image url
+            'background': '0x0437F2' #or image url
         }
     )
     embed.set_image(url=req.url)
+    print(req.url)
     await channel.send(embed=embed)    
 
 
