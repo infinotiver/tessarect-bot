@@ -16,11 +16,16 @@ ___
 It is my First bot but very advanced and designed for all your needs , from Moderation to cool Economy Features .
 
 
-| Link Name | Link |
-|:-:   |    :-:|
-|Invite | [CLICK !](https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands) |
-| Support Server | [Join  ! ](https://discord.gg/avpet3NjTE) |
 
+<p align="center">
+  <a href="#tessarect">Top</a>
+  •
+  <a href="https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands">Invite</a>
+  •
+  <a href="https://discord.gg/avpet3NjTE">Support Server</a>
+  •
+  <a href="https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE">License</a>
+</p>
 
 
 <p align="center">
