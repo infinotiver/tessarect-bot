@@ -11,7 +11,9 @@
   </a>
 </p>
 
-TESSARECT  A Powerful Bot you'll ever need for anything
+```ini
+[                                             TESSARECT - A Powerful Bot you'll ever need for anything                                              ]
+```
 ___
 It is my First bot but very advanced and designed for all your needs , from Moderation to cool Economy Features .
 
