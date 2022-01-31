@@ -17,9 +17,10 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 
 
 | Link Name | Link |
-|:---|        ---:|
+|:-:   |    :-:|
 |Invite | [CLICK !](https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands) |
 | Support Server | [Join  ! ](https://discord.gg/avpet3NjTE) |
+
 
 
 <p align="center">
@@ -71,6 +72,7 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 
 
   <h6 align="center">Operating Systems </h6>
+  <p align="center">
   <a href="#">
     <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black">
   </a>
@@ -135,7 +137,7 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 [Contributing Guide](CONTRIBUTE.md)
 ## Contributors
 
-###### People who made Tessarect Possible 
+###### People who made Tessarect Possible  (bots too !)
   <a href="https://github.com/prakarsh17/tessarect-bot">
     <img src="https://contrib.rocks/image?repo=prakarsh17/tessarect-bot">
   </a>
