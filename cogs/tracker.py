@@ -19,12 +19,24 @@ class invite_tracker(commands.Cog):
     """
     def __init__(self, bot):
         self.bot = bot
-        self.logs_channel = 929343543024177152
-        self.version = "8.0.0"
+
 
         self.invites = {}
         bot.loop.create_task(self.load())
+        with open("storage/invite_channels.json", "r") as modlogsFile:
+            self.modlogsFile = json.load(modlogsFile)
 
+    @commands.command(name="invitelogschannel",
+
+                      description="Sets the channel in which edited/deleted message logs are sent.")
+    @commands.has_permissions(administrator=True)
+    async def set_modlogs_channel(self, ctx, channel: discord.TextChannel):
+        channel_id = channel.id
+        self.modlogsFile[str(ctx.guild.id)] = int(channel_id)
+        with open("storage/invite_channels.json", "w") as modlogsFile:
+            json.dump(self.modlogsFile, modlogsFile, indent=4)
+        await ctx.send(f"Invited Logs channel set as {channel.mention} succesfully. "
+                       f"Invites , Server Joins will be shown here")
     async def load(self):
         await self.bot.wait_until_ready()
         # load the invites
@@ -41,7 +53,13 @@ class invite_tracker(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        logs = self.bot.get_channel(int(self.logs_channel))
+        message_channel_id = self.modlogsFile.get(str(member.guild.id))
+        if message_channel_id is None:
+            return
+        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        if message_channel is None:
+            return
+
         eme = Embed(description=f"Just joined  {member.guild}", color=0x03d692, title=" ")
         eme.set_author(name=str(member), icon_url=member.avatar_url)
         eme.set_footer(text="ID: " + str(member.id))
@@ -56,11 +74,16 @@ class invite_tracker(commands.Cog):
                                   value=f"Inviter: {invite.inviter.mention} (`{invite.inviter}` | `{str(invite.inviter.id)}`)\nCode: `{invite.code}`\nUses: ` {str(invite.uses)} `", inline=False)
         except:
             pass
-        await logs.send(embed=eme)
+        await message_channel.send(embed=eme)
 
     @commands.Cog.listener()
     async def on_member_remove(self, member,ctx):
-        logs = self.bot.get_channel(int(self.logs_channel))
+        message_channel_id = self.modlogsFile.get(str(member.guild.id))
+        if message_channel_id is None:
+            return
+        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        if message_channel is None:
+            return
         eme = Embed(description="Just left the server", color=0xff0000, title=self.ctx.guild)
         eme.set_author(name=str(member), icon_url=member.avatar_url)
         eme.set_footer(text="ID: " + str(member.id))
@@ -75,7 +98,7 @@ class invite_tracker(commands.Cog):
                                   value=f"Inviter: {invite.inviter.mention} (`{invite.inviter}` | `{str(invite.inviter.id)}`)\nCode: `{invite.code}`\nUses: ` {str(invite.uses)} `", inline=False)
         except:
             pass
-        await logs.send(embed=eme)
+        await message_channel.send(embed=eme)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):

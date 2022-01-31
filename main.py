@@ -150,7 +150,16 @@ async def on_ready():
                 type=discord.ActivityType.watching,
                 name= f"👀{len(client.users)} users on {len(client.guilds)} servers"
             ))
+    update_s.start()
+@tasks.loop(seconds=10)
+async def update_s():
 
+  await client.change_presence(
+
+        activity=discord.Activity(
+            type=discord.ActivityType.watching,
+            name= f"👀{len(client.users)} users on {len(client.guilds)} servers"
+        ))
 
 from googletrans import Translator
 
@@ -218,7 +227,7 @@ async def changeprefix(ctx, prefix): #command: a!changeprefix ...
     await ctx.send(f'Prefix changed to: {prefix}')
     #test #confirms the prefix it's been changed to
 #next step completely optional: changes bot nickname to also have prefix in the nickname
-    name=f'{prefix}Tessarect (Formely Tessarect (Formely Amteor))'
+    name=f'{prefix}Tessarect '
     await client.change_presence(
 
             activity=discord.Activity(
@@ -245,7 +254,7 @@ async def on_guild_join(guild): #when the bot joins the guild
 
 
 names =['Spencer M. McKnight','Saul D. Burgess','Ghiyath Haddad Shadid','Ramzi Muta Hakimi','Callum Peel','Joao Barbosa Pinto','Bertram Hoving','Cian Reith','Mat Twofoot''Alexander Achen''Rohan ','Manish Nadela']   
-tips=['Have you used our leveling system? Try <prefix>level<user(optional> to check out','Want your server on our website? use command <prefix>web for details','We have added daily command which gives you some money per day once or if you are so lucky then even twice or thrice . Depends','Have you ever robbed someone?']     
+tips=['Have you used our leveling system? Try <prefix>level<user(optional)> to check out','We have added daily command which gives you some money per day once ','Have you ever robbed someone?','Try new Ticket System']     
     
 @client.command(hidden=True)
 @commands.is_owner()

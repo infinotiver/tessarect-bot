@@ -49,7 +49,7 @@ class ReactionRoles(commands.Cog):
         emote,
         role: discord.Role,
         channel: discord.TextChannel,
-        title,
+        title,*,
         message:str,
     ):
         embed = discord.Embed(title=title, description=message)
