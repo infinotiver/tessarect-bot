@@ -42,7 +42,7 @@ It is my First bot but very advanced and designed for all your needs , from Mode
   </a>
   <br>
   </p>
-  <h6> Services Used In the Project</h6>
+  <h6 align="center"> Services Used In the Project</h6>
   <p align="center">
   <a href="https://www.mongodb.com/">
     <img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white">
@@ -70,7 +70,7 @@ It is my First bot but very advanced and designed for all your needs , from Mode
   </a>
 
 
-  <h6>Operating Systems </h6>
+  <h6 align="center">Operating Systems </h6>
   <a href="#">
     <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black">
   </a>
@@ -78,7 +78,7 @@ It is my First bot but very advanced and designed for all your needs , from Mode
     <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white">
   </a>
   </p>
-  <h6>Github Stats </h6>
+  <h6 align="center">Github Stats </h6>
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/prakarsh17/tessarect-bot.svg)](https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE)
@@ -86,7 +86,8 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 
 [![Stargazers over time](https://starchart.cc/prakarsh17/tessarect-bot.svg)](https://starchart.cc/prakarsh17/tessarect-bot)
 
-<h6> Some More Badges....</h6>
+<h6 align="center"> Some More Badges....</h6>
+
 
 [![ForTheBadge powered-by-electricity](http://ForTheBadge.com/images/badges/powered-by-electricity.svg)](http://ForTheBadge.com)
 [![ForTheBadge makes-people-smile](http://ForTheBadge.com/images/badges/makes-people-smile.svg)](http://ForTheBadge.com)
