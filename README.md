@@ -7,12 +7,12 @@
 <p align="center">
 
   <a href="https://discord.gg/avpet3NjTE">
-    <img src="https://raw.githubusercontent.com/prakarsh17/tessarect-bot/main/Tessarect.png" alt="Tessarect Logo">
+    <img src="https://raw.githubusercontent.com/prakarsh17/tessarect-bot/main/Tessarect%20New%20Final.png" alt="Tessarect Logo">
   </a>
 </p>
 
-```ini
-[                                             TESSARECT - A Powerful Bot you'll ever need for anything                                              ]
+```yml
+TESSARECT - A Powerful Bot you'll ever need for anything                           
 ```
 ___
 It is my First bot but very advanced and designed for all your needs , from Moderation to cool Economy Features .
