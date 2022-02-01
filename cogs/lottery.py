@@ -17,14 +17,16 @@ class Lottery(commands.Cog):
     @commands.group(invoke_without_command=True)
     async def lottery(self, ctx):
         '''Lottery help command'''
-        message = ("__**Lottery Commands**__\n"
-                   "__*Captain+ Commands*__\n"
+        em = discord.Embed(title="__**Lottery Commands**__",description="\n"
+                   "__*Developers+ Commands*__\n"
                    "**lottery end**\n"
                    "**lottery confirm** (Discord) (Tickets Purchased)\n"
                    "**lottery start** (cost per ticket) (end date) (end time)\n"
                     "__*Everyone*__\n"
                     "**lottery buy** (IGN(YOUR ID)) (# of tickets you want to buy)")
-        await ctx.send(message)
+        em.set_thumbnail(url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxNZetVc2eE3g0PgekaiOF_4pRHzAnkhN5FQ&usqp=CAU")
+        await ctx.send(embed=em)
+        
 
     @commands.has_any_role(perms.captain_role, perms.owner_role)
     @lottery.command()

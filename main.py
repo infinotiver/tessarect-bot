@@ -100,7 +100,7 @@ except:
 
 intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=2,
-    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD client YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Plugins",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=False))
+    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD     BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Plugins",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=False))
 #inter_client = InteractionClient(client)
 m = '֍'
 #slashx = SlashCommand(client)
@@ -483,7 +483,7 @@ async def links(ctx):
   #e = discord.Embed()
 def getmeme(topic): # Topic/Subreddit name
     reddit = praw.Reddit(client_id=os.environ['client_id'],
-                    client_secret=os.environ['client-secret'],
+                    client_secret=os.environ['meme'],
                     user_agent='meme') # Initializing details
 
     submission = reddit.subreddit(topic).random() #finding a random post in the given subreddit
@@ -2364,7 +2364,7 @@ async def bot( ctx):
     )
     embed.add_field(
         name="<:planet:930351400532201532>  Website",
-        value="Under Development",
+        value="https://tessarect-website.prakarsh17-coder.repl.co/",
     )
     embed.add_field(
         name="🚀 Made By", value="SniperXi199#2209"
@@ -2391,24 +2391,23 @@ async def stats(ctx):
     values23 = values22 * 0.001
     values24 = values23 * 0.001
     dpyVersion = discord.__version__
-    em=discord.Embed(title="Stats",description="Stats")
-    em.add_field(name="Library", value=f"discord.py")
-    em.add_field(name="Bot Latency", value=f"{client.ws.latency * 1000:.0f} ms")
-    #em.add_field(name="Status Page", value=f"https://stats.uptimerobot.com/GA8lYTBq86")
-    em.add_field(name="Version", value=f"·=»‡«=· 7.9.0·=»‡«=· ",inline=False)  
-    em.add_field(name='Channels', value=f"{sum(1 for g in client.guilds for _ in g.channels)}")
-    em.add_field(name='Total Members', value=client.users,inline=True)  
-    em.add_field(name='Hosting Stats', value=f'Cpu usage- {psutil.cpu_percent(1)}%'
-                          f'\n(Actual Cpu Usage May Differ)'
-                          f'\n'
+    em=discord.Embed(title="Stats",description=f"Stats\n **Channels** - {sum(1 for g in client.guilds for _ in g.channels)}\n **Users** -{len(client.users)}")
 
+
+    #em.add_field(name="Status Page", value=f"https://stats.uptimerobot.com/GA8lYTBq86")
+
+    #em.add_field(name='Channels', value=f"{sum(1 for g in client.guilds for _ in g.channels)}")
+    #em.add_field(name='Total Members', value=client.users,inline=True)  
+    em.add_field(name='Hosting Stats', value=f'<:CPU:937722162897375282> Cpu usage- {psutil.cpu_percent(1)}%'
+                          f'\n(Actual Cpu Usage May Differ)'
                           f'\nNumber OF Cores - {psutil.cpu_count()} '
                           f'\nNumber of Physical Cores- {psutil.cpu_count(logical=False)}'
                           f'\n'
 
-                          f'\nTotal ram- {round(values24, 2)} GB'
-                          f'\nAvailable Ram - {round(val4, 2)} GB',inline=False)
-    em.set_footer(text="Support https://discord.gg/avpet3NjTE  ")  
+                          f'\n<:blurple_settings:937722489004515418> Total ram- \n`{round(values24, 2)}` GB'
+                          f'\nAvailable Ram - \n `{round(val4, 2)}` GB',inline=False)
+    #em.set_footer(text="Support https://discord.gg/avpet3NjTE ")
+    em.set_image(url="https://images-ext-1.discordapp.net/external/Ff0M1fQmxVUh01eQUxP3gW1Igtcg0fFxH33-3dFBPJU/https/media.discordapp.net/attachments/912038870147801159/934147618957844612/Line.gif?format=png")  
     await ctx.send(embed=em)
 @client.command()
 async def goal(ctx):
@@ -2420,7 +2419,7 @@ async def goal(ctx):
             url='https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands'
         )
     )    '''
-  goal = 50
+  goal = 25
   currentg = len(client.guilds)
   em = discord.Embed(title="Bot Server Goal",description=f" Current Count {currentg}/{goal}",color=discord.Color.blue())
   em.set_footer(text="Kindly be kind enough to invite me in a server and contribute")
@@ -2579,24 +2578,7 @@ async def search(ctx):
         await ctx.send('Dumbass you ran out of time')
  
 
-# Responds to commands
-@client.command(pass_context=True)
-async def hypesquad(ctx, user: discord.Member):
-    # Remove unnecessary characters
-    hypesquad_class = str(user.public_flags.all()).replace('[<UserFlags.', '').replace('>]', '').replace('_',
-                                                                                                         ' ').replace(
-        ':', '').title()
 
-    # Remove digits from string
-    hypesquad_class = ''.join([i for i in hypesquad_class if not i.isdigit()])
-
-    # Output
-    test = discord.Embed(title=f"{user.name} User's Badges", description=f"{hypesquad_class}", color=0xff0000)
-    await ctx.channel.send(embed=test)
-with open('text files/badwords.txt', 'r') as f:
-    global filter
-    words = f.read()
-    filter = words.split()
 
 
 
@@ -2661,7 +2643,7 @@ async def report( ctx, user : discord.Member, *reason):
 @client.command() 
 async def features(ctx):
 
-    contents = ["AMTEOR FEATURES",""""**Economy Bot**\n
+    contents = ["TESSARECT FEATURES",""""**Economy Bot**\n
 Supports various economy commands like balance , send , rob to make the server more interactive""",
 """**Moderator Commands\n**
 Moderation using bot , use Mute , kick ban etc""",
@@ -2759,7 +2741,7 @@ async def nasa( ctx):
 def restart_bot(): 
   os.execv(sys.executable, ['python'] + sys.argv)
 @client.command()
-async def readfile(ctx,file):
+async def readfile(ctx,*,file):
 
   with open(file) as f:
 
