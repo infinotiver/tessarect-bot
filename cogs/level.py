@@ -6,7 +6,7 @@ try:
 except:
   subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'vacefron.py'])
 import os
-
+import random
 import discord
 import motor.motor_asyncio
 import nest_asyncio
@@ -57,7 +57,7 @@ class Levelsys(commands.Cog):
                         levelling.insert_one(newuser)
 
                     else:
-                        xp = stats["xp"] + 5
+                        xp = stats["xp"] + random.randrange(1,10)
                         levelling.update_one(
                             {"id": message.author.id}, {"$set": {"xp": xp}}
                         )
@@ -80,7 +80,7 @@ class Levelsys(commands.Cog):
             pass
 
     @commands.command(aliases=["xp", "r"], description="Shows your xp and global rank")
-    async def rank(self, ctx,user:discord.Member=None):
+    async def rank(self, ctx,user:discord.Member=None,):
         if user ==None:
           user = ctx.author
         stats2 = await isitenabled.find_one({"id": ctx.guild.id})
@@ -175,14 +175,15 @@ class Levelsys(commands.Cog):
                             current_xp = xp,
                             next_level_xp = int(200* ((1/2)*lvl)),  # you will need calculate this according the current_xp.
                             previous_level_xp = 0,  # you will need calculate this according the current_xp.
-                            #custom_background = str(user_rank["background"]),  # optional custom background.
-                            #xp_color = '34363A',  # optional progress bar color. Defaults to #fcba41. 
+                            custom_background = 'https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/footer-bg.jpg',  # optional custom background.
+                            xp_color = '7FFFD4',  # optional progress bar color. Defaults to #fcba41. 
                             #is_boosting = ,  # optional server boost icon next to username.
-                            circle_avatar = True  # optional circle avatar instead of a square.
+                            circle_avatar = False  # optional circle avatar instead of a square.
                             )
                 rank_image = discord.File(fp = await gen_card.read(), filename = f"{user.name}_rank.png")
-                
-                await ctx.channel.send(embed=embed,file = rank_image)              
+                await ctx.channel.send(file = rank_image) 
+                #if embed:
+                  #await ctx.channel.send(embed=embed)              
         else:
             await ctx.send("**Levelling is disabled here**")
 

@@ -2738,6 +2738,39 @@ async def nasa( ctx):
       #jsonFile.write(jsonString)
       #jsonFile.close()
 
+@client.command()
+async def wolf(ctx, *, question):
+    out = get_answer1(question)
+    await ctx.reply(embed=out[0], file=out[1])
+
+def get_answer1(question=""):
+    if question == "":
+        embed = discord.Embed(
+            title="Oops",
+            description="You need to enter a question",
+
+        )
+        embed.set_thumbnail(url=client.user.avatar_url_as(format="png"))
+        return (embed, None)
+    else:
+        question = urllib.parse.quote(question)
+        a = requests.get(
+            f"http://api.wolframalpha.com/v1/simple?appid={os.environ['wolf']}&i={question}&layout=labelbar&width=1500&fontsize=20"
+        ).content
+        file = open("output.png", "wb")
+        file.write(a)
+        file.close()
+        embed = discord.Embed(
+            title="Wolfram",
+            description="This result is from Wolfram",
+
+        )
+        embed.set_thumbnail(
+            url="https://www.wolfram.com/homepage/img/carousel-wolfram-alpha.png"
+        )
+        file = discord.File("output.png")
+        embed.set_image(url="attachment://output.png")
+        return (embed, file)
 def restart_bot(): 
   os.execv(sys.executable, ['python'] + sys.argv)
 @client.command()

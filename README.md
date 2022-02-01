@@ -7,13 +7,10 @@
 <p align="center">
 
   <a href="https://discord.gg/avpet3NjTE">
-    <img src="https://raw.githubusercontent.com/prakarsh17/tessarect-bot/main/Tessarect%20New%20Final.png" alt="Tessarect Logo">
+    <img src="https://raw.githubusercontent.com/prakarsh17/tessarect-bot/main/Tessarect%20New%20Final.jpg" height=200 width=200 alt="Tessarect Logo">
   </a>
 </p>
 
-```yml
-TESSARECT - A Powerful Bot you'll ever need for anything                           
-```
 ___
 It is my First bot but very advanced and designed for all your needs , from Moderation to cool Economy Features .
 
@@ -141,7 +138,7 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 ###### And Much more cogs hidden for making your experience Better Note : All cogs arent Listed here go to the cogs folder to see all the cogs
 ### Wanna Like Making Tessarect Better ?
 ###### Contribute now to tessarect see  👇🏻
-[Contributing Guide](CONTRIBUTE.md)
+[Contributing Guide](CONTRIBUTING.md)
 ## Contributors
 
 ###### People who made Tessarect Possible  (bots too !)
