@@ -2745,7 +2745,13 @@ async def restart(ctx):
 '''
 
 
+@client.command()
+async def embed(ctx, *, content: str):
+    title, description, footer = content.split('|')
+    embed = discord.Embed(title=title, description=description, color=0x72d345)
+    embed.set_footer(text=footer)
 
+    await ctx.send(embed=embed)
 def replace_chars(stri):
     stri2 = ""
     for char in stri:
