@@ -1,30 +1,34 @@
 import os
+with open("requirements.txt") as file:
+    os.system(f"pip3 install {' '.join(file.read().split())}")
+import time
 import discord
 import traceback
-from discord.ext.commands import has_permissions
-from dislash import SelectMenu, SelectOption
+from dislash import SelectMenu
 import web        
 #dislash.py 
 from discord.ext import commands
 import subprocess
 import requests, urllib, re
-import praw 
+#import praw 
 import pyjokes
 import json
 from dislash import InteractionClient, ActionRow, Button, ButtonStyle
 from dislash import ContextMenuInteraction
-import time
 import asyncio 
 import jishaku
 #from load import  printProgressBar, printProgressBar2
 import googletrans
+#needed googletrans 's  alpha version
 import sys
-import sys
+
 try:
 
   import DiscordUtils
 except:
-  subprocess.check_call([sys.executable, '-m', 'pip', 'install','DiscordUtils' ])
+  os.system( 'pip install DiscordUtils')
+
+
 #from replit import db
 import motor.motor_asyncio
 #import nest_asyncio
@@ -36,9 +40,9 @@ from datetime import datetime, timedelta
 import logging
  
 # Create and configure logger
-logging.basicConfig(
+logging.basicConfig(filename="logs.txt",
                     format='%(asctime)s %(message)s',
-                    
+                    filemode="w"
                     )
  
 # Creating an object
@@ -48,7 +52,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
  
 import urllib.request
-from dislash import InteractionClient, Option, OptionType
+from dislash import  Option, OptionType
 import typing
 import random
 from PIL import Image
@@ -97,11 +101,11 @@ try:
   from pretty_help import PrettyHelp
 except:
   subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'discord_pretty_help'])
-
+#import dnspython
 intents = discord.Intents.all()
-client =AutoShardedBot(shard_count=2,
-    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD     BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Plugins",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=False))
-#inter_client = InteractionClient(client)
+client =AutoShardedBot(shard_count=5,
+    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD     BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Plugins",color=0x34363A,no_category="Base Commands",sort_commandsdef=False,show_index=False))
+inter_client = InteractionClient(client, test_guilds=[912569937116147772])
 m = '֍'
 #slashx = SlashCommand(client)
 
@@ -151,7 +155,7 @@ async def on_ready():
                 name= f"👀{len(client.users)} users on {len(client.guilds)} servers"
             ))
     update_s.start()
-@tasks.loop(seconds=10)
+@tasks.loop(hours=1)
 async def update_s():
 
   await client.change_presence(
@@ -213,7 +217,7 @@ async def on_guild_remove(guild): #when the bot is removed from the guild
             ))
         
 @client.command(pass_context=True)
-@has_permissions(administrator=True)
+@commands.has_permissions(administrator=True)
 async def changeprefix(ctx, prefix): #command: a!changeprefix ...
     #test
     with open('prefixes.json', 'r') as f:
@@ -468,7 +472,7 @@ async def hello(ctx):
   #test 
   em = discord.Embed(title="Hi", description=f"Hi , Bonjour , Namaste 🙏  {ctx.author.mention}", color=discord.Color.green())
   em.set_image(url="https://media2.giphy.com/media/SbKNFpFZEumGTkgPgA/giphy.gif?cid=ecf05e47bhxa7graukqo2r3o6o83x9a3wja60ym4y9rmud4o&rid=giphy.gif&ct=g")
-
+#no errors ok to move on checked 2nd error nothing useful 
   await ctx.channel.send(embed = em)
 #embed=discord.Embed(title="Here you go",description="Here are the important links you must have",color=discord.Color.random())
 @client.command(aliases=['support server','githubrepo','src','invite'])
@@ -492,7 +496,7 @@ ser = []
 
 from requests import PreparedRequest
 @client.command(pass_context=True)
-@has_permissions(administrator=True) #ensure that only administrators can use this command
+@commands.has_permissions(administrator=True) #ensure that only administrators can use this command
 async def setwelcomechannel(ctx,channel:discord.TextChannel): 
     with open('storage/welcome.json', 'r') as f:
         wel = json.load(f)
@@ -512,7 +516,7 @@ async def on_member_join(member):
         wel = json.load(f)  
     
     channel = client.get_channel(wel[str(member.guild.id)])
-    if not channel:
+    if channel==None:
       return print('not set')
     embed = discord.Embed(colour=discord.Colour.blue())
     req = PreparedRequest()
@@ -596,32 +600,6 @@ async def pyjoke(ctx):
     em = discord.Embed(title="Joke", description=jk,color=discord.Color.red())
     
     await ctx.send(embed = em)
-@client.command(name='hp99', description="Sings Harry Potter in 99 Seconds ",hidden=True)
-@commands.cooldown(1,99,commands.BucketType.guild)
-async def hp99(ctx):
-  await ctx.send("THERE ONCE WAS A BOY NAMED HARRY DESTINED TO BE A STAR HIS PARENTS WERE KILLED BY VOLDEMORT WHO GAVE HIM HIS LIGHTNING SCAR YO HARRY YER A WIZARD DOODOODOODOODOODOODOODOODOODOOODOODOODOODOODOODOO HARRY GOES TO HOGWARTS HE MEETS RON AND HERMIONE MCGONAGALL REQUIRES THAT HE PLAYS FOR GRYFFINDOR DRACO IS A DADDY'S BOY QUIRRELL BECOMES UNEMPLOYED AND THE SORCERER'S STONE IS DESTROYED BY DUMBLEDORE")
-  await ctx.send("RON BREAKS HIS WAND NOW GINNY'S GONE AND HARRY'S IN MORTAL DANGER TOM RIDDLE HIDES HIS SNAKE INSIDE HIS GINORMOUS SECRET CHAMBER")
-  await ctx.send("HARRY BLOWS UP AUNT MARGE THE DEMENTORS COME AND TAKE CHARGE LUPIN IS A WOLF THE RAT'S A MAN AND NOW THE PRISONER IS AT LARGE THEY USE TIME TRAVEL SO THEY CAN SAVE THE PRISONER OF AZKABAN WHO JUST SO HAPPENS TO BE HARRY'S GODFATHER I DON'T REALLY GET IT EITHER")
-  await ctx.send("HARRY GETS PUT INTO THE TRIWIZARD TOURNAMENT DRAGONS AND MERMAIDS OH NO EDWARD CULLEN GETS SLAYED HE'S BACK")
-  await ctx.send("HARRY HARRY ITS GETTING SCARY VOLDEMORT'S BACK YOU'REA REVOLUTIONARY HARRY DUMBLEDORE DUMBLEDORE WHY IS HE IGNORING YOUR CONSTANT ATTEMPTS TO CONTACT HIM HE IS FORCED TO LEAVE THE SCHOOL UMBRIDGE ARRIVES DRACO'S A TOOL KIDS BREAK INTO THE MINISTRY AND SIRIUS BLACK IS DEAD AS CAN BE OHHHHHH")
-  await ctx.send("SPLIT YOUR SOUL SEVEN PARTS OF A WHOLE THEY'RE HORCRUXES IT'S DUMBELDORE'S END DOODOODOODOODOODOODOO")
-  await ctx.send("THERE ONCE WAS A BOY NAMED HARRY WHO CONSTANTLY CONQUERED DEATH BUT IN ONE FINAL DUEL BETWEEN GOOD AND BAD HE MAY TAKE HIS FINAL BREATH...")
-
-
-#+never
-@client.command(name='never', description="Sings Never Gonna Give you Up by Rick Astley",hidden=True)
-@commands.cooldown(1,212, commands.BucketType.guild)
-async def never(ctx):
-  await ctx.send(("We're no strangers to love You know the rules and so do I A full commitment's what I'm thinking of You wouldn't get this from any other guy").upper())
-  await ctx.send(("I just wanna tell you how I'm feeling Gotta make you understand").upper())
-  await ctx.send(("Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you").upper())
-  await ctx.send(("We've known each other for so long Your heart's been aching, but you're too shy to say it Inside, we both know what's been going on We know the game, and we're gonna play it").upper())
-  await ctx.send(("And if you ask me how I'm feeling Don't tell me you're too blind to see").upper())
-  await ctx.send(("Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you").upper())
-  await ctx.send(("Ooh (Give you up) Ooh-ooh (Give you up) Ooh-ooh Never gonna give, never gonna give (Give you up) Ooh-ooh Never gonna give, never gonna give (Give you up)").upper())
-  await ctx.send(("We've known each other for so long Your heart's been aching, but you're too shy to say it Inside, we both know what's been going on We know the game, and we're gonna play it").upper())
-  await ctx.send(("I just wanna tell you how I'm feeling Gotta make you understand").upper())
-  await ctx.send(("Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you").upper())
 
 
 
@@ -646,7 +624,7 @@ async def google(ctx, *, query):
  
 
 @client.command()
-@has_permissions(administrator=True)
+@commands.has_permissions(administrator=True)
 async def dm(ctx,member: discord.User, *, text):
   try:
     em = discord.Embed(title=(f"Direct Message via Tessarect  DM Services . Sent by  {ctx.author.display_name} in  {ctx.message.guild.name}"), description=(text), color=discord.Color.blue())
@@ -761,7 +739,7 @@ mainshop = [{"name":"Watch","price":100,"description":"Watch Time","emoji":'<a:w
             {"name":"Ink","price":220,"description":"Scrible ","emoji":"",'com':' Common'}]
 
 weapons=[{"name":"Phasing_Bow","price":100000000000000,"short":"his flexible bow is made from the chitinous legs of a phase spider and retains some of its ethereal properties. ","description":"This flexible bow is made from the chitinous legs of a phase spider and retains some of its ethereal properties. The bow has 5 charges and regains all expended charges daily at dawn. When you make a ranged attack roll with this magic bow, you can expend 1 of its charges to cause the arrow to slip partially into the Ethereal Plane. When you do, the target of the attack gains no benefit from cover, including total cover, as long as the cover isn't made of lead or more than 1 foot thick. If you hit, the target takes an extra 2d6 force damage. Any effect that blocks travel through the Ethereal Plane also blocks the arrow. Alternatively, you can speak the bow's command word as a bonus action to expend 3 of its charges and fire an arrow at a point you can see within the weapon's normal range. When the arrow hits a solid surface, you vanish from your location and reappear in an unoccupied space nearest to that point.**Oh, you're not getting away that easily.**","emoji":"",'com':'Epic Rare'},
-{"name":"Pride_Armor","price":100000000000000,"short":"This well-crafted leather armor comes with a sturdy, enveloping longcoat, bearing on its back the insignia of a well-known pirate captain","description":"This well-crafted leather armor comes with a sturdy, enveloping longcoat, bearing on its back the insignia of a well-known pirate captain. When you attune to it, the insignia changes to one that represents you instead. While wearing this armor, climbing and swimming don't cost you extra movement, and you can breathe underwater. In addition, you can use a bonus action to shift into a watery, elemental form, gaining the following benefits for the duration: Your speed increases by 10 feet. You have resistance to bludgeoning, piercing, and slashing damage from nonmagical attacks, as well as resistance to acid damage. You have advantage on ability checks to avoid or escape being grappled or restrained. If you’re already grappled or restrained when shift into this form, you automatically escape. While you’re underwater, Wisdom (Perception) checks made to see you have disadvantage. This form lasts as long as you concentrate (as if concentrating on a spell), to a maximum of 1 minute. Once this property of the armor has been used, it can’t be used again until the next dawn","emoji":"",'com':'Epic Rare'}]
+{"name":"Pride_Armor","price":100000000000000,"short":"This well-crafted leather armor comes with a sturdy, enveloping longcoat, bearing on its back the insignia of a well-known pirate captain","description":"This well-crafted leather armor comes with a sturdy, enveloping longcoat, bearing on its back the insignia of a well-known pirate captain. When you attune to it, the insignia changes to one that represents you instead. While wearing this armor, climbing and swimming don't cost you extra movement, and you can breathe underwater.Use this for protecting yourself from Robs etc","emoji":"",'com':'Epic Rare'}]
 
 bundles=[{"name":"DiplomatPack","items":"Includes a chest, 2 cases for maps and scrolls, a set of fine clothes, a bottle of ink, an ink pen, a lamp, 2 flasks of oil, 5 sheets of paper, a vial of perfume, sealing wax, and soap.**","emoji":"",'com':' lEGENDARY ePic',"price":12000}]
 with open("mainbank.json") as file:
@@ -796,11 +774,44 @@ async def balance(ctx ,user: discord.Member = None):
   em.add_field(name='Bank Balance',value=f'֍{bank_amt:,}')
   em.add_field(name='Terrabux',value=f"<a:Diamond:930350459020017694> {bal['terrabux']}",inline=False)
   em.set_thumbnail(url=user.avatar_url)
-  tot = bank_amt+wallet_amt
-  em.set_footer(text=f"🤨 {wallet_amt+bank_amt}")    
+  tot = bank_amt+wallet_amt+(bal['terrabux']*10)
+  em.set_footer(text=f"🤨 {tot}")    
   msg=await ctx.send(embed= em)
 
+@inter_client.slash_command(
+    description="Shows the balance of user",
+    options=[
+        Option("user", "Enter the user", OptionType.USER)
+        # By default, Option is optional
+        # Pass required=True to make it a required arg
+    ]
+)
+async def balance(inter, user=None):
+    # If user is None, set it to inter.author
+  user = user or inter.author
+    # We are guaranteed to receive a discord.User object,
+    # because we specified the option type as Type.USER
+  bal = await ecomoney.find_one({"id": user.id})
+  if bal is None:
+      await open_ter(user.id)
+      bal = await ecomoney.find_one({"id": user.id})
+  #test
+  await open_account(user)
 
+
+  users = await get_bank_data()
+
+  wallet_amt = users[str(user.id)]["wallet"]
+
+  bank_amt = users[str(user.id)]["bank"]
+  em = discord.Embed(title=f'{user.name} Balance',color = 0x0437F2,timestamp=ctx.message.created_at)
+  em.add_field(name="Wallet Balance", value=f'֍{wallet_amt:,}')
+  em.add_field(name='Bank Balance',value=f'֍{bank_amt:,}')
+  em.add_field(name='Terrabux',value=f"<a:Diamond:930350459020017694> {bal['terrabux']}",inline=False)
+  em.set_thumbnail(url=user.avatar_url)
+  tot = bank_amt+wallet_amt+(bal['terrabux']*10)
+  em.set_footer(text=f"🤨 {tot}")    
+  msg=await ctx.send(embed= em)
 import string    
 hacking_status = ['breaching mainframe', 'accessing CPU pins', 'a couple gigabytes of RAM','Accessing Ip adress ','Getting Os info']
 osd = ['unkown windows','windows 11','unknown linux','mac','arch','calinix','windows xp','andriod 2','andriod 12','A poor os ']
@@ -1323,7 +1334,16 @@ async def rob(ctx,member : discord.Member):
       await ctx.send(f"You got caught while robbing {member} , and u payed them {earningd}.BE more pro next time :/")      
 
     return
-  
+
+
+  users = await get_bank_data()
+  bag = users[str(member.id)].get("bag")
+
+
+  if bag:
+      if any(element['item'] == 'pride_armor' and element['amount'] > 0
+            for element in bag): 
+              return await ctx.send(f'You tried to rob **{member}**, but they had a **Pride_Armor**🛡. Try again next time.')
   await open_account(ctx.author)
   await open_account(member)
   bal = await update_bank(member)
@@ -1447,7 +1467,7 @@ async def shop(ctx):
         desc = item["short"]
         emoji=item["emoji"]
         com=item["com"]           
-        em2.add_field(name = f'{emoji} {name}', value = f" \n {desc}\nRarity : {com}",inline=False)
+        em2.add_field(name = f'{emoji} {name} - {price:,}', value = f" \n {desc}\nRarity : {com}",inline=False)
     em3=discord.Embed(title="Bundles",description="Some bundles you cant buy")
 
 
@@ -1761,7 +1781,7 @@ async def globallb(ctx,x = 10):
 
 # command to clear channel messages
 @client.command(hidden=True)
-@has_permissions(manage_messages=True)
+@commands.has_permissions(manage_messages=True)
 async def clear(ctx, amount=5):
     #test
     await ctx.channel.purge(limit=amount)
@@ -2081,7 +2101,7 @@ async def pickpocket(ctx):
     @on_click.timeout
     async def on_timeout():
         await msg.edit(components=[])
-inter_client = InteractionClient(client)
+
 @inter_client.slash_command(description="Test command")
 async def test(inter):
     await inter.reply("Test")
@@ -2117,42 +2137,6 @@ async def reverse(inter: ContextMenuInteraction):
         # Here we will explain that the message isn't valid
         await inter.respond("There's no content", ephemeral=True)
 
-@client.group(invoke_without_command=True)
-async def helpx(ctx):
-    e = discord.Embed(title="Tessarect (Formely Tessarect (Formely Amteor)) Help",description="Here is a help for you ",color = 0x011D4F)
-    e.add_field(name = "Utility",value ="Many useful commands s")
-    e.add_field(name = "Moderation",value ="Many useful commands for managing your server like kick and warn")
-    e.add_field(name = "Economy Commands",value ="Many interesting economy commands like rob ,bal or send")
-
-    e.add_field(name = "Basic",value ="Some Basic Commands")
-    e.add_field(name = "Fun Commands🎈",value ="Many interesting fun commands like 8ball ,ascii")
-    e.add_field(name = "Music",value ="Listen to some music yay!")
-    e.add_field(name = "Suggest",value ="Have an Idea on how we can imprve? use this command")  
-    e.add_field(name = "Level",value ="Use Leveling Sys")
-    e.add_field(name = "Others",value ="Other Commands that arent from any category")
-    e.add_field(name = "Browsing",value ="Browse without leaving discord")
-    e.add_field(name = "Information",value ="For Information by the Developers")
-    e.set_footer(text="You can type help<category> for more help on a category")
-    await ctx.send(embed =e)
-@helpx.command()
-async def utility(ctx):
-  await ctx.send('this command is under progress kindly use help command till updates')
-@helpx.command()
-async def basic(ctx):
-  await ctx.send('this command is under progress kindly use help command till updates')
-'''
-@client.command()
-async def ping(ctx):
-    if round(client.latency * 1000) <= 50:
-        embed=discord.Embed(title="PING", description=f":ping_pong: Pingpingpingpingping! The ping is **{round(client.latency *1000)}** milliseconds!", color=0x44ff44)
-    elif round(client.latency * 1000) <= 100:
-        embed=discord.Embed(title="PING", description=f":ping_pong: Pingpingpingpingping! The ping is **{round(client.latency *1000)}** milliseconds!", color=0xffd000)
-    elif round(client.latency * 1000) <= 200:
-        embed=discord.Embed(title="PING", description=f":ping_pong: Pingpingpingpingping! The ping is **{round(client.latency *1000)}** milliseconds!", color=0xff6600)
-    else:
-        embed=discord.Embed(title="PING", description=f":ping_pong: Pingpingpingpingping! The ping is **{round(client.latency *1000)}** milliseconds!", color=0x990000)
-    await ctx.send(embed=embed)
-'''
 @client.command()
 async def joke(ctx): 
 
@@ -2339,6 +2323,23 @@ import psutil
 startTime = time.monotonic()
 @client.command(aliases=["bi", "about"])
 async def bot( ctx):
+    row = ActionRow(
+        Button(
+            style=ButtonStyle.link,
+            label="Invite Me!",
+            url='https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands'
+        ),
+        Button(
+            style=ButtonStyle.link,
+            label="Github!",
+            url='https://github.com/prakarsh17/tessarect-bot'
+        ),
+        Button(
+            style=ButtonStyle.blurple,
+            label="Credits!",
+            custom_id="cred"
+        )
+    )   
     ser = len(client.guilds)
     mem = len(client.users)
 
@@ -2359,8 +2360,8 @@ async def bot( ctx):
         value="[Join My Server](https://discord.gg/avpet3NjTE)",
     )
     embed.add_field(
-        name="<a:Diamond:930350459020017694> Add Me",
-        value="[Click Here to Add Me](https://bit.ly/terrasectbot)",
+        name="<a:Diamond:930350459020017694> Invite Me",
+        value="[Click Here to Invite Me](https://bit.ly/terrasectbot)",
     )
     embed.add_field(
         name="<:planet:930351400532201532>  Website",
@@ -2372,7 +2373,18 @@ async def bot( ctx):
     embed.set_footer(
         text=f"Requested By: {ctx.author.name}", icon_url=f"{ctx.author.avatar_url}"
     )
-    await ctx.send(embed=embed)
+    msg =await ctx.send(embed=embed,components=[row])
+    on_click = msg.create_click_listener(timeout=60)
+    @on_click.matching_id("cred")
+    async def on_test_button(inter):
+        em = discord.Embed(title="Contributors",description="SniperXi199#2209 \n Owner and Lead Developer \n\n DrFate#6876\n Head Co Developer and a great supporter",color=discord.Color.blue())
+        em.set_footer(text="See our Github for details")
+        await inter.reply(embed=em)
+        await msg.edit(components=[])  
+
+    @on_click.timeout
+    async def on_timeout():
+        await msg.edit(components=[])    
 @client.command()
 async def stats(ctx):
     now = time.monotonic()
@@ -2411,25 +2423,25 @@ async def stats(ctx):
     await ctx.send(embed=em)
 @client.command()
 async def goal(ctx):
-  '''
+
   row = ActionRow(
         Button(
             style=ButtonStyle.link,
             label="Invite Me!",
             url='https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands'
         )
-    )    '''
-  goal = 25
+    )    
+  goal = 50
   currentg = len(client.guilds)
   em = discord.Embed(title="Bot Server Goal",description=f" Current Count {currentg}/{goal}",color=discord.Color.blue())
   em.set_footer(text="Kindly be kind enough to invite me in a server and contribute")
-  
+  em.add_field(name="Goal 1(25 servers) " ,value=f"Achieved on 2nd Feb 2022",inline=False) 
   if goal ==currentg:
     em.add_field(name='Congrats ',value=' I have achieved the current goal')
   else:
-    em.add_field(name=":| Not yet" ,value=f"We still need {goal-currentg} servers more!")
-  em.add_field(name="CONTRIBUTE by inviting me",value = "[INVITE](https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands)")
-  await ctx.send(embed=em)
+    em.add_field(name=" Not yet" ,value=f"We still need {goal-currentg} servers more!")
+  em.add_field(name="**Contribute** by inviting me",value = "[INVITE](https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands)")
+  await ctx.send(embed=em,components=[row])
 # GIFs for Damn Son react
 dms = ["https://giphy.com/gifs/batman-film-qVID3J8fLrlZK", "https://giphy.com/gifs/homer-simpson-barney-batman-and-robin-pSFEEQMaNcFAQ", "https://giphy.com/gifs/hug-5sos-5-seconds-of-summer-BcOvvS5t0sxnG", 'https://giphy.com/gifs/joker-the-joaquin-phoenix-A7ZbCuv0fJ0POGucwV']
 
@@ -2652,7 +2664,7 @@ The code of the bot is open source so you dont have to worry about your privacy 
 """**Utility Commands**
 Commands to make your work easier and faster like avatar{user} gets the avatar of the mentioned user""",
 """**Leveling System**
-Enjoy and use Tessarect (Formely Tessarect (Formely Amteor))'s leveling system for your server . Make a rank system""",
+Enjoy and use Tessarect 's leveling system for your server . Make a rank system""",
 """**Fun Commands**
 Enjoy various fun commands such as ascii font , emojify , avatar lookup , info or play tictactoe with someone""",
 """**Secured**
@@ -2744,7 +2756,7 @@ async def wolf(ctx, *, question):
     await ctx.reply(embed=out[0], file=out[1])
 
 def get_answer1(question=""):
-    if question == "":
+    if question == "_ _":
         embed = discord.Embed(
             title="Oops",
             description="You need to enter a question",
@@ -2983,8 +2995,9 @@ async def add_dev(ctx, user:discord.Member=None):
         await ctx.send(f"The user {user} is already a Dev!")
     else:
         add_Mod(user.id)
-        await ctx.send(f"{user} added as a Dev!")  
-     
+        await ctx.send(f"{user} added as a Dev!")
+ 
+
 web.keep_alive()
 client.run(os.environ['token'],reconnect=True)
 

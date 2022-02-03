@@ -1,1 +1,1 @@
-run="python3 main.py"
+run="sh main.sh"

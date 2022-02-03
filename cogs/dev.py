@@ -1,5 +1,5 @@
 import datetime
-
+import traceback
 import discord
 import requests
 from discord.ext import commands
@@ -83,40 +83,23 @@ class Dev(commands.Cog):
     @check(check_Mod)
     async def restart(self,ctx):
       e = discord.Embed(title='🕐',description='Restarting.. Scheduled , in approx 7 seconds')
-      e3= discord.Embed(title='<:Protectedshield:922468797246488596>',description="Unloaded Cogs,Final Works , **RESTARTING BOT IN 3 SECONDS FROM THIS EDIT**")
+      e3= discord.Embed(title='<:Protectedshield:922468797246488596>',description="Unloaded Cogs,Final Works , **RESTARTING BOT **")
       e2= discord.Embed(title='<a:Loading:922468614009925692>',description="Unloading cogs")  
       x = await ctx.send(embed=e)
 
       await x.edit(embed=e2)
       for filename in os.listdir("./cogs"):
-          if filename.endswith(".py"):
+        if filename.endswith(".py"):
+            try:
+
               self.bot.unload_extension(f"cogs.{filename[:-3]}")
+            except Exception as e:
+              await ctx.send(f"{filename} - {e}") 
 
       await x.edit(embed=e3)  
 
       restart_bot()  
-    @commands.command(hidden=True)
-    @commands.check(check_Mod)
-    async def shell(self, ctx: commands.Context, *, command: str) -> None:
-        """ Run a shell command. """
 
-        def run_shell(command):
-            with Popen(command, stdout=PIPE, stderr=PIPE, shell=True) as proc:
-                return [std.decode("utf-8") for std in proc.communicate()]
-
-        command = self.cleanup_code(command)
-        argv = shlex.split(command)
-        stdout, stderr = await self.bot.loop.run_in_executor(None, run_shell, argv)
-        if stdout:
-            if len(stdout) >= 1500:
-                print(stdout)
-                return await ctx.send("Too big I'll print it instead")
-            await ctx.send(f"```\n{stdout}\n```")
-        if stderr:
-            if len(stderr) >= 1500:
-                print(stderr)
-                return await ctx.send("Too big I'll print it instead")
-            await ctx.send(f"```\n{stderr}\n```")
 
 def setup(client):
     client.add_cog(Dev(client))

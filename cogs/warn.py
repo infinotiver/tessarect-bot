@@ -29,7 +29,7 @@ class Warn(commands.Cog):
         print("Warn cog loaded successfully")
 
     @commands.command(
-        aliases=["w"], description="Warn a user ( If limit > 5 , the member is banned )"
+        aliases=["w"], description="Warn a user ( If limit > 10 , the member is banned )"
     )
     @commands.has_permissions(ban_members=True)
     async def warn(
@@ -55,7 +55,7 @@ class Warn(commands.Cog):
 
                     if member == self.client.user:
                         await ctx.send("**Haha, i am immortal**")
-                    elif stats is None and warns <= 5:
+                    elif stats is None and warns <= 10:
                         passwor = discord_pass.secure_password_gen(10)
                         passwor = str(passwor)
                         newuser = {
@@ -110,11 +110,11 @@ class Warn(commands.Cog):
                         )
                         await ctx.send(embed=embed)
 
-                        if total_warn >= 5:
+                        if total_warn >= 10:
                             await member.ban(reason="Exceeded The Warn Limit")
                             embed = discord.Embed(
                                 title="Warn",
-                                description=f"{member.name} has been banned since he exceeded the warn limit",
+                                description=f"{member.name} has been banned since they exceeded the warn limit",
                                 color=0xFF0000,
                             )
                             await ctx.send(embed=embed)
