@@ -105,7 +105,7 @@ except:
 intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
     command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD     BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Plugins",color=0x34363A,no_category="Base Commands",sort_commandsdef=False,show_index=False))
-inter_client = InteractionClient(client, test_guilds=[912569937116147772])
+
 m = '֍'
 #slashx = SlashCommand(client)
 
@@ -778,40 +778,6 @@ async def balance(ctx ,user: discord.Member = None):
   em.set_footer(text=f"🤨 {tot}")    
   msg=await ctx.send(embed= em)
 
-@inter_client.slash_command(
-    description="Shows the balance of user",
-    options=[
-        Option("user", "Enter the user", OptionType.USER)
-        # By default, Option is optional
-        # Pass required=True to make it a required arg
-    ]
-)
-async def balance(inter, user=None):
-    # If user is None, set it to inter.author
-  user = user or inter.author
-    # We are guaranteed to receive a discord.User object,
-    # because we specified the option type as Type.USER
-  bal = await ecomoney.find_one({"id": user.id})
-  if bal is None:
-      await open_ter(user.id)
-      bal = await ecomoney.find_one({"id": user.id})
-  #test
-  await open_account(user)
-
-
-  users = await get_bank_data()
-
-  wallet_amt = users[str(user.id)]["wallet"]
-
-  bank_amt = users[str(user.id)]["bank"]
-  em = discord.Embed(title=f'{user.name} Balance',color = 0x0437F2,timestamp=ctx.message.created_at)
-  em.add_field(name="Wallet Balance", value=f'֍{wallet_amt:,}')
-  em.add_field(name='Bank Balance',value=f'֍{bank_amt:,}')
-  em.add_field(name='Terrabux',value=f"<a:Diamond:930350459020017694> {bal['terrabux']}",inline=False)
-  em.set_thumbnail(url=user.avatar_url)
-  tot = bank_amt+wallet_amt+(bal['terrabux']*10)
-  em.set_footer(text=f"🤨 {tot}")    
-  msg=await ctx.send(embed= em)
 import string    
 hacking_status = ['breaching mainframe', 'accessing CPU pins', 'a couple gigabytes of RAM','Accessing Ip adress ','Getting Os info']
 osd = ['unkown windows','windows 11','unknown linux','mac','arch','calinix','windows xp','andriod 2','andriod 12','A poor os ']
@@ -2102,40 +2068,6 @@ async def pickpocket(ctx):
     async def on_timeout():
         await msg.edit(components=[])
 
-@inter_client.slash_command(description="Test command")
-async def test(inter):
-    await inter.reply("Test")
-
-
-@inter_client.slash_command(
-    description="Shows the avatar of the user",
-    options=[
-        Option("user", "Enter the user", OptionType.USER)
-        # By default, Option is optional
-        # Pass required=True to make it a required arg
-    ]
-)
-async def avatar(inter, user=None):
-    # If user is None, set it to inter.author
-    user = user or inter.author
-    # We are guaranteed to receive a discord.User object,
-    # because we specified the option type as Type.USER
-
-    emb = discord.Embed(
-        title=f"{user}'s avatar",
-        color=discord.Color.blue()
-    )
-    emb.set_image(url=user.avatar_url)
-    await inter.reply(embed=emb)
-@inter_client.message_command(name="Reverse")
-async def reverse(inter: ContextMenuInteraction):
-    # Message commands always have only this ^ argument
-    if inter.message.content:
-        # Here we will send a reversed message to the chat
-        await inter.respond(inter.message.content[::-1])
-    else:
-        # Here we will explain that the message isn't valid
-        await inter.respond("There's no content", ephemeral=True)
 
 @client.command()
 async def joke(ctx): 
