@@ -2,3 +2,4 @@
 *.png
 *.txt
 .cache/
+*.pyc

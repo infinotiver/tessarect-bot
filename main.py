@@ -512,7 +512,8 @@ async def setwelcomechannel(ctx,channel:discord.TextChannel):
 async def on_member_join(member):
     with open('storage/welcome.json', 'r') as f:
         wel = json.load(f)  
-    if str(member.guilds.id) in wel
+    if str(member.guilds.id) not in wel:
+        return
     channel = client.get_channel(wel[str(member.guild.id)])
     if channel==None:
       return print('not set')
