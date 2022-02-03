@@ -1,39 +1,18 @@
-2022-02-03 06:07:51,502 Just an information
-2022-02-03 06:07:51,502 Its a Warning
-2022-02-03 06:07:51,502 Error Logger Test
-2022-02-03 06:07:51,502 Testing Critical Logging
-2022-02-03 06:07:53,411  * Running on all addresses.
+2022-02-03 06:23:21,900 Just an information
+2022-02-03 06:23:21,900 Its a Warning
+2022-02-03 06:23:21,900 Error Logger Test
+2022-02-03 06:23:21,900 Testing Critical Logging
+2022-02-03 06:23:42,411  * Running on all addresses.
    WARNING: This is a development server. Do not use it in a production deployment.
-2022-02-03 06:07:53,412 logging in using static token
-2022-02-03 06:07:53,413  * Running on http://172.18.0.125:8080/ (Press CTRL+C to quit)
-2022-02-03 06:07:53,803 Shard ID 0 has sent the IDENTIFY payload.
-2022-02-03 06:07:53,991 Shard ID 0 has connected to Gateway: ["gateway-prd-main-3stg",{"micros":93880,"calls":["discord-sessions-blue-prd-2-107",{"micros":89145,"calls":["start_session",{"micros":77777,"calls":["api-prd-main-tkd2",{"micros":73467,"calls":["get_user",{"micros":5670},"add_authorized_ip",{"micros":1306},"get_guilds",{"micros":49060},"coros_wait",{"micros":2}]}]},"guilds_connect",{"micros":2,"calls":[]},"presence_connect",{"micros":1,"calls":[]}]}]}] (Session ID: dad7fa3c53cfa7fe48dde588918f9232).
-2022-02-03 06:07:58,922 Shard ID 1 has sent the IDENTIFY payload.
-2022-02-03 06:07:59,148 Shard ID 1 has connected to Gateway: ["gateway-prd-main-n4mz",{"micros":139190,"calls":["discord-sessions-blue-prd-2-50",{"micros":129351,"calls":["start_session",{"micros":68386,"calls":["api-prd-main-pcvk",{"micros":58463,"calls":["get_user",{"micros":8664},"add_authorized_ip",{"micros":3379},"get_guilds",{"micros":13775},"coros_wait",{"micros":2}]}]},"guilds_connect",{"micros":3,"calls":[]},"presence_connect",{"micros":2,"calls":[]}]}]}] (Session ID: 671483d0bd4c0e6b7d6393ea0dcf70a9).
-2022-02-03 06:08:01,241 172.18.0.1 - - [03/Feb/2022 06:08:01] "GET / HTTP/1.1" 200 -
-2022-02-03 06:08:05,263 Shard ID 2 has sent the IDENTIFY payload.
-2022-02-03 06:08:05,416 Shard ID 2 has connected to Gateway: ["gateway-prd-main-8m7k",{"micros":78722,"calls":["discord-sessions-blue-prd-2-15",{"micros":77850,"calls":["start_session",{"micros":29833,"calls":["api-prd-main-0r0z",{"micros":26433,"calls":["get_user",{"micros":3426},"add_authorized_ip",{"micros":1405},"get_guilds",{"micros":4026},"coros_wait",{"micros":1}]}]},"guilds_connect",{"micros":2,"calls":[]},"presence_connect",{"micros":1,"calls":[]}]}]}] (Session ID: a17a8843bec069f8e2593288dbccbe43).
-2022-02-03 06:08:11,293 Shard ID 3 has sent the IDENTIFY payload.
-2022-02-03 06:08:11,491 Shard ID 3 has connected to Gateway: ["gateway-prd-main-tr0g",{"micros":90097,"calls":["discord-sessions-blue-prd-2-39",{"micros":88571,"calls":["start_session",{"micros":52540,"calls":["api-prd-main-p6wq",{"micros":48536,"calls":["get_user",{"micros":6144},"add_authorized_ip",{"micros":2690},"get_guilds",{"micros":14252},"coros_wait",{"micros":1}]}]},"guilds_connect",{"micros":2,"calls":[]},"presence_connect",{"micros":0,"calls":[]}]}]}] (Session ID: b3377755f09f4f57d5e28ca84ebf6fae).
-2022-02-03 06:08:12,197 172.18.0.1 - - [03/Feb/2022 06:08:12] "GET / HTTP/1.1" 200 -
-2022-02-03 06:08:16,420 Shard ID 4 has sent the IDENTIFY payload.
-2022-02-03 06:08:16,590 Shard ID 4 has connected to Gateway: ["gateway-prd-main-p6jp",{"micros":77656,"calls":["discord-sessions-blue-prd-2-88",{"micros":74251,"calls":["start_session",{"micros":57818,"calls":["api-prd-main-v27w",{"micros":51811,"calls":["get_user",{"micros":3605},"add_authorized_ip",{"micros":2913},"get_guilds",{"micros":7115},"coros_wait",{"micros":2}]}]},"guilds_connect",{"micros":2,"calls":[]},"presence_connect",{"micros":308,"calls":[]}]}]}] (Session ID: c83695898c04c5c6b5ad8079df332062).
-2022-02-03 06:08:22,611 172.18.0.1 - - [03/Feb/2022 06:08:22] "GET / HTTP/1.1" 200 -
-2022-02-03 06:08:32,973 172.18.0.1 - - [03/Feb/2022 06:08:32] "GET / HTTP/1.1" 200 -
-2022-02-03 06:08:43,433 172.18.0.1 - - [03/Feb/2022 06:08:43] "GET / HTTP/1.1" 200 -
-2022-02-03 06:08:53,774 172.18.0.1 - - [03/Feb/2022 06:08:53] "GET / HTTP/1.1" 200 -
-2022-02-03 06:09:04,155 172.18.0.1 - - [03/Feb/2022 06:09:04] "GET / HTTP/1.1" 200 -
-2022-02-03 06:09:14,705 172.18.0.1 - - [03/Feb/2022 06:09:14] "GET / HTTP/1.1" 200 -
-2022-02-03 06:09:25,447 172.18.0.1 - - [03/Feb/2022 06:09:25] "GET / HTTP/1.1" 200 -
-2022-02-03 06:09:36,061 172.18.0.1 - - [03/Feb/2022 06:09:36] "GET / HTTP/1.1" 200 -
-2022-02-03 06:09:46,473 172.18.0.1 - - [03/Feb/2022 06:09:46] "GET / HTTP/1.1" 200 -
-2022-02-03 06:09:57,020 172.18.0.1 - - [03/Feb/2022 06:09:57] "GET / HTTP/1.1" 200 -
-2022-02-03 06:10:07,621 172.18.0.1 - - [03/Feb/2022 06:10:07] "GET / HTTP/1.1" 200 -
-2022-02-03 06:10:17,225 172.18.0.1 - - [03/Feb/2022 06:10:17] "HEAD / HTTP/1.1" 200 -
-2022-02-03 06:10:18,009 172.18.0.1 - - [03/Feb/2022 06:10:18] "GET / HTTP/1.1" 200 -
-2022-02-03 06:10:28,509 172.18.0.1 - - [03/Feb/2022 06:10:28] "GET / HTTP/1.1" 200 -
-2022-02-03 06:10:38,936 172.18.0.1 - - [03/Feb/2022 06:10:38] "GET / HTTP/1.1" 200 -
-2022-02-03 06:13:13,312 Cleaning up tasks.
-2022-02-03 06:13:13,313 Cleaning up after 3 tasks.
-2022-02-03 06:13:13,570 All tasks finished cancelling.
-2022-02-03 06:13:13,571 Closing the event loop.
+2022-02-03 06:23:42,414  * Running on http://172.18.0.12:8080/ (Press CTRL+C to quit)
+2022-02-03 06:23:42,412 logging in using static token
+2022-02-03 06:23:42,722 Shard ID 0 has sent the IDENTIFY payload.
+2022-02-03 06:23:42,902 Shard ID 0 has connected to Gateway: ["gateway-prd-main-7vsp",{"micros":96558,"calls":["discord-sessions-blue-prd-2-120",{"micros":95746,"calls":["start_session",{"micros":51621,"calls":["api-prd-main-qfrm",{"micros":25570,"calls":["get_user",{"micros":3099},"add_authorized_ip",{"micros":1440},"get_guilds",{"micros":3469},"coros_wait",{"micros":1}]}]},"guilds_connect",{"micros":2,"calls":[]},"presence_connect",{"micros":30791,"calls":[]}]}]}] (Session ID: 50c407d50b844a882e0fab1d70350536).
+2022-02-03 06:23:47,854 Shard ID 1 has sent the IDENTIFY payload.
+2022-02-03 06:23:48,056 Shard ID 1 has connected to Gateway: ["gateway-prd-main-3mn0",{"micros":116423,"calls":["discord-sessions-blue-prd-2-32",{"micros":115550,"calls":["start_session",{"micros":82264,"calls":["api-prd-main-clfc",{"micros":74486,"calls":["get_user",{"micros":8586},"add_authorized_ip",{"micros":6995},"get_guilds",{"micros":15648},"coros_wait",{"micros":1}]}]},"guilds_connect",{"micros":4,"calls":[]},"presence_connect",{"micros":286,"calls":[]}]}]}] (Session ID: 63851085a68af0365a53833a28688b39).
+2022-02-03 06:23:52,976 Shard ID 2 has sent the IDENTIFY payload.
+2022-02-03 06:23:53,139 Shard ID 2 has connected to Gateway: ["gateway-prd-main-7g6p",{"micros":81665,"calls":["discord-sessions-blue-prd-2-35",{"micros":80857,"calls":["start_session",{"micros":68206,"calls":["api-prd-main-mpjr",{"micros":50628,"calls":["get_user",{"micros":5036},"add_authorized_ip",{"micros":7971},"get_guilds",{"micros":6329},"coros_wait",{"micros":1}]}]},"guilds_connect",{"micros":3,"calls":[]},"presence_connect",{"micros":2,"calls":[]}]}]}] (Session ID: 9a24133263122d82c05aba50e0390a00).
+2022-02-03 06:23:58,116 Shard ID 3 has sent the IDENTIFY payload.
+2022-02-03 06:23:58,297 Shard ID 3 has connected to Gateway: ["gateway-prd-main-w5jn",{"micros":94545,"calls":["discord-sessions-blue-prd-2-171",{"micros":92974,"calls":["start_session",{"micros":64026,"calls":["api-prd-main-rwm2",{"micros":56931,"calls":["get_user",{"micros":4396},"add_authorized_ip",{"micros":2063},"get_guilds",{"micros":7026},"coros_wait",{"micros":2}]}]},"guilds_connect",{"micros":2,"calls":[]},"presence_connect",{"micros":6560,"calls":[]}]}]}] (Session ID: 2c98f2b1301e762261bdf3e2e045bfe0).
+2022-02-03 06:24:03,242 Shard ID 4 has sent the IDENTIFY payload.
+2022-02-03 06:24:03,849 Shard ID 4 has connected to Gateway: ["gateway-prd-main-wwlc",{"micros":113920,"calls":["discord-sessions-blue-prd-2-147",{"micros":113181,"calls":["start_session",{"micros":91605,"calls":["api-prd-main-brsp",{"micros":86735,"calls":["get_user",{"micros":13856},"add_authorized_ip",{"micros":5323},"get_guilds",{"micros":11185},"coros_wait",{"micros":2}]}]},"guilds_connect",{"micros":2,"calls":[]},"presence_connect",{"micros":3,"calls":[]}]}]}] (Session ID: f5167ba24882d73b9840218cbcb51279).
