@@ -14,7 +14,7 @@ import requests, urllib, re
 import pyjokes
 import json
 from dislash import InteractionClient, ActionRow, Button, ButtonStyle
-from dislash import ContextMenuInteraction
+from dislash import ContextMenu,Interaction
 import asyncio 
 import jishaku
 #from load import  printProgressBar, printProgressBar2
@@ -37,8 +37,7 @@ import socket
 from datetime import datetime, timedelta
 # Create a translator object
 #from discord_slash import SlashCommand, SlashContext
-import logging
- 
+import logging 
 # Create and configure logger
 logging.basicConfig(filename="logs.txt",
                     format='%(asctime)s %(message)s',
@@ -47,10 +46,9 @@ logging.basicConfig(filename="logs.txt",
  
 # Creating an object
 logger = logging.getLogger()
- 
 # Setting the threshold of logger to DEBUG
 logger.setLevel(logging.INFO)
- 
+
 import urllib.request
 from dislash import  Option, OptionType
 import typing
@@ -514,7 +512,7 @@ async def setwelcomechannel(ctx,channel:discord.TextChannel):
 async def on_member_join(member):
     with open('storage/welcome.json', 'r') as f:
         wel = json.load(f)  
-    
+    if str(member.guilds.id) in wel
     channel = client.get_channel(wel[str(member.guild.id)])
     if channel==None:
       return print('not set')
