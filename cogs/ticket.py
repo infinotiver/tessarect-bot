@@ -48,7 +48,7 @@ class Tickets(commands.Cog):
                     if _channel.name == channelname:
                         return await ctx.channel.send(f"You already have a ticket! Please contact staff in {_channel.mention}!")
 
-                warning = f"""{ctx.author.mention} it is good to provide a reason for your inquires with the EMPIRE\nNext time try `[p] new <reason>`
+                warning = f"""{ctx.author.mention} it is good to provide a reason for your inquires with the Lords\nNext time try `[p] new <reason>`
                 """
                 tickets = await self.get_tickets()
                 guild = ctx.guild
@@ -67,7 +67,7 @@ class Tickets(commands.Cog):
                 # Setting up the Channel
                 channel = await ctx.guild.create_text_channel(f'ticket-{ctx.author.name}')
                 # Creating the embed
-                em = discord.Embed(title = f"<:sucess:935052640449077248> New ticket", color = ctx.author.color)
+                em = discord.Embed(title = f"<:sucess:935052640449077248> New ticket", color = 0x1a1110)
                 em.add_field(name = "Ticket Channel:", value= f"{channel.mention}")
                 em.add_field(name = "Description:", value = "Staff will be with your shortly")
                 em.add_field(name = "Member:", value = f"{ctx.author.mention}")
@@ -112,11 +112,11 @@ class Tickets(commands.Cog):
             em = discord.Embed(title = "<:Warn:922468797108080660> New Error", color = ctx.author.color)
             em.add_field(name = "Reason:", value = "If your trying to spam the server then get off!")
             em.add_field(name = "Try again in:", value = "`{:.2f}s`".format(error.retry_after))
-            em.set_footer(text="Bot Made By SniperXi199#2209")
+            em.set_footer(text="Lots of Spam can lead to a ban")
             em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
             await ctx.send(embed = em)
         if isinstance(error, commands.BotMissingPermissions):
-            em = discord.Embed(title = f'<:Warn:922468797108080660> {ctx.command.name} Failed!', color = discord.Color.random(), description = "<:Coder_Hammer:826315685142462474> Ladies and gentlemen we created uhhhhhhhhh yeahhhhhh")
+            em = discord.Embed(title = f'<:Warn:922468797108080660> {ctx.command.name} Failed!', color = discord.Color.random(), description = "<:Coder_Hammer:826315685142462474> Guys huh we created uhhhhhhhhh yeahhhhhh")
             em.add_field(name = 'Reason', value = 'I don\'t have the perms to do that-')
             em.add_field(name = 'What to do:', value = "Give me perms when?")
             em.set_footer(text = "-_-", icon_url = ctx.author.avatar_url)
@@ -140,7 +140,7 @@ class Tickets(commands.Cog):
             tickets[str(guild.id)]["ticketrole"] = int(role.id)
         else:
             role_id = tickets[str(guild.id)]["ticketrole"]
-            tickets[str(guild.id)]["ticketrole"] = int(role.id)
+            tickets[str(guild.id)]["ticketrole"]=int(role.id)
             em.add_field(name = "Role:", value = f"{role.mention}")
         em.add_field(name = "Features:", value = "Users can now type `[p] new <reason>`")
         em.add_field(name = "Reason:", value = f"`{reason}`")
@@ -172,7 +172,7 @@ class Tickets(commands.Cog):
     async def addticketrole_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):
             em = discord.Embed(title = "<:Warn:922468797108080660> Ticket Error", color = ctx.author.color)
-            em.add_field(name = "Reason:", value = "You don't have the perms")
+            em.add_field(name = "Reason:", value = "You don't have the perms dont try to control me duh!")
             em.add_field(name = "Perms:", value = "`Manage Server permission missing!`")
             em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
             em.set_footer(text="Bot Made By SniperXi199#2209")
@@ -229,7 +229,7 @@ class Tickets(commands.Cog):
         if isinstance(error, commands.BadArgument):
             em = discord.Embed(title = '<:Warn:922468797108080660> Setticketlogs Failed', color = ctx.author.color)
             em.add_field(name = "Reason:", value = "Mention a channel properly, like {}".format(ctx.channel.mention))
-            em.add_field(name= "Usage:", value = "```diff\n+ [p] setticketlogs #ticket-logs better ticket logs\n- [p] setticketlogs @NightZan999 setting a member as logs\n```")
+            em.add_field(name= "Usage:", value = "```diff\n+ [p] setticketlogs #ticket-logs better ticket logs\n- [p] setticketlogs SniperXi199#2209 setting a member as logs\n```")
             em.set_thumbnail(url = ctx.author.avatar_url)
             em.set_footer(text="Smh, imagine being that bad!")
             em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)

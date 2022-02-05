@@ -149,7 +149,10 @@ class Errors(commands.Cog):
           )
           err_code=discord_pass.secure_password_gen(10)
           msgcon=ctx.message.content
-          data[str(err_code)] = [str(error),str(ctx.author),str(ctx.guild),str(msgcon)]
+          data[str(err_code)] = {}
+          data[str(err_code)]['error']=str(error)
+
+          
           with open ('storage/errors.json', 'w') as f:
               json.dump(data, f, indent=4)
           uem=discord.Embed(title="Oops!",description=f'It seems like an unexpected error happened',color=discord.Color.light_grey()).add_field(name="Error",value=f"{error} , Click the button below to get your Error id for reference").add_field(name="TROUBLESHOOTING",value="Retry again\n Check bot's/your permissions \n check command help \n Ask developers \n Try after sometime \n Drink milk and enjoy other commands")

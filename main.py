@@ -4,7 +4,7 @@ with open("requirements.txt") as file:
 import time
 import discord
 import traceback
-from dislash import SelectMenu
+from dislash import SelectMenu,SelectOption
 import web        
 #dislash.py 
 from discord.ext import commands
@@ -14,7 +14,7 @@ import requests, urllib, re
 import pyjokes
 import json
 from dislash import InteractionClient, ActionRow, Button, ButtonStyle
-from dislash import ContextMenu,Interaction
+from dislash import  ContextMenuInteraction
 import asyncio 
 import jishaku
 #from load import  printProgressBar, printProgressBar2
@@ -33,8 +33,9 @@ except:
 import motor.motor_asyncio
 #import nest_asyncio
 #import datetime
-import socket   
-from datetime import datetime, timedelta
+import socket  
+import datetime
+#from datetime import datetime, timedelta
 # Create a translator object
 #from discord_slash import SlashCommand, SlashContext
 import logging 
@@ -146,6 +147,10 @@ async def on_ready():
     #DiscordComponents(client) 
     print(f'{client.user} - Tessarect  has connected to Discord! Enjoy ')  
 
+    em = discord.Embed(title ="Monitor Up",description=f"Tessarect Monitor Up  ",color =discord.Color.blue())
+
+    channel=client.get_channel(929333501101215794)
+    await channel.send(embed=em)
     await client.change_presence(
 
             activity=discord.Activity(
@@ -153,7 +158,7 @@ async def on_ready():
                 name= f"👀{len(client.users)} users on {len(client.guilds)} servers"
             ))
     update_s.start()
-@tasks.loop(hours=1)
+@tasks.loop(minutes=10)
 async def update_s():
 
   await client.change_presence(
@@ -512,7 +517,7 @@ async def setwelcomechannel(ctx,channel:discord.TextChannel):
 async def on_member_join(member):
     with open('storage/welcome.json', 'r') as f:
         wel = json.load(f)  
-    if str(member.guilds.id) not in wel:
+    if str(member.guild.id) not in wel:
         return
     channel = client.get_channel(wel[str(member.guild.id)])
     if channel==None:
@@ -1761,6 +1766,7 @@ async def ss(ctx, site):
     embed.set_footer(text="Here is the website'ss you requested")
     embed.set_image(url=(f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}"))
     await ctx.send(embed=embed)
+    await ctx.send(f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}")
 
 
 
@@ -2199,14 +2205,7 @@ async def fakename(ctx):
   e.add_field(name="email_url",value=email_url,inline=False)
   e.add_field(name="domain_url",value=domain_url,inline=False)      
   await ctx.channel.send(embed=e)  
-@client.command(aliases=['c'])
-#@commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
-async def chat(ctx,msg): 
 
-  page = requests.get(f'https://api.spapi.ga/fun/chatbot?message={msg}&owner=SniperXi199&botname=Tessarect&user={ctx.author.id}')
-  source = json.loads(page.content)
-  res = source["response"]  
-  await ctx.send(res)
 @client.command()
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
 async def fact(ctx): 
@@ -2316,6 +2315,62 @@ async def bot( ctx):
     @on_click.timeout
     async def on_timeout():
         await msg.edit(components=[])    
+
+@client.command()
+@commands.cooldown(1,40,commands.BucketType.guild)
+@commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
+async def feedback(ctx,*,message):
+    row = ActionRow(
+   
+        Button(
+            style=ButtonStyle.green,
+            label="Confirm!",
+            custom_id="gr"
+        ),
+        Button(
+            style=ButtonStyle.red,
+            label="Cancel!",
+            custom_id="red"
+        )        
+    )   
+  
+    embed = discord.Embed(
+        timestamp=ctx.message.created_at, title="Confirm",description="Do you really wanna send that to developers note it may take time to process your request", color=0x06c8f9
+    )
+
+    msg =await ctx.send(embed=embed,components=[row])
+    on_click = msg.create_click_listener(timeout=10)
+    @on_click.matching_id("red")
+    async def on_test_button(inter):
+      em = discord.Embed(title="Cancelled",description="Alright",color=discord.Color.red())   
+      await msg.edit(content=None,embed=em)
+      await msg.edit(components=[])
+    @on_click.matching_id("gr")
+    async def on_test_button(inter):
+      bugs_channel = client.get_channel(929333373913137224)
+
+
+
+      embed = discord.Embed(
+            title='Feedback',
+            colour = 0x000133
+        )
+      embed.add_field(name='Username', value=inter.author)
+      embed.add_field(name='User id', value=inter.author.id,inline=True)
+      embed.add_field(name='Report: ', value=message,inline=False)
+      await bugs_channel.send(f"<@&912569937116147777>",embed=embed)
+
+
+
+      em = discord.Embed(title="Done",description="Thank you for your feedback kindly keep your dms open they may contact anyway enjoy",color=discord.Color.green())   
+      await msg.edit(content=None,embed=em)
+      await msg.edit(components=[])
+
+    @on_click.timeout
+    async def on_timeout():
+        await msg.edit("Ok so dude cancelling",components=[])    
+
+
 @client.command()
 async def stats(ctx):
     now = time.monotonic()
@@ -2526,18 +2581,20 @@ async def search(ctx):
 
 
 @client.command()
+@commands.cooldown(1,100,commands.BucketType.guild)
 async def report( ctx, user : discord.Member, *reason):
-    em = discord.Embed(title=f'Report {user}?',description="Are you sure you want to report that user , if yes choose report categories .")
+    em = discord.Embed(title=f'Report {user}?',description="Are you sure you want to report that user , if yes choose report categories else wait for 10 seconds it will automatically go")
     msg = await ctx.send(
         embed=em,
         components=[
+
             SelectMenu(
                 custom_id="test",
                 placeholder="Choose the needed choices",
                 options=[
                     SelectOption("Used bad words via /for bot or anyone", "value 1"),
                     SelectOption("Used amteor currency for buying /trading anyother real existence item", "value 2"),
-                    SelectOption("Made Tessarect (Formely Tessarect (Formely Amteor)) say foul/swearing words by any means ", "value 3"),
+                    SelectOption("Made Tessarect  say foul/swearing words by any means ", "value 3"),
                     SelectOption("Breaking other rules","value 4"),
                     SelectOption("Something Else to be there in the reason","value 5"),
                     SelectOption("Reporting a staff","value 6"),
@@ -2547,23 +2604,13 @@ async def report( ctx, user : discord.Member, *reason):
             )
         ]
     )
-    row = ActionRow(
-        Button(
-            style=ButtonStyle.green,
-            label="Send as Solved",
-            custom_id="y"
-        ),
-             Button(
-            style=ButtonStyle.green,
-            label="Mark as not important",
-            custom_id="x"
-        )
-    )
-    inter = await msg.wait_for_dropdown(timeout=60)
+ 
+    inter = await msg.wait_for_dropdown(timeout=20)
+
     # Send what you received
     if inter.author == ctx.author:
 
-      labels = [option.label for option in inter.select_menu.selected_options]
+      labelsx = [option.label for option in inter.select_menu.selected_options]
       await inter.reply('YOUR REQUEST HAS BEEN SENT SUCCESSFULLY , YOU MAY BE CONTACTED SO KEEP YOUR DMS OPEN .')
      
     channel = client.get_channel(929333373913137224) #since it's a cog u need self.bot
@@ -2571,16 +2618,14 @@ async def report( ctx, user : discord.Member, *reason):
     rearray = ' '.join(reason[:]) #converts reason argument array to string
 
     if not rearray: #what to do if there is no reason specified
-        await channel.send(f"{author} has reported {user}, reason: Not provided , Parameters {', '.join(labels)}", components=[row])
-        on_click = msg.create_click_listener(timeout=60)        
+        await channel.send(f"{author} has reported {user}, reason: Not provided , Parameters {', '.join(labelsx)}")
+     
         await ctx.message.delete() #I would get rid of the command input
     else:
-        await channel.send(f"{author} has reported {user}, reason: {rearray}, Parameters {', '.join(labels)}", components=[row])
-        on_click = msg.create_click_listener(timeout=60)   
+        await channel.send(f"{author} has reported {user}, reason: {rearray}, Parameters {', '.join(labelsx)}")
+ 
         await ctx.message.delete() 
-    @on_click.matching_id("x")
-    async def on_test_button(inter):
-        await inter.author.send("YOUR REQUEST HAS BEEN DENIED")
+
 
 
 @client.command() 

@@ -29,9 +29,9 @@ class Warn(commands.Cog):
         print("Warn cog loaded successfully")
 
     @commands.command(
-        aliases=["w"], description="Warn a user ( If limit > 10 , the member is banned )"
+        aliases=["w"], description="Warn a user ( If limit > 10 , the member is kicked )"
     )
-    @commands.has_permissions(ban_members=True)
+    @commands.has_permissions(kick_members=True)
     async def warn(
         self, ctx, member: discord.Member, warns=1, *, reason="Not specified"
     ):
@@ -111,10 +111,10 @@ class Warn(commands.Cog):
                         await ctx.send(embed=embed)
 
                         if total_warn >= 10:
-                            await member.ban(reason="Exceeded The Warn Limit")
+                            await member.kick(reason="Exceeded The Warn Limit you cant warn more than 5 warns at once")
                             embed = discord.Embed(
                                 title="Warn",
-                                description=f"{member.name} has been banned since they exceeded the warn limit",
+                                description=f"{member.name} has been kicked since they exceeded the warn limit",
                                 color=0xFF0000,
                             )
                             await ctx.send(embed=embed)
