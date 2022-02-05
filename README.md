@@ -17,7 +17,7 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 
 
 <p align="center">
-  <a href="#tessarect">Top</a>
+  <a href="https://bit.ly/tessarect-website">Website</a>
   •
   <a href="https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands">Invite</a>
   •
