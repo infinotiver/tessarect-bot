@@ -19,5 +19,86 @@
     },
     "~gl4FxOVHz": {
         "error": "No module named 'captcha'"
+    },
+    "5&xR_wGOaI": {
+        "error": "too many values to unpack (expected 3)"
+    },
+    "6ka9c30GUp": {
+        "error": "not enough values to unpack (expected 3, got 2)"
+    },
+    "eGR+yEyuV^": {
+        "error": "'ClientUser' object has no attribute 'display_avatar'"
+    },
+    "@UfqIZfuQz": {
+        "error": "'NoneType' object has no attribute 'create_embed'"
+    },
+    "sIcWV*tnyn": {
+        "error": "too many values to unpack (expected 3)"
+    },
+    "~wHMAK0QaY": {
+        "error": "name 'praw' is not defined"
+    },
+    "KO~skoL42u": {
+        "error": "name 'url' is not defined"
+    },
+    "k2X_8&2^G#": {
+        "error": "name 'url' is not defined"
+    },
+    "0q$H7lus+R": {
+        "error": "name 'querystring' is not defined"
+    },
+    "oJ1Ohw945#": {
+        "error": ""
+    },
+    "j%~j+F&L2e": {
+        "error": ""
+    },
+    "mfdMrOy&LJ": {
+        "error": ""
+    },
+    "8ZVmBK5ryC": {
+        "error": ""
+    },
+    "A3K+@a~u#k": {
+        "error": ""
+    },
+    "%IAqefsc+~": {
+        "error": ""
+    },
+    "ARqwr6C@$N": {
+        "error": ""
+    },
+    "yYnub19s+$": {
+        "error": ""
+    },
+    "*icUEeO+w#": {
+        "error": "400 Bad Request (error code: 50035): Invalid Form Body\nIn embed.description: Must be 4096 or fewer in length."
+    },
+    "5f+XlHFQq3": {
+        "error": ""
+    },
+    "UOGDsWH~z0": {
+        "error": "'fluxpoint'"
+    },
+    "Iyjb_DnCMo": {
+        "error": ""
+    },
+    "h%CnWk802j": {
+        "error": ""
+    },
+    "HPAVNWE%*T": {
+        "error": "Expected discord.Colour, int, or Embed.Empty but received str instead."
+    },
+    "QJ^FGH8U8*": {
+        "error": "Expected discord.Colour, int, or Embed.Empty but received str instead."
+    },
+    "hcA3c*Aez+": {
+        "error": "Expected discord.Colour, int, or Embed.Empty but received str instead."
+    },
+    "Nzu6dsGk@F": {
+        "error": "Expected discord.Colour, int, or Embed.Empty but received str instead."
+    },
+    "E4g_Psw2%u": {
+        "error": "Expected discord.Colour, int, or Embed.Empty but received str instead."
     }
 }

@@ -89,17 +89,17 @@ def get_prefix(client, message):
 import aiohttp
 import warnings
 from discord.ext.commands import AutoShardedBot
-#from pretty_help import DefaultMenu, PrettyHelp
+from pretty_help import DefaultMenu, PrettyHelp
 
 r = requests.head(url="https://discord.com/api/v1")
 try:
     print(f"Rate limit {int(r.headers['Retry-After']) / 60} minutes left")
 except:
     print('No rate limit Sire Lets do it!')
-try:
-  from pretty_help import PrettyHelp
-except:
-  subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'discord_pretty_help'])
+#try:
+  #from pretty_help import PrettyHelp
+#except:
+  #subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'discord_pretty_help'])
 #import dnspython
 intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
@@ -701,32 +701,6 @@ async def create(ctx, *, name=None):
 
 
 
-
-
-@client.command()
-@commands.cooldown(1, 2, commands.BucketType.guild)
-async def flames(ctx, *, msg):
-    msg = await ctx.send(f'{msg}? (15sec to vote)\n```{msg}?```')
-    await msg.add_reaction('👍')
-    await msg.add_reaction('👎')
-    reaction = None
-    try:
-        while reaction == None or \
-        (str(reaction.emoji) != '👍' and reaction.count <= 3):
-            reaction, user = await client.wait_for('reaction_add', timeout=15.0)
-    except asyncio.TimeoutError:
-        await msg.delete()
-        await sendTempMsg(ctx, 3, f'{ctx.message.author.mention} denied.')
-        await ctx.message.add_reaction('👎')
-    else:
-        await msg.delete()
-        await sendTempMsg(ctx, 3, f'{ctx.message.author.mention} approved!')
-        await ctx.message.add_reaction('👍')
-
-async def sendTempMsg(ctx, time, msg):
-    tempMsg = await ctx.send(msg)
-    await asyncio.sleep(time)
-    await tempMsg.delete()
 
 
 
@@ -2257,16 +2231,24 @@ async def bot( ctx):
         Button(
             style=ButtonStyle.link,
             label="Invite Me!",
-            url='https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands'
+            url='https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands',
+            emoji='<:heart:939018192498593832>'
         ),
         Button(
             style=ButtonStyle.link,
             label="Github!",
-            url='https://github.com/prakarsh17/tessarect-bot'
+            url='https://github.com/prakarsh17/tessarect-bot',
+            emoji="<:github:912608431230320660>"
         ),
         Button(
-            style=ButtonStyle.blurple,
-            label="Credits!",
+            style=ButtonStyle.link,
+            label="Status Page!",
+            url='https://stats.uptimerobot.com/GA8lYTBq86',
+            emoji="<:Info:939018353396310036>"
+        ),
+        Button(
+            style=ButtonStyle.primary,
+            label="Developers!",
             custom_id="cred"
         )
     )   
@@ -2307,7 +2289,7 @@ async def bot( ctx):
     on_click = msg.create_click_listener(timeout=60)
     @on_click.matching_id("cred")
     async def on_test_button(inter):
-        em = discord.Embed(title="Contributors",description="SniperXi199#2209 \n Owner and Lead Developer \n\n DrFate#6876\n Head Co Developer and a great supporter",color=discord.Color.blue())
+        em = discord.Embed(title="Contributors",description="SniperXi199#2209 \n Owner and Lead Developer \n\n DrFate#6876\n Co Developer and a great supporter",color=discord.Color.blue())
         em.set_footer(text="See our Github for details")
         await inter.reply(embed=em)
         await msg.edit(components=[])  
@@ -2323,14 +2305,16 @@ async def feedback(ctx,*,message):
     row = ActionRow(
    
         Button(
-            style=ButtonStyle.green,
+            style=ButtonStyle.success,
             label="Confirm!",
-            custom_id="gr"
+            custom_id="gr",
+            emoji="<:like_blue_purple:939021441213562890>"
         ),
         Button(
-            style=ButtonStyle.red,
+            style=ButtonStyle.danger,
             label="Cancel!",
-            custom_id="red"
+            custom_id="red",
+            emoji="<:dislike_blue_purple:939021398284857364>"
         )        
     )   
   
@@ -2419,71 +2403,16 @@ async def goal(ctx):
     )    
   goal = 50
   currentg = len(client.guilds)
-  em = discord.Embed(title="Bot Server Goal",description=f" Current Count {currentg}/{goal}",color=discord.Color.blue())
-  em.set_footer(text="Kindly be kind enough to invite me in a server and contribute")
+  em = discord.Embed(title="Invite tessarect",description=f" Current Count {currentg}/{goal}",color=discord.Color.blue())
+  em.set_footer(text="Kindly be kind enough to invite me in a server and contribute and make devs happy xD")
   em.add_field(name="Goal 1(25 servers) " ,value=f"Achieved on 2nd Feb 2022",inline=False) 
   if goal ==currentg:
     em.add_field(name='Congrats ',value=' I have achieved the current goal')
   else:
     em.add_field(name=" Not yet" ,value=f"We still need {goal-currentg} servers more!")
-  em.add_field(name="**Contribute** by inviting me",value = "[INVITE](https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands)")
+
   await ctx.send(embed=em,components=[row])
-# GIFs for Damn Son react
-dms = ["https://giphy.com/gifs/batman-film-qVID3J8fLrlZK", "https://giphy.com/gifs/homer-simpson-barney-batman-and-robin-pSFEEQMaNcFAQ", "https://giphy.com/gifs/hug-5sos-5-seconds-of-summer-BcOvvS5t0sxnG", 'https://giphy.com/gifs/joker-the-joaquin-phoenix-A7ZbCuv0fJ0POGucwV']
 
-# GIFs for LOL react
-lolm = ['https://giphy.com/gifs/originals-lol-3o6ozvv0zsJskzOCbu', 'https://giphy.com/gifs/theoffice-episode-6-the-office-tv-bC9czlgCMtw4cj8RgH','https://giphy.com/gifs/moodman-lol-spit-take-Q7ozWVYCR0nyW2rvPW', 'https://giphy.com/gifs/moodman-funny-lol-laughing-fUYhyT9IjftxrxJXcE', 'https://giphy.com/gifs/laughing-despicable-me-minions-ZqlvCTNHpqrio', 
-'https://giphy.com/gifs/laughing-applause-mike-tyson-wWue0rCDOphOE']
-
-# GIFs for Yay reaction
-yaym = [
-    "https://giphy.com/gifs/F9hQLAVhWnL56",
-    "https://giphy.com/gifs/thegifys-gifys-5xaOcLGvzHxDKjufnLW",
-    "https://giphy.com/gifs/studiosoriginals-dog-josh-freydkis-bad-woof-l41Ym8O8dbIG0XvFK",
-    "https://giphy.com/gifs/sherlockgnomes-sherlock-l4pTfx2qLszoacZRS",
-    'https://giphy.com/gifs/foxinternational-reaction-simpsons-celebrate-26tPplGWjN0xLybiU',
-    "https://giphy.com/gifs/excited-screaming-jonah-hill-5GoVLqeAOo6PK",
-    "https://giphy.com/gifs/excited-yes-30-rock-I24hjk3H0R8Oc"
-]
-
-
-
-# GIFs for Yes Reaction
-yesm = [
-    "https://giphy.com/gifs/theoffice-MNmyTin5qt5LSXirxd",
-    "https://giphy.com/gifs/DffShiJ47fPqM",
-    "https://giphy.com/gifs/dYZuqJLDVsWMLWyIxJ"
-]
-
-susm = ["https://giphy.com/gifs/confused-futurama-suspicious-ANbD1CCdA3iI8","https://giphy.com/gifs/moodman-monkey-side-eye-sideeye-H5C8CevNMbpBqNqFjl","https://giphy.com/gifs/tiktok-cute-aww-jRHD367KLHU7NsPjmb",
-"https://giphy.com/gifs/reaction-mood-3gNotAoIRZsb9UHPnj"]
-
-# GIFs for No Reaction
-nom = [
-    "https://giphy.com/gifs/the-office-mrw-d10dMmzqCYqQ0",
-    "https://giphy.com/gifs/NetflixisaJoke-netflix-iglesias-mr-h5cl6eHMvf0IQ3wJch",
-    "https://giphy.com/gifs/memecandy-J46T6SB3yzwc4eBYeL"
-]
-from random import choice
-@client.command()
-async def yay(ctx):
-    await ctx.send(choice(yaym))
-
-@client.command()
-async def lol(ctx):
-    await ctx.send(choice(lolm))
-@client.command()
-async def yes(ctx):
-    await ctx.send(choice(yesm))
-@client.command()
-async def no(ctx):
-    await ctx.send(choice(nom))
-@client.command()
-async def sus(ctx):
-    await ctx.send(choice(susm))
-@client.command()
-async def damnson(ctx):
-    await ctx.send(choice(dms))
 @client.command()
 async def verify(ctx):
 # Import the following modules
@@ -2789,9 +2718,11 @@ async def restart(ctx):
 '''
 
 
-@client.command()
+@client.command(hidden=True)
 async def embed(ctx, *, content: str):
     title, description, footer = content.split('|')
+
+    
     embed = discord.Embed(title=title, description=description, color=0x72d345)
     embed.set_footer(text=footer)
 
@@ -2945,11 +2876,18 @@ def check_Mod(ctx):
             return ctx.author.id 
         
           
-@client.command()
+@client.command(hidden=True)
 @commands.check(check_Mod)
 async def dev_test(ctx):
     await ctx.send("You are a dev!")
-@client.command()
+    querystring = {"username": f"{ctx.author}", "avatar": f"{ctx.author.avatar_url}","background":"red"}
+    headers = {
+        "Authorization": os.environ['fluxpoint']}
+    respo = requests.request(
+        "GET", 'https://api.fluxpoint.dev/gen/welcome', headers=headers, params=querystring
+    )
+    await ctx.send(respo)
+@client.command(hidden=True)
 @commands.check(check_Mod)
 async def add_dev(ctx, user:discord.Member=None):
     if user == None:

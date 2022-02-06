@@ -1,6 +1,3 @@
-# Copyright: GregTCLTK 2018-2021.
-# Contact Developer on https://discord.gg/nPwjaJk (Skidder#8515 | 401817301919465482)
-# Cog by: Quill (quillfires)
 
 import discord
 import asyncio

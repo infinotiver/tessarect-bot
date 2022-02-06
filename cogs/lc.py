@@ -2,7 +2,7 @@ import discord
 import requests
 from discord.ext import commands
 
-
+import os
 class LC(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -22,7 +22,7 @@ class LC(commands.Cog):
                 querystring = {"fname": f"{name1}", "sname": f"{name2}"}
 
                 headers = {
-                    "x-rapidapi-key": "fefb761607mshbf25f11ccc8b263p1d41bfjsn20dfefe445d1",
+                    "x-rapidapi-key": os.environ['api'],
                     "x-rapidapi-host": "love-calculator.p.rapidapi.com",
                 }
 
