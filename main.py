@@ -480,12 +480,44 @@ async def hello(ctx):
 #embed=discord.Embed(title="Here you go",description="Here are the important links you must have",color=discord.Color.random())
 @client.command(aliases=['support server','githubrepo','src','invite'])
 async def links(ctx):
+    row = ActionRow(
+        Button(
+            style=ButtonStyle.link,
+            label="Invite !",
+            url='https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands',
+            emoji='<:heart:939018192498593832>'
+        ),
+        Button(
+            style=ButtonStyle.link,
+            label="Support!",
+            url='https://discord.gg/avpet3NjTE',
+            emoji="<a:devserver:930350030072729620>"
+        ),        
+        Button(
+            style=ButtonStyle.link,
+            label="Github Src!",
+            url='https://github.com/prakarsh17/tessarect-bot',
+            emoji="<:github:912608431230320660>"
+        ),
+        Button(
+            style=ButtonStyle.link,
+            label="Website!",
+            url='https://bit.ly/tessarect-website',
+            emoji="<:planet:930351400532201532>"
+        ),       
+        Button(
+            style=ButtonStyle.link,
+            label="Status Page!",
+            url='https://stats.uptimerobot.com/GA8lYTBq86',
+            emoji="<:Info:939018353396310036>"
+        ),
 
-    e = discord.Embed(title="LINKS",description="Keep it safe dude")
-    e.add_field(name="Invite",value='[CLICK !](https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands)')
-    e.add_field(name="Get Support",value='[Support Server!](https://discord.gg/avpet3NjTE)')   
-    e.add_field(name="Src",value='[See!](https://github.com/prakarsh17/tessarect-bot)')     
-    await ctx.send(embed=e)
+    )   
+    embed=discord.Embed(title="Links",description="Important Links keep it safe guys",color=discord.Color.green())
+    embed.set_thumbnail(url=client.user.avatar_url)
+    msg =await ctx.send(embed=embed,components=[row])
+
+
     
   #e = discord.Embed()
 def getmeme(topic): # Topic/Subreddit name
@@ -1998,54 +2030,6 @@ async def bio(ctx,user:discord.Member=None):
 
 
 
-@client.command()
-@commands.cooldown(1,400,commands.BucketType.guild)
-async def pickpocket(ctx):
-  
-    row = ActionRow(
-        Button(
-            style=ButtonStyle.green,
-            label="Pickpocket!",
-            custom_id="test_button"
-        )
-    )
-    msg = await ctx.send("Pickpocket ", components=[row])
-
-    # Here timeout=60 means that the listener will
-    # finish working after 60 seconds of inactivity
-    on_click = msg.create_click_listener(timeout=10)
-
-    @on_click.not_from_user(ctx.author, cancel_others=True, reset_timeout=False)
-    async def on_wrong_user(inter):
-        # This function is called in case a button was clicked not by the author
-        # cancel_others=True prevents all on_click-functions under this function from working
-        # regardless of their checks
-        # reset_timeout=False makes the timer keep going after this function is called
-        await inter.reply("You're not the author", ephemeral=True)
-
-    @on_click.matching_id("test_button")
-    async def on_test_button(inter):
-        # This function only works if the author presses the button
-        # Becase otherwise the previous decorator cancels this one
-        await msg.edit(components=[])
-        await open_account(ctx.author)
-
-        victim = random.choice(victims)
-        value = random.randint(5,25)
-
-        sucess = random.randint(1,100)
-        if sucess >= 10:
-
-          await add_money(ctx.author, value)
-          sucs =discord.Embed(title =f'{ctx.author} attempted to pickpocket',description=f'``You attempted to pickpocket {victim} for {m}{value} and {random.choice(sucess_phrases)}.``')
-          await ctx.channel.send(embed=sucs)
-        else:
-
-          await add_money(ctx.author, -value)
-          await ctx.channel.send(f'``You attempted to pickpocket {victim} and {random.choice(fail_phrases)}. You lost {m}{value} in the process.``')
-    @on_click.timeout
-    async def on_timeout():
-        await msg.edit(components=[])
 
 
 @client.command()

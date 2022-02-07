@@ -158,7 +158,7 @@ class Song:
     def create_embed(self):
         embed = (
             discord.Embed(
-                title="Now playing",
+                title="Now playing :musical_note: ",
                 description="```css\n{0.source.title}\n```".format(self),
                 color=discord.Color.blurple(),
             )
@@ -317,7 +317,7 @@ class Music(commands.Cog):
 
         ctx.voice_state.voice = await destination.connect()
         embed = discord.Embed(
-            title="Connected to Music <:musical_note:798449595834433577>",
+            title="Connected to Music <:Audio:912648310672728064>",
             color=0xFF0000,
         )
         await ctx.send(embed=embed)
@@ -339,7 +339,7 @@ class Music(commands.Cog):
 
         ctx.voice_state.voice = await destination.connect()
         embed = discord.Embed(
-            title="Summoned <:musical_note:798449595834433577>", color=0xFF0000
+            title="Summoned <:Audio:912648310672728064>", color=0xFF0000
         )
         await ctx.send(embed=embed)
 
@@ -353,7 +353,7 @@ class Music(commands.Cog):
         await ctx.voice_state.stop()
         del self.voice_states[ctx.guild.id]
         embed = discord.Embed(
-            title="Disconnected to Music <:rainblob:796632292503977995>", color=0xFF0000
+            title="Disconnected to Music <:rainbowBlob:940103490557071360>", color=0xFF0000
         )
         await ctx.send(embed=embed)
 
@@ -434,7 +434,7 @@ class Music(commands.Cog):
 
         embed = discord.Embed(
             description="**{} tracks:**\n\n{}".format(len(ctx.voice_state.songs), queue)
-        ).set_footer(text="Viewing page {}/{}".format(page, pages))
+        ).set_footer(text=" <:LibraryMusic:912648429400911883> Viewing page {}/{}".format(page, pages))
         await ctx.send(embed=embed)
 
     @commands.command(name="shuffle")

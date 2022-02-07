@@ -5,6 +5,7 @@ import requests
 from discord.ext import commands
 from discord.ext.commands import check
 import os
+import asyncio
 import sys
 from subprocess import Popen, PIPE
 import shlex
@@ -82,22 +83,31 @@ class Dev(commands.Cog):
     @commands.command(name= 'restart')
     @check(check_Mod)
     async def restart(self,ctx):
-      e = discord.Embed(title='🕐',description='Restarting.. Scheduled , in approx 7 seconds')
-      e3= discord.Embed(title='<:Protectedshield:922468797246488596>',description="Unloaded Cogs,Final Works , **RESTARTING BOT **")
-      e2= discord.Embed(title='<a:Loading:922468614009925692>',description="Unloading cogs")  
+      e = discord.Embed(title='🕐Restarting..',description=' Scheduled , in approx 5 seconds(unless errors)',color=discord.Color.red())
+      e3= discord.Embed(title='<:Protectedshield:922468797246488596> **RESTARTING BOT **',description="Unloaded Cogs,Final Works , ",color=discord.Color.green())
+      e2= discord.Embed(title='<a:Loading:922468614009925692>',description="Unloading cogs",color=discord.Color.blue())  
       x = await ctx.send(embed=e)
 
       await x.edit(embed=e2)
+      await asyncio.sleep(2)
       for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
             try:
 
               self.bot.unload_extension(f"cogs.{filename[:-3]}")
             except Exception as e:
-              await ctx.send(f"{filename} - {e}") 
+              e2.set_footer(text=f"{filename} - {e}") 
+              await x.edit(embed=e2)
+              await asyncio.sleep(2)
+
 
       await x.edit(embed=e3)  
+      await self.bot.change_presence(
 
+              activity=discord.Activity(
+                  type=discord.ActivityType.watching,
+                  name= f"🌠 System Reboot"
+              ))
       restart_bot()  
 
 

@@ -100,5 +100,14 @@
     },
     "E4g_Psw2%u": {
         "error": "Expected discord.Colour, int, or Embed.Empty but received str instead."
+    },
+    "~d9@@&DJSb": {
+        "error": "too many values to unpack (expected 3)"
+    },
+    "G0g_@swPgo": {
+        "error": "You are not connected to any voice channel."
+    },
+    "Qrujq9GfLr": {
+        "error": "name 'asyncio' is not defined"
     }
 }
