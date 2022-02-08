@@ -1,5 +1,4 @@
-'''THANKS TO https://github.com/Code-Cecilia/BotMan.py FOR CONCEPT
-'''
+
 import asyncio
 import json
 import os
