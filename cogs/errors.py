@@ -143,19 +143,29 @@ class Errors(commands.Cog):
           row2 = ActionRow(
               Button(
                   style=ButtonStyle.red,
-                  label="Error Code!",
-                  custom_id="test_button"
+                  label="Error Code",
+                  custom_id="test_button",
+
               )
           )
           err_code=discord_pass.secure_password_gen(10)
           msgcon=ctx.message.content
           data[str(err_code)] = {}
-          data[str(err_code)]['error']=str(error)
+          data[str(err_code)]['error']=str(traceback.format_exc())
+          data[str(err_code)]['author']=str(ctx.author.id)
+          data[str(err_code)]['guild']=str(ctx.guild.id)
 
           
           with open ('storage/errors.json', 'w') as f:
               json.dump(data, f, indent=4)
-          uem=discord.Embed(title="Oops!",description=f'It seems like an unexpected error happened',color=discord.Color.light_grey()).add_field(name="Error",value=f"{error} , Click the button below to get your Error id for reference").add_field(name="TROUBLESHOOTING",value="Retry again\n Check bot's/your permissions \n check command help \n Ask developers \n Try after sometime \n Drink milk and enjoy other commands")
+          uem=discord.Embed(title="Oops!",description=f'It seems like an unexpected error happened',color=0xff0800).add_field(name="Error",value=f"```py \n{error}``` \n Click the button below to get your Error id for reference").add_field(name="TROUBLESHOOTING",value="""```yml
+- Retry again\n 
+- Check bot's/your permissions \n 
+- check command help \n 
+- Ask developers \n 
+- Try after sometime \n 
+- Drink milk and enjoy other commands
+          ```""")
           msg2=await ctx.send(embed=uem,components=[row2])
           on_click = msg2.create_click_listener(timeout=60)
 

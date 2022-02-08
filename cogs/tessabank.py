@@ -11,7 +11,7 @@ class TessaBank(commands.Cog):
         self.bot = bot
 
     @perms.owner()
-    @commands.command()
+    @commands.command(hidden=True)
     async def addm(self, ctx, add: int):
         bank["totals"]["balance"] += add
         with open("bank.json", "w") as file:
@@ -19,7 +19,7 @@ class TessaBank(commands.Cog):
         await ctx.send(f'{bank["totals"]["balance"]:,} ')
 
     @perms.owner()
-    @commands.command()
+    @commands.command(hidden=True)
     async def removem(self, ctx, remove: int):
         bank["totals"]["balance"] -= remove
         with open("bank.json", "w") as file:
@@ -27,7 +27,7 @@ class TessaBank(commands.Cog):
         await ctx.send(f'{bank["totals"]["balance"]:,} ')
 
     @perms.owner()
-    @commands.command()
+    @commands.command(hidden=True)
     async def count(self, ctx):
         await ctx.send(f'{bank["totals"]["balance"]:,} ')
 

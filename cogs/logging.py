@@ -19,6 +19,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
                       description="Sets the channel in which edited/deleted message logs are sent.")
     @commands.has_permissions(administrator=True)
     async def set_modlogs_channel(self, ctx, channel: discord.TextChannel):
+    
         channel_id = channel.id
         self.modlogsFile[str(ctx.guild.id)] = int(channel_id)
         with open("storage/modlogs_channels.json", "w") as modlogsFile:

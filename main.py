@@ -103,7 +103,7 @@ except:
 #import dnspython
 intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
-    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD     BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Plugins",color=0x34363A,no_category="Base Commands",sort_commandsdef=False,show_index=False))
+    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD     BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Plugins",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=False))
 
 m = '֍'
 #slashx = SlashCommand(client)
@@ -125,13 +125,19 @@ ecomoney = cluster["discord"]["terrabux"]
 prefix=(get_prefix)
 from itertools import cycle
 from discord.ext import  tasks
-
+not_lo=[]
+not_lox=[]
+totalcog=0
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
         try:
 
           client.load_extension(f"cogs.{filename[:-3]}")
+          totalcog +=1
         except Exception as e:
+          not_lo.append(filename)
+          not_lox.append(str(e))
+
           print(f"{filename} - {traceback.print_exc()}") 
 
 
@@ -147,7 +153,13 @@ async def on_ready():
     #DiscordComponents(client) 
     print(f'{client.user} - Tessarect  has connected to Discord! Enjoy ')  
 
-    em = discord.Embed(title ="Monitor Up",description=f"Tessarect Monitor Up  ",color =discord.Color.blue())
+    em = discord.Embed(title ="<:online_status:930347639172657164> Monitor Up",description=f"Tessarect Monitor Up  ",color =discord.Color.green())
+    em.add_field(name="Cogs not loaded",value=f"{','.join(not_lo)} \n **Reason(order wise)**\n {' | '.join(not_lox)}")
+    em.add_field(name="Server Count",value=len(client.guilds),inline=True)
+    em.add_field(name="Cogs Count",value=len(client.cogs),inline=True)
+    em.add_field(name="Cogs Loaded",value=totalcog,inline=True)
+    em.add_field(name="User Count",value=len(client.users),inline=True)
+  
 
     channel=client.get_channel(929333501101215794)
     await channel.send(embed=em)
@@ -197,9 +209,9 @@ async def on_resumed():
     print("Bot user: {0.user} RESUMED".format(client))
 
     print("==========RESUMED==========")
-    em = discord.Embed(title ="Monitor RESUMED",description=f"Tessarect (Formely Tessarect (Formely Amteor)) Monitor Resumed ",color =0x00b300)
+    em = discord.Embed(title ="Monitor RESUMED",description=f"Tessarect  Monitor Resumed ",color =0x00b300)
 
-    channel = client.get_channel(918800361278550037)
+    channel = client.get_channel(929333501101215794)
 
     await channel.send(embed=em)    
 
@@ -446,18 +458,6 @@ async def color(ctx, color: typing.Optional[discord.Color]):
         await ctx.send(embed=embed,file=discord.File(fp=image_binary, filename="image.png"))
 
 
-@client.command(aliases =['delete'])
-async def delete_channel(ctx, channel_name):
-   #test
-   # check if the channel exists
-   existing_channel = discord.utils.get(ctx.guild.channels, name=channel_name)
-   
-   # if the channel exists
-   if existing_channel is not None:
-      await existing_channel.delete()
-   # if the channel does not exist, inform the user
-   else:
-      await ctx.send(f'No channel named, "{channel_name}", was found')
 
 
     #embed = discord.Embed(title=f"{ctx.guild.name}", description="Tessarect (Formely Tessarect (Formely Amteor)) Information Services", timestamp=datetime.datetime.utcnow(), color=discord.Color.blue())
@@ -577,6 +577,9 @@ async def on_member_join(member):
 
 @client.command()
 async def meme(ctx):
+    x = True
+    if x :
+      return await ctx.send('Sorry but this command is under maintainence due to some unexpected error | You can try other commands')
     #test()
     embed = discord.Embed(color=0x34363A)
     embed.set_image(url=getmeme("ProgrammerHumor"))
@@ -588,21 +591,6 @@ async def meme(ctx):
     await ctx.send(embed=embed)
 
 
-
-#The below code unbans player.
-@client.command()
-@commands.has_permissions(administrator = True)
-async def unban(ctx, *, member):
-    banned_users = await ctx.guild.bans()
-    member_name, member_discriminator = member.split("#")
-
-    for ban_entry in banned_users:
-        user = ban_entry.user
-
-        if (user.name, user.discriminator) == (member_name, member_discriminator):
-            await ctx.guild.unban(user)
-            await ctx.send(f'Unbanned {user.mention}')
-            return
 
 
 def searchyt(song):
@@ -640,13 +628,14 @@ async def pyjoke(ctx):
 
 
 
-
+os.system('pip install google bs4')
 @client.command()
 async def google(ctx, *, query):
     import google , bs4
+    e=discord.Embed(description="Here are some results",color=discord.Color.random())
     from googlesearch import search # pip install google, bs4
-    for j in search(query, tld="co.in", num=1, stop=1, pause=2):
-        await ctx.send(j) 
+    for j in search(query, tld="co.in", num=1, stop=5, pause=2):
+        e.add_field(name="_ _",value=j) 
 
 
 
@@ -658,20 +647,6 @@ async def google(ctx, *, query):
 # ---------------------------------------------------------------------------------------
 
  
-
-@client.command()
-@commands.has_permissions(administrator=True)
-async def dm(ctx,member: discord.User, *, text):
-  try:
-    em = discord.Embed(title=(f"Direct Message via Tessarect  DM Services . Sent by  {ctx.author.display_name} in  {ctx.message.guild.name}"), description=(text), color=discord.Color.blue())
-    
-    channel=await member.create_dm()
-    await channel.send(embed = em) 
-    await ctx.message.delete()
-    
-  except Exception as e:
-    print(e)
-
 
 @client.command()
 async def lyrics(ctx, *, song):
@@ -702,23 +677,6 @@ async def lyrics(ctx, *, song):
 
 
 
-
-
-@client.command()
-async def create(ctx, *, name=None):
-  if (
-        
-         ctx.author.guild_permissions.manage_messages or
-         ctx.author.id == 900992402356043806
-
-    ):
-    guild = ctx.message.guild
-    if name == None:
-     await ctx.send('Sorry, but you have to insert a name. Try again, but do it like this: `a!create [channel name]`')
-     return
-    else:
-     await guild.create_text_channel(name)
-    await ctx.send(f"Created a channel named {name}")
 
 
 
@@ -1768,9 +1726,9 @@ async def clear(ctx, amount=5):
 
 @client.command()
 async def ss(ctx, site):
-    embed=discord.Embed(colour = discord.Colour.orange(), timestamp=ctx.message.created_at)
-    embed.set_footer(text="Here is the website'ss you requested")
-    embed.set_image(url=(f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}"))
+    embed=discord.Embed(description="Here is the website'ss you requested",colour = discord.Colour.orange(), timestamp=ctx.message.created_at)
+    embed.set_footer(text="WE got some reports that images dont load in embed so they will be sent seperately so please wait for few seconds so image can load")
+    #embed.set_image(url=(f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}"))
     await ctx.send(embed=embed)
     await ctx.send(f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}")
 
@@ -1793,6 +1751,7 @@ winningConditions = [
     [0, 4, 8],
     [2, 4, 6]
 ]
+
 def prefix_check(guild):
     # Check if this is a dm instead of a server
     # Will give an error if this is not added (if guild is None)

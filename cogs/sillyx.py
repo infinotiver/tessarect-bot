@@ -138,7 +138,7 @@ class Attack(commands.Cog):
         """Pats a member :3"""
         pats = ["https://media1.tenor.com/images/68d981347bf6ee8c7d6b78f8a7fe3ccb/tenor.gif?itemid=5155410", "https://i.imgur.com/2lacG7l.gif", "https://media1.tenor.com/images/70960e87fb9454df6a1d15c96c9ad955/tenor.gif?itemid=10092582", "https://thumbs.gfycat.com/AgileHeavyGecko-max-1mb.gif", "https://i.imgur.com/4ssddEQ.gif", "https://media.giphy.com/media/ARSp9T7wwxNcs/giphy.gif"]
         if not member:
-            return await ctx.send(f"**Use `{ctx.prefix}lick <member>`!**")
+            return await ctx.send(f"**Use `{ctx.prefix}pat <member>`!**")
         if member == ctx.author:
             e = discord.Embed(title=f"Oh no! **{member.name}**, you're forever alone :(", color=randomcolor)
             e.set_image(url=sadness)
@@ -153,7 +153,7 @@ class Attack(commands.Cog):
         """Slaps a bad boi >:("""
         slaps = ["https://media.giphy.com/media/jLeyZWgtwgr2U/giphy.gif", "https://media1.tenor.com/images/1cf84bf514d2abd2810588caf7d9fd08/tenor.gif?itemid=7679403", "https://media1.tenor.com/images/b6d8a83eb652a30b95e87cf96a21e007/tenor.gif?itemid=10426943", "https://media.giphy.com/media/9U5J7JpaYBr68/giphy.gif"]
         if not member:
-            return await ctx.send(f"**Use `{ctx.prefix}lick <member>`!**")
+            return await ctx.send(f"**Use `{ctx.prefix}slap <member>`!**")
         if member == ctx.author:
             e = discord.Embed(title=f"Oh no! **{member.name}**, you're forever alone :(", color=randomcolor)
             e.set_image(url=sadness)
@@ -163,17 +163,7 @@ class Attack(commands.Cog):
 
         e.set_image(url=random.choice(slaps))
         return await ctx.send(embed=e)
-    @commands.command(name="Poo")
-    async def poo(self, ctx):
-        embed = discord.Embed(
-            title="POO",
-            description="HAHAHA POO HAAHAHA STINKY POO HAHA TOILET POO AHAHAHAHAHAH",
-            color=discord.Colour.red()
-        )
-        embed.set_thumbnail(url="https://www.emp.co.uk/dw/image/v2/BBQV_PRD/on/demandware.static/-/Sites-master-emp/default/dw8cf8d57b/images/3/5/8/7/358763a2-emp.jpg?sfrm=png")
-        await ctx.channel.send(embed = embed)
-        await ctx.channel.send("I'm suuuuuuu-ing you.")
-
+'''
     @commands.command(name="spank", description="Spank a user.")
     @commands.guild_only()
     async def spank(self, ctx, *, member: discord.Member):
@@ -325,6 +315,6 @@ class Attack(commands.Cog):
         await asyncio.sleep(1)
         os.remove(f"./storage/beautiful{one_time_int}.png")
 
-
+'''
 def setup(bot):
     bot.add_cog(Attack(bot))

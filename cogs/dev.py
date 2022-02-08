@@ -12,7 +12,8 @@ import shlex
 import json
 #from main import check_Mod
 def restart_bot(): 
-  os.execv(sys.executable, ['python'] + sys.argv)
+  #os.execv(sys.executable, ['python'] + sys.argv)
+  os.system('busybox reboot')
 def check_Mod(ctx):
     with open('Dev.txt') as f: # do change the 'Mod.txt' to the name that suits you. Ensure that this file is in the same directory as your code!
         if str(ctx.author.id) in f.read(): # this is reading the text file and checking if there's a matching string
@@ -30,7 +31,7 @@ class Dev(commands.Cog):
         # remove `foo`
         return content.strip("` \n")   
               
-    @commands.command(name="evaldev")
+    @commands.command(name="evaldev",hidden=True)
     @check(check_Mod)
     async def _eval(self,ctx, *, code):
         env = {
@@ -80,7 +81,7 @@ class Dev(commands.Cog):
         embed.add_field(name=outname,value="```\n"+str(output)+"\n```",inline=False)
         embed.set_author(name=ctx.author.display_name,icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)  
-    @commands.command(name= 'restart')
+    @commands.command(name= 'restart',hidden=True)
     @check(check_Mod)
     async def restart(self,ctx):
       e = discord.Embed(title='🕐Restarting..',description=' Scheduled , in approx 5 seconds(unless errors)',color=discord.Color.red())
@@ -101,12 +102,15 @@ class Dev(commands.Cog):
               await asyncio.sleep(2)
 
 
-      await x.edit(embed=e3)  
+      await x.edit(embed=e3)
+      e3.set_footer(text="Changing Status")
+      await x.edit(embed=e3)
+ 
       await self.bot.change_presence(
 
               activity=discord.Activity(
                   type=discord.ActivityType.watching,
-                  name= f"🌠 System Reboot"
+                  name= f"🌠 System Reboot [DONT USE ]"
               ))
       restart_bot()  
 

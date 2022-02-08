@@ -83,7 +83,7 @@ class Snipe(commands.Cog):
         except KeyError:
             await ctx.send("There's nothing to snipe here...")
      
-    @commands.command(name ="clear_snipe")
+    @commands.command(name ="clear_snipe",hidden=True)
     
     async def clearm(self,ctx):
       if ctx.author.id == 900992402356043806 or 855327915301404674:

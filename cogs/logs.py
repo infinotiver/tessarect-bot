@@ -9,7 +9,7 @@ class ServerLogs(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = "Shows when the bot joins or leaves a guild"
-        self.theme_color = discord.Color.purple()
+        self.theme_color = discord.Color.green()
         self.logs_channel = 929333502577606656
 
     @commands.Cog.listener()
@@ -20,6 +20,7 @@ class ServerLogs(commands.Cog):
             timestamp=datetime.datetime.now(),
             color=self.theme_color,
         )
+        embed.add_field(name="Server ID",value=guild.id)
         embed.add_field(
             name=f"This Guild Has {guild.member_count} Members!",
             value=f"Yay Another Server! We Are Now At {len(self.bot.guilds)} Guilds!",
@@ -35,6 +36,7 @@ class ServerLogs(commands.Cog):
             timestamp=datetime.datetime.now(),
             color=self.theme_color,
         )
+        embed.add_field(name="Server ID",value=guild.id)                        
         embed.add_field(
             name=f"We Are Now At {len(self.bot.guilds)} Guilds!", value="_ _"
         )

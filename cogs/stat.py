@@ -7,6 +7,7 @@ class StatsUpload(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
     self.VoidUpload.start()
+    self.DiscordBotsUpload.start()
 
   def cog_unload(self):
     self.VoidUpload.cancel()
@@ -26,6 +27,20 @@ class StatsUpload(commands.Cog):
         }) as r:
         json = await r.json()
         print(json)
-
+  @tasks.loop(minutes = 30)
+  async def DiscordBotsUpload(self):
+    await self.bot.wait_until_ready()
+    async with aiohttp.ClientSession() as session:
+      async with session.post(url = f"https://discordbots.gg/api/servers",
+      headers = {
+        "Authorization": f"bearer {os.environ['discordbots']}"
+        },
+      json = {
+        "client_id": self.bot.user.id,
+        "count": len(self.bot.guilds) 
+        }) as r:
+        json = await r.json()
+        print(json)
+     
 def setup(bot):
  bot.add_cog(StatsUpload(bot))   

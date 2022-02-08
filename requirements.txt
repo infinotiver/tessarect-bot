@@ -1,8 +1,10 @@
 motor==2.5.1
+algoliasearch==2.6.1
 spotipy==2.19.0
 dnspython==2.2.0
 dislash.py==1.4.9
 jishaku==2.3.2
+vacefron.py==1.6.3
 prawcore==2.3.0
 pyjokes==0.6.0
 googletrans==3.1.0a0
