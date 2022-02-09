@@ -15,7 +15,7 @@ ___
 It is my First bot but very advanced and designed for all your needs , from Moderation to cool Economy Features .
 ## Top.gg
 ###### Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support
-<a href="https://top.gg/bot/916630347746250782">
+<a href="https://top.gg/bot/916630347746250782" align="center">
   <img src="https://top.gg/api/widget/916630347746250782.svg">
 </a>
 
