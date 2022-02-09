@@ -217,6 +217,25 @@ async def on_resumed():
 
     await channel.send(embed=em)    
 
+import topgg
+
+# This example uses tasks provided by discord.ext to create a task that posts guild count to Top.gg every 30 minutes.
+
+dbl_token = os.environ['topgg']  # set this to your bot's Top.gg token
+client.topggpy = topgg.DBLClient(client, dbl_token)
+
+
+@tasks.loop(minutes=30)
+async def update_stats():
+    """This function runs every 30 minutes to automatically update your server count."""
+    try:
+        await client.topggpy.post_guild_count()
+        print(f"Posted server count ({client.topggpy.guild_count})")
+    except Exception as e:
+        print(f"Failed to post server count\n{e.__class__.__name__}: {e}")
+
+
+update_stats.start()
 @client.event
 async def on_guild_remove(guild): #when the bot is removed from the guild
     with open('prefixes.json', 'r') as f: #read the file

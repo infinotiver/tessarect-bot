@@ -3,17 +3,15 @@ import os
 from discord.ext import commands
 import aiohttp # Use `pip install aiohttp` to install
 from discord.ext import  tasks
-from discord.ext import tasks
 
-import topgg
-dbl_token = os.environ['topgg']
+
 class StatsUpload(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
     self.VoidUpload.start()
     self.DiscordBotsUpload.start()
-    self.update_stats.start()
-    self.bot.topggpy = topgg.DBLClient(self.bot, dbl_token)    
+
+  
 
   def cog_unload(self):
     self.VoidUpload.cancel()
@@ -54,21 +52,6 @@ class StatsUpload(commands.Cog):
       channel = self.bot.get_channel(int(929332390432735243))
       await channel.send(embed=embed) 
 
-
-  # This example uses tasks provided by discord.ext to create a task that posts guild count to Top.gg every 30 minutes.
-
-    # set this to your bot's Top.gg token
-  
-
-
-  @tasks.loop(minutes=30)
-  async def update_stats():
-      """This function runs every 30 minutes to automatically update your server count."""
-      try:
-          await self.bot.topggpy.post_guild_count()
-          print(f"Posted server count ({self.bot.topggpy.guild_count})")
-      except Exception as e:
-          print(f"Failed to post server count\n{e.__class__.__name__}: {e}")
 
 
     
