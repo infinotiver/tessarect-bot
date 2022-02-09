@@ -151,9 +151,12 @@ class Errors(commands.Cog):
           err_code=discord_pass.secure_password_gen(10)
           msgcon=ctx.message.content
           data[str(err_code)] = {}
-          data[str(err_code)]['error']=str(traceback.format_exc())
-          data[str(err_code)]['author']=str(ctx.author.id)
+          data[str(err_code)]['error']=str(error)
+          data[str(err_code)]['authorid']=str(ctx.author.id)
+          data[str(err_code)]['author']=str(ctx.author)
           data[str(err_code)]['guild']=str(ctx.guild.id)
+          data[str(err_code)]['full text']=str(ctx.message.content)
+          data[str(err_code)]['command used']=str(ctx.command)
 
           
           with open ('storage/errors.json', 'w') as f:

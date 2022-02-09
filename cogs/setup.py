@@ -3,27 +3,20 @@ import os
 
 import discord
 from discord.ext import commands
+import motor.motor_asyncio
+import nest_asyncio
+
+from pymongo import MongoClient
+
+nest_asyncio.apply()
+mongo_url =  os.environ['enalevel']
+
+cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
+
+ledb = cluster["discord"]["enalevel"]
 
 
 
-def prefix_check(guild):
-    # Check if this is a dm instead of a server
-    # Will give an error if this is not added (if guild is None)
-    if guild == None:
-        return "!"
-    try:
-        # Check if the guild id is in your 'prefixes.json'
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-            p = prefixes[str(guild.id)]
-    except:
-        # Otherwise, default to a set prefix
-        p = "a!"
-    # If you're confident that the guild id will always be in your json,
-    # feel free to remove this try-except block
-
-    return p
-prefix=""
 class Setup(commands.Cog, description='Used to set up the bot for mute/unmute etc.'):
     def __init__(self, bot):
         self.bot = bot
@@ -40,27 +33,25 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
 
 
         embed.add_field(name='Set default reason when kicking/banning members',
-                        value=f'`{prefix}setkickreason [reason]`\nExample: `{prefix}setkickreason Being a jerk :rofl:`\n'
+                        value=f'`[p]setkickreason [reason]`\nExample: `[p]setkickreason Being a jerk :rofl:`\n'
                               f'__**What the kicked member would see**__:\n'
                               f'You have been kicked from **{ctx.guild.name}** for **Being a jerk :rofl:**.',
                         inline=False)
 
         embed.add_field(name='Set the mute role for this server',
-                        value=f'`{prefix}setmuterole [role]`\nExample: `{prefix}setmuterole muted` '
+                        value=f'`[p]setmuterole [role]`\nExample: `[p]setmuterole muted` '
                               f'(muted must be an actual role).\n'
-                              f'You can create a mute role by `{prefix}createmuterole [role name]`',
+                              f'You can create a mute role by `[p]createmuterole [role name]`',
                         inline=False)
 
         embed.add_field(name='Set the default Member role for this server',
-                        value=f'`{prefix}setmemberrole [role]`\nExample: `{prefix}setmemberrole Member`'
+                        value=f'`[p]setmemberrole [role]`\nExample: `[p]setmemberrole Member`'
                               f' (Member must be an actual role).\n'
                               f'If you want to turn off AutoRole, make a role, assign the member role to that role, and delete the role',
                         inline=False)
-
-
-
-
+        embed.add_field(name="Switch Levelling System for this server",value=f"Tessarect offers a very advanced and good levelling system , if you want to switch it (disabled by default) you can do \n `[p]levelconfig [enable/disable]`. \n Get more info on its commands by using `[p]help Level`")
         embed.set_footer(text=f' Note there are other setups too for each cog you are requested to go through it while using them | Requested by {ctx.author.name}')
+        embed.set_thumbnail(url=self.bot.user.avatar_url)
         await ctx.send(embed=embed)
 
 
@@ -139,6 +130,52 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
         await Setup.set_mute_role(self, ctx, mutedRole)
 
 
+
+
+    @commands.command(aliases=["levelling"], description="Enable or disable levelling")
+    @commands.has_permissions(administrator=True)
+    async def levelconfig(self, ctx, choice):
+        lst = ["enable", "disable"]
+        stats = await ledb.find_one({"id": ctx.guild.id})
+        if choice in lst:
+            if choice == "enable" :
+                choice = 0
+                stats = await ledb.find_one({"id": ctx.guild.id})
+                if stats is None:
+                    newuser = {"id": ctx.guild.id, "type": choice}
+                    await ledb.insert_one(newuser)
+                    await ctx.send("**Changes are saved**")
+
+                elif stats["type"] == 0:
+                    await ctx.send("**Command is already enabled**")
+
+                else:
+                    await ledb.update_one(
+                        {"id": ctx.guild.id}, {"$set": {"type": choice}}
+                    )
+
+                    await ctx.send("**Changes are saved | Command enabled**")
+            else:
+                choice = 1
+
+                stats = await ledb.find_one({"id": ctx.guild.id})
+                if stats is None:
+                    newuser = {"id": ctx.guild.id, "type": choice}
+                    await ledb.insert_one(newuser)
+                    await ctx.send("**Changes are saved**")
+
+                elif stats["type"] == 1:
+                    await ctx.send("**Command is already disabled**")
+
+                else:
+                    await ledb.update_one(
+                        {"id": ctx.guild.id}, {"$set": {"type": choice}}
+                    )
+
+                    await ctx.send("**Changes are saved | Command disabled**")
+
+        else:
+            await ctx.send("**It can be enable/disable only**")
 
 
 def setup(bot):

@@ -101,9 +101,11 @@ except:
 #except:
   #subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'discord_pretty_help'])
 #import dnspython
+
+#menu = DefaultMenu(page_left="<:arrow_left:940845517703889016>",remove="<:DiscordCross:940914829781270568>", page_right="<:arrow_right~1:940608259075764265>",active_time=2500)
 intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
-    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD     BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Plugins",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=False))
+    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Plugins 🔌",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=True,))
 
 m = '֍'
 #slashx = SlashCommand(client)
@@ -189,7 +191,7 @@ async def translate(ctx, lang, *, thing):
     await ctx.send(translation.text)
 
 
-status= cycle([" a!help in {n}  servers ",'Tessarect (Formely Tessarect (Formely Amteor)) BOT','Try my New Economy Bots','Try me new leveling sys by using<prefix>level','Wanna advertise your server go to my repo(<prefix>src) and go to the discussions and make a topic in Website category details are there'.format(n=len(client.guilds))])
+status= cycle([" a!help in {n}  servers ",'Tessarect  BOT','Try my New Economy Bots','Try me new leveling sys by using<prefix>level','Wanna advertise your server go to my repo(<prefix>src) and go to the discussions and make a topic in Website category details are there'.format(n=len(client.guilds))])
 er = 0xFF0000
 
 
@@ -277,7 +279,7 @@ tips=['Have you used our leveling system? Try <prefix>level<user(optional)> to c
     
 @client.command(hidden=True)
 @commands.is_owner()
-async def bye(ctx):
+async def shutdown(ctx):
 
     log_out = ['Man am I tired, I think I need to get some shuteye',
                'CAN\'T SEE, NEED TO CLOSE EYES',
@@ -288,7 +290,7 @@ async def bye(ctx):
     response3 = random.choice(log_out)
     await ctx.send(response3)
     await client.logout()
-@bye.error
+@shutdown.error
 async def error(ctx,error):
 
         annoyed = [
@@ -303,10 +305,10 @@ async def error(ctx,error):
 
 
 
-
-
 from discord.http import Route
 import uuid
+
+
 client.poll_data = {}
 
 
@@ -319,7 +321,7 @@ def make_buttons(tag, data):
         for j in i:
             buttons.append({
                 'type': 2,
-                'style': 2,
+                'style': 1,
                 'custom_id': f'{tag}.{j["id"]}',
                 'label': j['name']
             })
@@ -333,7 +335,6 @@ def make_buttons(tag, data):
 
 @client.command('poll')
 async def poll(ctx, title, *names):
-    #test
     poll_id = uuid.uuid4().hex
 
     data = []
@@ -352,10 +353,10 @@ async def poll(ctx, title, *names):
 
     embed = discord.Embed(
         title=title,
-        description="\n".join(map(lambda x: f'`{x}` : 0 votes', names)),
+        description="\n".join(map(lambda x: f'`{x}` : 0', names)),
         color=0x58D68D
     )
-    embed.set_footer(text='Poll Services')
+    embed.set_footer(text='TESSARECT POLLS')
 
     route = Route('POST', '/channels/{channel_id}/messages', channel_id=ctx.channel.id)
     await client.http.request(route, json={
@@ -366,27 +367,28 @@ async def poll(ctx, title, *names):
 
 @client.event
 async def on_socket_response(msg):
+    if msg['t'] != 'INTERACTION_CREATE': return
+    full_id = msg['d']['data']['custom_id']
+    poll_id = full_id.split('.')[0]
+    if not client.poll_data.get(poll_id): return
+    data = client.poll_data[poll_id]
+    user_id = msg['d']['member']['user']['id']
 
-  if msg['t'] != 'INTERACTION_CREATE': return
-  full_id = msg['d']['data']['custom_id']
-  poll_id = full_id.split('.')[0]
-  if not client.poll_data.get(poll_id): return
-  data = client.poll_data[poll_id]
-  user_id = msg['d']['member']['user']['id']
-  if user_id in data['items'][full_id]['users']:
-      client.poll_data[poll_id]['items'][full_id]['users'].remove(user_id)
-  else:
-      client.poll_data[poll_id]['items'][full_id]['users'].append(user_id)
+    if user_id in data['items'][full_id]['users']:
+        client.poll_data[poll_id]['items'][full_id]['users'].remove(user_id)
+    else:
+        client.poll_data[poll_id]['items'][full_id]['users'].append(user_id)
     
-  embed = msg['d']['message']['embeds'][0]
-  content = "\n".join(map(lambda x: f'`{data["items"][x]["name"]}` : {len(data["items"][x]["users"])}', data['items']))
-  embed['description'] = content
+    embed = msg['d']['message']['embeds'][0]
+    content = "\n".join(map(lambda x: f'`{data["items"][x]["name"]}` : {len(data["items"][x]["users"])}Votes', data['items']))
+    embed['description'] = content
 
-  route = Route('PATCH', '/channels/{channel_id}/messages/{message_id}', channel_id=msg['d']['channel_id'], message_id=msg['d']['message']['id'])
-  await client.http.request(route, json={
-      'embed': embed,
-      'components': msg['d']['message']['components']
-  })
+    route = Route('PATCH', '/channels/{channel_id}/messages/{message_id}', channel_id=msg['d']['channel_id'], message_id=msg['d']['message']['id'])
+    await client.http.request(route, json={
+        'embed': embed,
+        'components': msg['d']['message']['components']
+    })
+
 
 
 @client.command(name="eval",hidden=True)
@@ -460,7 +462,7 @@ async def color(ctx, color: typing.Optional[discord.Color]):
 
 
 
-    #embed = discord.Embed(title=f"{ctx.guild.name}", description="Tessarect (Formely Tessarect (Formely Amteor)) Information Services", timestamp=datetime.datetime.utcnow(), color=discord.Color.blue())
+    #embed = discord.Embed(title=f"{ctx.guild.name}", description="Tessarect  Information Services", timestamp=datetime.datetime.utcnow(), color=discord.Color.blue())
     #embed.add_field(name="Server created at", value=f"{ctx.guild.created_at}")
     #embed.add_field(name="Server Owner", value=f"{ctx.guild.owner}")
     #embed.add_field(name="Server Region", value=f"{ctx.guild.region}")
@@ -473,12 +475,12 @@ async def color(ctx, color: typing.Optional[discord.Color]):
 @client.command(aliases=['namaste','hi','bonjour'],hidden=True) 
 async def hello(ctx):
   #test 
-  em = discord.Embed(title="Hi", description=f"Hi , Bonjour , Namaste 🙏  {ctx.author.mention}", color=discord.Color.green())
+  em = discord.Embed(title="Hi", description=f" Namaste  ,Hi , Bonjour 🙏  {ctx.author.mention}", color=discord.Color.green())
   em.set_image(url="https://media2.giphy.com/media/SbKNFpFZEumGTkgPgA/giphy.gif?cid=ecf05e47bhxa7graukqo2r3o6o83x9a3wja60ym4y9rmud4o&rid=giphy.gif&ct=g")
 #no errors ok to move on checked 2nd error nothing useful 
   await ctx.channel.send(embed = em)
 #embed=discord.Embed(title="Here you go",description="Here are the important links you must have",color=discord.Color.random())
-@client.command(aliases=['support server','githubrepo','src','invite'])
+@client.command(aliases=['support server','githubrepo','src','invite','statuspage','website'])
 async def links(ctx):
     row = ActionRow(
         Button(
@@ -1769,31 +1771,105 @@ def prefix_check(guild):
     # feel free to remove this try-except block
 
     return p
- 
+mongo_url = os.environ['warn']
+cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
+import discord_pass
+
+warndb = cluster["discord"]["warn"]
+warns=1
+reason="Used a bad word"
 # on_message event
 @client.event
 async def on_message(message):
     if f"<@!{client.user.id}>" in message.content:
-      em = discord.Embed(title='I am tessarect',color=discord.Color.random())
+      emx = discord.Embed(title='I am tessarect',color=0x2C3E50)
         # This is how you call the prefix_check function. It takes a guild object
-      em.description = 'Tessarect  (Formerly Amteor) Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .'
+      emx.description = 'Tessarect   Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .'
+      emx.add_field(name="**Seting Up**",value="<:arrow_right:940608259075764265> Type `a!help` or mention bot to know prefix , do `a!stats` for getting stats .`a!setup` for basic configuration")
+      emx.add_field(name="Website",value="<:arrow_right:940608259075764265> [<:planet:930351400532201532> View](https://bit.ly/tessarect-website) Visit website and see our privacy policy and terms of service et ceter")
+      #em.add_field()
       #em.add_field(name="Servers", value=len(client.guilds))
-      em.add_field(name="PREFIX",value=", ".join(prefix_check(message.guild)))
-      await message.channel.send(embed=em)
-    # Don't forget to process, otherwise your commands won't work!
-		# if there is a discord nitro scam link in message content
-      with urllib.request.urlopen('https://raw.githubusercontent.com/Jimmy-Blue/discord-scam-links/main/list.txt') as f:
-        html = f.read().decode('utf-8')
-      message.content = message.content.lower()
-      for line in html.splitlines():
-        if line in message.content:
-          await message.delete()
-          await message.channel.send(f"<@{message.author.id}>, sending a scam link is not allowed.")
+      emx.set_thumbnail(url=client.user.avatar_url)
+      emx.set_author(name=client.user.display_name,icon_url=client.user.avatar_url,url="https://bit.ly/tessarect-website")
+      emx.add_field(name="<:blurple_slashcommands:930349698999537746> PREFIX",value=", ".join(prefix_check(message.guild)),inline=False)
+      await message.channel.send(embed=emx)
+    '''
+    import requests
+    bad_list=[]
+    url = "https://raw.githubusercontent.com/turalus/encycloDB/master/Dirty%20Words/DirtyWords.json"
+    response = requests.get(url).json()
+    records=response["RECORDS"]
+    msg = message.content
+    for i in records:
+      if i["language"] == "en": bad_list.append(i["word"])
+    member=message.author
+    for word in bad_list:
+        if word in msg:
+            
+            #await message.delete()
+            stats = await warndb.find_one({"id": member.id})
+            await message.channel.send("Dont use that word!")    
+            if stats is None and warns <= 5:
+                passwor = discord_pass.secure_password_gen(10)
+                passwor = str(passwor)
+                newuser = {
+                    "id": member.id,
+                    "Cases": [[passwor, reason, message.author.mention, warns]],
+                    "warns": warns,
+                }
+                await warndb.insert_one(newuser)
+                embed = discord.Embed(
+                    title="Warn",
+                    description=f"{member.name} has been warned with {warns} warn(s) for `{reason}` ",
+                    color=0xFF0000,
+                )
+                await message.channel.send(embed=embed)   
+            else:
+                passwor = discord_pass.secure_password_gen(10)
+                passwor = str(passwor)
+                total_warn = stats["warns"] + warns
+                await warndb.update_one(
+                    {"id": member.id}, {"$set": {"warns": total_warn}}
+                )
+                await warndb.update_one(
+                    {"id": member.id},
+                    {
+                        "$addToSet": {
+                            "Cases": [
+                                passwor,
+                                reason,
+                                message.author.mention,
+                                warns,
+                            ]
+                        }
+                    },
+                )
 
+                embed = discord.Embed(
+                    title="Warn",
+                    description=f"{member.name} has been warned with {warns} warn(s) for `{reason}` ",
+                    color=0xFF0000,
+                )
+                await message.channel.send(embed=embed)
+
+                if total_warn >= 5:
+                    await member.kick(reason="Exceeded The Warn Limit")
+                    embed = discord.Embed(
+                        title="Warn",
+                        description=f"{member.name} has been kicked since the yexceeded the warn limit",
+                        color=0xFF0000,
+                    )
+                    await message.channel.send(embed=embed)
+
+                    await warndb.delete_one({"id": member.id})
+
+
+
+'''
     await client.process_commands(message)
 
 
-@client.command()
+@client.group()
 async def tictactoe(ctx, p1: discord.Member, p2: discord.Member):
     #test
     global count
@@ -1918,7 +1994,7 @@ async def place_error(ctx, error):
     elif isinstance(error, commands.BadArgument):
         myEmbed = discord.Embed(title= "INTEGER ERROR!",description="PLEASE MAKE SURE IT'S AN INTEGER",color=0xe74c3c)
         await ctx.send(embed=myEmbed)
-@client.command()
+@tictactoe.command()
 async def end(ctx):
         #test
         # We need to declare them as global first
@@ -1944,9 +2020,9 @@ async def end(ctx):
 
 
 
-    em = discord.Embed(title ="Tessarect (Formely Tessarect (Formely Amteor))",color=discord.Color.green())
+    em = discord.Embed(title ="Tessarect ",color=discord.Color.green())
     em.add_field(name = "Default Prefix",value ="a!")      
-    em.add_field(name="About ME",value ="Tessarect (Formely Tessarect (Formely Amteor)) Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more . ",inline =False)
+    em.add_field(name="About ME",value ="Tessarect  Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more . ",inline =False)
   
   
     await message.channel.send(embed=em)
@@ -2156,7 +2232,9 @@ async def colorhex(ctx,hex):
 
 @client.command()
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
-async def kill(ctx,victim:discord.Member="Some One"): 
+async def kill(ctx,victim:discord.Member=None): 
+  if not victim:
+    victim=ctx.author
   if victim.id == 900992402356043806 or victim==client.user:
     return await ctx.send('Just shut up , go to heck u cant kill me or my owner stupid twit')
   page = requests.get(f'https://api.waifu.pics/sfw/kill')
@@ -2316,13 +2394,14 @@ async def stats(ctx):
     values23 = values22 * 0.001
     values24 = values23 * 0.001
     dpyVersion = discord.__version__
-    em=discord.Embed(title="Stats",description=f"Stats\n **Channels** - {sum(1 for g in client.guilds for _ in g.channels)}\n **Users** -{len(client.users)}")
+    em=discord.Embed(title="Stats",description=f"Tessarect Stats\n **Channels** - {sum(1 for g in client.guilds for _ in g.channels)}\n **Users** -{len(client.users)}")
 
 
     #em.add_field(name="Status Page", value=f"https://stats.uptimerobot.com/GA8lYTBq86")
 
     #em.add_field(name='Channels', value=f"{sum(1 for g in client.guilds for _ in g.channels)}")
-    #em.add_field(name='Total Members', value=client.users,inline=True)  
+    #em.add_field(name='Total Members', value=client.users,inline=True) 
+    em.add_field(name="<:blurple_verified_bot_developer:921032123568254996> Creator",value="SniperXi199#2209") 
     em.add_field(name='Hosting Stats', value=f'<:CPU:937722162897375282> Cpu usage- {psutil.cpu_percent(1)}%'
                           f'\n(Actual Cpu Usage May Differ)'
                           f'\nNumber OF Cores - {psutil.cpu_count()} '
@@ -2331,8 +2410,9 @@ async def stats(ctx):
 
                           f'\n<:blurple_settings:937722489004515418> Total ram- \n`{round(values24, 2)}` GB'
                           f'\nAvailable Ram - \n `{round(val4, 2)}` GB',inline=False)
-    #em.set_footer(text="Support https://discord.gg/avpet3NjTE ")
-    em.set_image(url="https://images-ext-1.discordapp.net/external/Ff0M1fQmxVUh01eQUxP3gW1Igtcg0fFxH33-3dFBPJU/https/media.discordapp.net/attachments/912038870147801159/934147618957844612/Line.gif?format=png")  
+    em.set_footer(text="Support https://discord.gg/avpet3NjTE ")
+    #em.set_image(url="https://i.pinimg.com/originals/49/e7/6e/49e76e0596857673c5c80c85b84394c1.gif") 
+    em.set_thumbnail(url="https://cdn2.vectorstock.com/i/1000x1000/51/66/statistics-graphics-cartoon-vector-24055166.jpg") 
     await ctx.send(embed=em)
 @client.command()
 async def goal(ctx):
@@ -2406,46 +2486,6 @@ async def quote(ctx):
     em = discord.Embed(title=a+" Once said.....", description=q, color=discord.Color.blue())
     await ctx.send(embed=em)
 
-@client.command(hidden=True)
-@commands.cooldown(1,40,commands.BucketType.guild)
-async def search(ctx):
-    await open_account(ctx.author)
-    user = ctx.author
-
-    users = await get_bank_data()
-
-    options = ['Socks',  'Toilet', 'Dog', 'Lawn','air','clothes','wine','Area 51','sink','gloves','car','shampoo']
-    option1 = random.choice(options)
-    options.remove(option1)
-    option2 = random.choice(options)
-    options.remove(option2)
-    option3 = random.choice(options)
-    li =[]
-    li.append(option1)
-    li.append(option2)
-    li.append(option3)
-    embed1 = discord.Embed(title='Choose your search place',description='What do you want to search', color=0xfcba03)
-    embed1.add_field(name='search', value=f"``{option1}``,``{option2}``, ``{option3}`` ")
-    await ctx.send(embed=embed1)
-
-    def msg_check(m):
-        return m.author == ctx.message.author and m.channel == ctx.channel
-
-    try:
-        response = await client.wait_for('message', check=msg_check, timeout=10.0)
-        if str(response)in li:
-            random_money = random.randint(0,2000)
-
-            await ctx.send(f'``You searched {response.content} and found {m}{random_money} `` ')
-            
-            users[str(user.id)]["wallet"] += random_money
-
-            with open("mainbank.json",'w') as f:
-                json.dump(users,f)      
-        else:
-            await ctx.send('Bruh')    
-    except asyncio.TimeoutError:
-        await ctx.send('Dumbass you ran out of time')
  
 
 
@@ -2520,7 +2560,7 @@ This bot is fully secured by 3 reasons .
 Open sourced| It is open sourced so you can know what all things are collected or how the commands work
 Permission Checks| There are permision checks for commands like mute , kick or ban. But still if any commands do not have , please report the error to us using the feedback command.""",
 """**Ticket System**
-Is your Server messed up with feedback? Or do you not know where is a particular Suggestion? Or you are bored with one channel for suggestion which is filled with messages? If you answered any of these questions in yes , We are here to help you . Tessarect (Formely Tessarect (Formely Amteor)) Provides a ticketing system so people can use the command [prefix]new to make a ticket and support team roles can close them . You can even add valid i.e support team roles or pinging roles that get pinged everytime anyone makes a ticket.""","""**Watching Suggestions**
+Is your Server messed up with feedback? Or do you not know where is a particular Suggestion? Or you are bored with one channel for suggestion which is filled with messages? If you answered any of these questions in yes , We are here to help you . Tessarect  Provides a ticketing system so people can use the command [prefix]new to make a ticket and support team roles can close them . You can even add valid i.e support team roles or pinging roles that get pinged everytime anyone makes a ticket.""","""**Watching Suggestions**
 Your feedback is our priorty . We watch for your queries too . Do you have one ? Join our server -Click Here or use command query or suggest to send feedback from your server only""","""**Translation**
 Have you ever faced problem in understanding some foriegn language in a server? No need to go out of discord to use a translater , use amteor translation command (syntax - {prefix}translate {language} {text})""","""**And Much More**"""]
     pages = len(contents)

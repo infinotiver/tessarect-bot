@@ -330,6 +330,34 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         else:
             return await ctx.send("Wrong format. use `User#1234` or the user's ID (17/18 digits long).")
+    @commands.command(name="armorlock",aliases=['lockdown'])
+    @commands.has_permissions(manage_channels=True)
+    async def armor(self,ctx,channel:discord.TextChannel):
+      otp_success = await otp_assets.send_waitfor_otp(ctx, self.bot)
+      # random otp generator. if user enters correct otp, returns true. else, returns false
+      if not otp_success:
+          return      
+      emb=discord.Embed(title="Armor Mode",description="Initializing Armor Mode",color=discord.Color.green())
+      x=await ctx.send(embed=emb)
+      await channel.set_permissions(ctx.guild.default_role, send_messages=False)
+      em=discord.Embed(title="Armor Mode",description=f"Armor Mode Turned On | Default role can not now chat in {channel.mention}",color=discord.Color.green())
+      em.set_image(url="https://i0.wp.com/hypebeast.com/image/2016/12/iron-man-suit-360000-usd-0.gif?w=960")
+      await x.edit(content=None,embed=em)
+    @commands.command(name="armorunlock",aliases=['unlockdown'])
+    @commands.has_permissions(manage_channels=True)
+    async def armorunlock(self,ctx,channel:discord.TextChannel):
+      otp_success = await otp_assets.send_waitfor_otp(ctx, self.bot)
+      # random otp generator. if user enters correct otp, returns true. else, returns false
+      if not otp_success:
+          return
+      emb=discord.Embed(title="Armor Mode",description="Initializing Armor Mode",color=discord.Color.red())
+      x=await ctx.send(embed=emb)
+      await channel.set_permissions(ctx.guild.default_role, send_messages=True)
+      em=discord.Embed(title="Armor Mode",description=f"Armor Mode Turned Off | Default role can now chat in {channel.mention}",color=discord.Color.red())
+      em.set_image(url="https://c.tenor.com/nhG08mOiOCMAAAAM/iron-man-mark50suit-up-iron-man.gif")
+      await x.edit(content=None,embed=em)        
+        
+
 
     @commands.command(name="leave_guild", aliases=["leaveguild", "leaveserver"],
                       description="The command to remove me from  server using id",hidden=True)

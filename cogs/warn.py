@@ -12,7 +12,7 @@ nest_asyncio.apply()
 sys.path.append("discord_pass.py")
 import os
 
-mongo_url = "mongodb+srv://prakarsh17:Prakarsh_262@remindercog.yjf1z.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+mongo_url = os.environ['warn']
 
 cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
 import discord_pass

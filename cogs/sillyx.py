@@ -7,6 +7,7 @@ import ast
 import discord
 from discord.ext import commands
 import aiohttp
+import vacefron
 
 
 async def aiohttp_get(url: str):
@@ -49,17 +50,10 @@ import random
 import discord
 
 
-def get_otp(digits=4):
-    otp = ""
-    for x in range(digits):
-        otp += str(random.randint(0, 9))
-    return otp
 
 
-async def genpost(api, header, json):
-    async with aiohttp.ClientSession() as session:
-        async with session.post(api, headers=header, json=json) as resp:
-            return await resp.json()
+
+
 sadness = 'https://media0.giphy.com/media/OPU6wzx8JrHna/giphy.gif'
 
 randomcolor = random.choice([discord.Color.red(), discord.Color.blue(), discord.Color.green(), discord.Color.purple(), discord.Color.magenta(), discord.Color.gold()])
@@ -69,13 +63,8 @@ class Attack(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.spank_url = "https://api.devs-hub.xyz/spank?"
-        self.hitler_url = "https://api.devs-hub.xyz/hitler?image="
-        self.grab_url = "https://api.devs-hub.xyz/grab?image="
-        self.trigger_url = "https://api.devs-hub.xyz/trigger?image="
-        self.delete_url = "https://api.devs-hub.xyz/delete?image="
-        self.wasted_url = "https://api.devs-hub.xyz/wasted?image="
-        self.beautiful_url = "https://api.devs-hub.xyz/beautiful?image="
+        self.vac_api = vacefron.Client()
+
   
        
     @commands.command(usage='<member>')
@@ -146,7 +135,79 @@ class Attack(commands.Cog):
         e = discord.Embed(title=f"**{member.name}**, you got a pat by **{ctx.author.name}**!", color=randomcolor)
         e.set_image(url=random.choice(pats))
         return await ctx.send(embed=e)
-    
+    @commands.command()
+    async def eject(self,ctx, name, crewmate, impostor=True):
+        image = await self.vac_api.ejected(name, crewmate, impostor)
+        image_out = discord.File(fp = await image.read(), filename = "ejected.png")
+
+        await ctx.send(file = image_out)
+    '''    
+    @commands.command()
+    async def first_time(self,ctx, user:discord.Member):
+        image = await self.vac_api.first_time(user.avatar_url)
+        image_out = discord.File(fp = await image.read(), filename = "firsttime.png")
+
+        await ctx.send(file = image_out) 
+    '''
+    @commands.command()
+    async def grave_user(self,ctx, user:discord.Member):
+        image = await self.vac_api.grave(user.avatar_url)
+        image_out = discord.File(fp = await image.read(), filename = "grave.png")
+
+        await ctx.send(file = image_out)
+    @commands.command()
+    async def iam_speed(self,ctx, user:discord.Member):
+        image = await self.vac_api.iam_speed(user.avatar_url)
+        image_out = discord.File(fp = await image.read(), filename = "iam_speed.png")
+        await ctx.send(file = image_out)
+    @commands.command()
+    async def i_can_milk_you(self,ctx, user:discord.Member,user2:discord.Member=None):
+        image = await self.vac_api.i_can_milk_you(user.avatar_url,user2=user2.avatar_url)
+        image_out = discord.File(fp = await image.read(), filename = "iam_speed.png")
+        await ctx.send(file = image_out) 
+    @commands.command()
+    async def heaven(self,ctx, user:discord.Member):
+        image = await self.vac_api.heaven(user.avatar_url)
+        image_out = discord.File(fp = await image.read(), filename = "heaven.png")
+        await ctx.send(file = image_out)
+    @commands.command()
+    async def npc(self,ctx, text,text1):
+        image = await self.vac_api.npc(text,text1)
+        image_out = discord.File(fp = await image.read(), filename = "npc.png")
+        await ctx.send(file = image_out) 
+    @commands.command()
+    async def stonks(self,ctx,user:discord.Member,not_stonks:bool=True):
+        image = await self.vac_api.stonks(user.avatar_url,not_stonks)
+        image_out = discord.File(fp = await image.read(), filename = "stonks.png")
+        await ctx.send(file = image_out)
+    @commands.command()
+    async def table_flip(self,ctx,user:discord.Member):
+        image = await self.vac_api.table_flip(user.avatar_url)
+        image_out = discord.File(fp = await image.read(), filename = "table_flip.png")
+        await ctx.send(file = image_out)
+    @commands.command()
+    async def water(self,ctx,*,text):
+        image = await self.vac_api.water(text)
+        image_out = discord.File(fp = await image.read(), filename = "water.png")
+        await ctx.send(file = image_out)
+    @commands.command()
+    async def wide(self,ctx,user:discord.Member):
+        image = await self.vac_api.wide(user.avatar_url)
+        image_out = discord.File(fp = await image.read(), filename = "widep.png")
+        await ctx.send(file = image_out) 
+
+    @commands.command()
+    async def wolverine(self,ctx,user:discord.Member):
+        image = await self.vac_api.wolverine(user.avatar_url)
+        image_out = discord.File(fp = await image.read(), filename = "wolverine.png")
+        await ctx.send(file = image_out)        
+    @commands.command()
+    async def womanyellingatcat(self,ctx, user:discord.Member,user2:discord.Member):
+        image = await self.vac_api.woman_yelling_at_cat(user.avatar_url,user2.avatar_url)
+        image_out = discord.File(fp = await image.read(), filename = "woman_yelling_at_cat.png")
+      
+        await ctx.send(file = image_out) 
+
     @commands.command(usage='<member>')
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def slap(self, ctx, member: discord.Member=None):
@@ -163,158 +224,7 @@ class Attack(commands.Cog):
 
         e.set_image(url=random.choice(slaps))
         return await ctx.send(embed=e)
-'''
-    @commands.command(name="spank", description="Spank a user.")
-    @commands.guild_only()
-    async def spank(self, ctx, *, member: discord.Member):
-        one_time_int =get_otp(digits=4)
-        #  random 4 digit int so multiple requests dont overwrite the file
-        if member is None:
-            member = ctx.author
-        async with ctx.typing():
-            user1 = ctx.author.avatar_url
-            user2 = member.avatar_url
-            spank_url = f"{self.spank_url}face={user1}&face2={user2}"
 
-            binary_data = await aiohttp_get_binary(spank_url)
 
-            with open(f"./storage/spank{one_time_int}.png", "wb") as writeFile:
-                writeFile.write(binary_data)
-            file = discord.File(f"./storage/spank{one_time_int}.png", filename=f"spank{one_time_int}.png")
-
-            embed = discord.Embed(title=f"Get spanked, {member.display_name}!", color=get_color(member))
-            embed.set_image(url=f"attachment://spank{one_time_int}.png")
-            await ctx.reply(file=file, embed=embed)
-        await asyncio.sleep(1)
-        os.remove(f"./storage/spank{one_time_int}.png")
-
-    @commands.command(name="hitler", description="Breaking news! [user] is worse than Hitler!")
-    @commands.guild_only()
-    async def hitler(self, ctx, *, member: discord.Member = None):
-        one_time_int = get_otp(digits=4)
-        #  random 4 digit int so multiple requests dont overwrite the file
-        if member is None:
-            member = ctx.author
-        async with ctx.typing():
-            hitler_url = f"{self.hitler_url}{member.avatar_url}"
-
-            binary_data = await aiohttp_get_binary(hitler_url)
-
-            with open(f"./storage/hitler{one_time_int}.png", "wb") as writeFile:
-                writeFile.write(binary_data)
-            file = discord.File(f"./storage/hitler{one_time_int}.png", filename=f"hitler{one_time_int}.png")
-
-            embed = discord.Embed(title=f"Oh no {member.name}, what have you done!",
-                                  color=get_color(member))
-            embed.set_image(url=f"attachment://hitler{one_time_int}.png")
-            await ctx.reply(file=file, embed=embed)
-        await asyncio.sleep(1)
-        os.remove(f"./storage/hitler{one_time_int}.png")
-
-    @commands.command(name="grab", description="Make a user's pfp grab you!")
-    @commands.guild_only()
-    async def grab(self, ctx, *, user: discord.Member = None):
-        one_time_int = get_otp(digits=4)
-        #  random 4 digit int so multiple requests dont overwrite the file
-        if user is None:
-            user = ctx.author
-        grab_url = f"{self.grab_url}{user.avatar_url}"
-        async with ctx.typing():
-            binary_data = await aiohttp_get_binary(grab_url)
-            try:
-                dict_error = ast.literal_eval(binary_data.decode("utf-8"))
-                if dict_error.get("error") is not None:
-                    return await ctx.send(dict_error.get("error"))
-            except:
-                pass
-            with open(f"./storage/grab{one_time_int}.png", "wb") as writeFile:
-                writeFile.write(binary_data)
-            file = discord.File(f"./storage/grab{one_time_int}.png", filename=f"grab{one_time_int}.png")
-
-            embed = discord.Embed(color=get_color(ctx.author))
-            embed.set_image(url=f"attachment://grab{one_time_int}.png")
-            await ctx.reply(file=file, embed=embed)
-        await asyncio.sleep(1)
-        os.remove(f"./storage/grab{one_time_int}.png")
-
-    @commands.command(name="trigger", description="Trigger a user! Get a \"Triggered!\" image!")
-    @commands.guild_only()
-    async def trigger(self, ctx, *, member: discord.Member = None):
-        one_time_int = get_otp(digits=4)
-        #  random 4 digit int so multiple requests dont overwrite the file
-        if member is None:
-            member = ctx.author
-        grab_url = f"{self.trigger_url}{member.avatar_url}"
-        async with ctx.typing():
-            binary_data = await aiohttp_get_binary(grab_url)
-            with open(f"./storage/trigger{one_time_int}.gif", "wb") as writeFile:
-                writeFile.write(binary_data)
-            file = discord.File(f"./storage/trigger{one_time_int}.gif", filename=f"trigger{one_time_int}.gif")
-
-            embed = discord.Embed(color=get_color(ctx.author))
-            embed.set_image(url=f"attachment://trigger{one_time_int}.gif")
-            await ctx.reply(file=file, embed=embed)
-        await asyncio.sleep(1)
-        os.remove(f"./storage/trigger{one_time_int}.gif")
-
-    @commands.command(name="delete_mem", description="Delete a member. Begone, filthy mortal!")
-    @commands.guild_only()
-    async def delete_user(self, ctx, user: discord.Member = None, dark=None):
-        if user is None:
-            user = ctx.author
-
-        one_time_int = get_otp(digits=4)
-        if dark == "dark":
-            grab_url = f"{self.delete_url}{user.avatar_url}&darkmode={dark}"
-        else:
-            grab_url = f"{self.delete_url}{user.avatar_url}"
-        async with ctx.typing():
-            binary_data = await aiohttp_get_binary(grab_url)
-            with open(f"./storage/delete{one_time_int}.png", "wb") as writeFile:
-                writeFile.write(binary_data)
-            file = discord.File(f"./storage/delete{one_time_int}.png", filename=f"delete{one_time_int}.png")
-            embed = discord.Embed(color=get_color(user))
-            embed.set_image(url=f"attachment://delete{one_time_int}.png")
-            await ctx.reply(file=file, embed=embed)
-        await asyncio.sleep(1)
-        os.remove(f"./storage/delete{one_time_int}.png")
-
-    @commands.command(name="wasted", aliases=["gta"], description="A user's pfp, but with the GTA \"Wasted\" overlay")
-    @commands.guild_only()
-    async def wasted(self, ctx, *, user: discord.Member = None):
-        if user is None:
-            user = ctx.author
-        url = f"{self.wasted_url}{user.avatar_url}"
-        one_time_int = get_otp(digits=4)
-        async with ctx.typing():
-            binary_data = await aiohttp_get_binary(url)
-            with open(f"./storage/wasted{one_time_int}.png", "wb") as writeFile:
-                writeFile.write(binary_data)
-            file = discord.File(f"./storage/wasted{one_time_int}.png", filename=f"wasted{one_time_int}.png")
-            embed = discord.Embed(color=get_color(user), title=f"{user.display_name}, you died.")
-            embed.set_image(url=f"attachment://wasted{one_time_int}.png")
-            await ctx.reply(file=file, embed=embed)
-        await asyncio.sleep(1)
-        os.remove(f"./storage/wasted{one_time_int}.png")
-
-    @commands.command(name="beautiful", description="compliment a user for their beauty.")
-    @commands.guild_only()
-    async def beautiful(self, ctx, *, user: discord.Member = None):
-        if user is None:
-            user = ctx.author
-        url = f"{self.beautiful_url}{user.avatar_url}"
-        one_time_int =get_otp(digits=4)
-        async with ctx.typing():
-            binary_data = await aiohttp_get_binary(url)
-            with open(f"./storage/beautiful{one_time_int}.png", "wb") as writeFile:
-                writeFile.write(binary_data)
-            file = discord.File(f"./storage/beautiful{one_time_int}.png", filename=f"beautiful{one_time_int}.png")
-            embed = discord.Embed(color=get_color(user), title=f"{user.display_name}, you're beautiful.")
-            embed.set_image(url=f"attachment://beautiful{one_time_int}.png")
-            await ctx.reply(file=file, embed=embed)
-        await asyncio.sleep(1)
-        os.remove(f"./storage/beautiful{one_time_int}.png")
-
-'''
 def setup(bot):
     bot.add_cog(Attack(bot))
