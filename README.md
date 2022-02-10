@@ -19,11 +19,7 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 <a href="https://top.gg/bot/916630347746250782" >
   <img src="https://top.gg/api/widget/916630347746250782.svg">
 </a>
-<a href="https://top.gg/bot/916630347746250782">
-  <img src="https://top.gg/api/widget/servers/916630347746250782.svg" align="left">
-</a>
-<a href="https://top.gg/bot/916630347746250782">
-  <img src="https://top.gg/api/widget/upvotes/916630347746250782.svg" align="right">
+
 </a>
 </p>
 <p align="center">
@@ -115,9 +111,9 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 - [x] Secured
 - [x] Ticket System
 - [x] Translation
-- [ ] Images Commands (Broken due to api errors)
-- [ ] AUTOMOD
-- [ ] Moderator Commands (Under development / testing)
+- [x] Moderator Commands (More commands Under development)
+- [x] Images Commands (Fixed Again)
+- [ ] AUTOMOD ( development startd)
 - [ ] Advanced Economy Features
 # Cogs (Plugins)
 **40+ Cogs(plugins) for better experience and more features** 

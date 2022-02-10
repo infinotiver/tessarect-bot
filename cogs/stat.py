@@ -3,7 +3,7 @@ import os
 from discord.ext import commands
 import aiohttp # Use `pip install aiohttp` to install
 from discord.ext import  tasks
-
+import topgg
 
 class StatsUpload(commands.Cog):
   def __init__(self, bot):

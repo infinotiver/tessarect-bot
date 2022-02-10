@@ -105,7 +105,7 @@ except:
 #menu = DefaultMenu(page_left="<:arrow_left:940845517703889016>",remove="<:DiscordCross:940914829781270568>", page_right="<:arrow_right~1:940608259075764265>",active_time=2500)
 intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
-    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Plugins 🔌",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=True,))
+    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Plugins 🔌",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=True))
 
 m = '֍'
 #slashx = SlashCommand(client)
@@ -632,10 +632,6 @@ async def yt(ctx, *, url):
 
 
 import platform
-@client.command(hidden=True)
-async def botplatform(ctx):
-    """Shows what OS the bot is running on."""
-    await ctx.send("The bot is currently running on: ```" + str(platform.platform()) + "```")
 
 
 
@@ -2413,25 +2409,23 @@ async def stats(ctx):
     values23 = values22 * 0.001
     values24 = values23 * 0.001
     dpyVersion = discord.__version__
-    em=discord.Embed(title="Stats",description=f"Tessarect Stats\n **Channels** - {sum(1 for g in client.guilds for _ in g.channels)}\n **Users** -{len(client.users)}")
+    em=discord.Embed(title="Stats",description=f"Tessarect Stats \n <:blurple_verified_bot_developer:921032123568254996> **Creator** \n__**SniperXi199#2209**__\n **Channels** \n <:Reply:941181074015412225> {sum(1 for g in client.guilds for _ in g.channels)}\n **Users** \n <:Reply:941181074015412225>{len(client.users)}",color=discord.Color.gold())
 
-
-    #em.add_field(name="Status Page", value=f"https://stats.uptimerobot.com/GA8lYTBq86")
-
-    #em.add_field(name='Channels', value=f"{sum(1 for g in client.guilds for _ in g.channels)}")
-    #em.add_field(name='Total Members', value=client.users,inline=True) 
-    em.add_field(name="<:blurple_verified_bot_developer:921032123568254996> Creator",value="SniperXi199#2209") 
-    em.add_field(name='Hosting Stats', value=f'<:CPU:937722162897375282> Cpu usage- {psutil.cpu_percent(1)}%'
-                          f'\n(Actual Cpu Usage May Differ)'
-                          f'\nNumber OF Cores - {psutil.cpu_count()} '
-                          f'\nNumber of Physical Cores- {psutil.cpu_count(logical=False)}'
-                          f'\n'
-
-                          f'\n<:blurple_settings:937722489004515418> Total ram- \n`{round(values24, 2)}` GB'
-                          f'\nAvailable Ram - \n `{round(val4, 2)}` GB',inline=False)
-    em.set_footer(text="Support https://discord.gg/avpet3NjTE ")
+    em.add_field(name='<:CPU:937722162897375282> Hosting Stats', value=f'''```yml
+Cpu_usage: {psutil.cpu_percent(1)}%
+(Actual Cpu Usage May Differ)
+                          
+Cores: {psutil.cpu_count()} 
+Physical_Cores: {psutil.cpu_count(logical=False)}
+BotPlatform: {str(platform.platform())}
+                          \n```''',inline=True)
+    em.add_field(name='<:blurple_settings:937722489004515418> Storage', value=
+                          f'''\n ```yml
+                          \nTotal_ram: {round(values24, 2)} GB                          
+                          \nAvailable_Ram : {round(val4, 2)} GB```''',inline=False)                          
+    em.set_footer(text="Vote here : https://top.gg/bot/916630347746250782/vote ")
     #em.set_image(url="https://i.pinimg.com/originals/49/e7/6e/49e76e0596857673c5c80c85b84394c1.gif") 
-    em.set_thumbnail(url="https://cdn2.vectorstock.com/i/1000x1000/51/66/statistics-graphics-cartoon-vector-24055166.jpg") 
+    em.set_thumbnail(url=client.user.avatar_url) 
     await ctx.send(embed=em)
 @client.command()
 async def goal(ctx):
