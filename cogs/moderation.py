@@ -3,17 +3,30 @@ import asyncio
 import json
 import os
 import re
-
+import datetime
 import discord
 from discord.ext import commands
 from discord.utils import get
 
-from assets import time_calc, misc_checks, otp_assets
+from assets import time_calc, misc_checks, otp_assets,button_check
 
 
 class Moderation(commands.Cog, description="Moderation commands. Use with caution."):
     def __init__(self, bot):
         self.bot = bot
+    '''
+    @commands.command(name='timeout', description='Timeouts the person mentioned. Time period is required and should be in munutes| NEW |')
+    @commands.has_permissions(manage_roles=True)
+    async def timeout_func(self, ctx, user: discord.Member, time_period:int,*,reason:str=None):
+      time_period=int(time_period)
+      await user.edit(timeout = datetime.timedelta(minutes = time_period))
+      muteem=discord.Embed(description=f"<:command:941986813013274625> Action: Timeout\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}\n<:timer:941993935507689492> Time:  {time_period} minute",color=0x34363A)
+      muteem.add_field(name="<:rightarrow:941994550124245013> Reason", value=reason, inline=False)
+      await ctx.send(embed=muteem)
+      '''
+
+
+
 
     @commands.command(name='mute', description='Mutes the person mentioned. Time period is optional.')
     @commands.has_permissions(manage_roles=True)

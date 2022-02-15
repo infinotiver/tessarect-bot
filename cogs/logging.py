@@ -33,7 +33,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         message_channel_id = self.modlogsFile.get(str(before.guild.id))
         if message_channel_id is None:
             return
-        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        message_channel = self.bot.get_channel(int(message_channel_id))
         if message_channel is None:
             return
         message_link = f"https://discord.com/channels/{before.guild.id}/{before.channel.id}/{before.id}"
@@ -57,7 +57,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         message_channel_id = self.modlogsFile.get(str(message.guild.id))
         if message_channel_id is None:
             return
-        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        message_channel = self.bot.get_channel(int(message_channel_id))
         if message_channel is None:
             return
         embed = discord.Embed(title=f"Message deleted in {message.channel.name}",
@@ -79,7 +79,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         message_channel_id = (self.modlogsFile.get(str(messages[0].guild.id)))
         if message_channel_id is None:
             return
-        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        message_channel = self.bot.get_channel(int(message_channel_id))
         if message_channel is None:
             return
         with open(f"storage/tempText/{messages[0].guild.id}.txt", "w") as temp_textfile:
@@ -99,7 +99,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         message_channel_id = self.modlogsFile.get(str(guild.id))
         if message_channel_id is None:
             return
-        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        message_channel = self.bot.get_channel(int(message_channel_id))
         if message_channel is None:
             return
         embed = discord.Embed(title=f"{member} has been banned from {guild.name}", description=f"ID: {member.id}",
@@ -113,7 +113,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         message_channel_id = self.modlogsFile.get(str(before.guild.id))
         if message_channel_id is None:
             return
-        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        message_channel = self.bot.get_channel(int(message_channel_id))
         if message_channel is None:
             return
 
@@ -153,7 +153,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         message_channel_id = self.modlogsFile.get(str(guild.id))
         if message_channel_id is None:
             return
-        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        message_channel = self.bot.get_channel(int(message_channel_id))
         if message_channel is None:
             return
         embed = discord.Embed(title=f"{member} has been unbanned", description=f"ID: {member.id}",
@@ -169,7 +169,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         message_channel_id = self.modlogsFile.get(str(member.guild.id))
         if message_channel_id is None:
             return
-        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        message_channel = self.bot.get_channel(int(message_channel_id))
         if message_channel is None:
             return
         embed = discord.Embed(title=f"{member} joined the the server.", color=discord.Color.green(),
@@ -185,7 +185,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         message_channel_id = self.modlogsFile.get(str(member.guild.id))
         if message_channel_id is None:
             return
-        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        message_channel = self.bot.get_channel(int(message_channel_id))
         if message_channel is None:
             return
         roles = [role for role in member.roles]

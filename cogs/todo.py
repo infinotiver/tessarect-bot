@@ -280,14 +280,14 @@ class Todo(commands.Cog):
                 for entry in sorted_keys:
 
                     if self.todo_list[entry][0] == "none":
-                        embed.description += "\u2022 {}\n".format(entry)
+                        embed.description += "<:checkbox:942779132591370310> {}\n".format(entry)
                     elif self.todo_list[entry][0] == "done":
-                        embed.description += "\u2022 {}` - `time's up!\n".format(entry)
+                        embed.description += "<:checkboxcheck:942779132117409863>  [time's up!] {}\n".format(entry)
                     else:
                         m, s = divmod(self.todo_list[entry][0]-current_time(), 60)
                         h, m = divmod(m, 60)
                         d, h = divmod(h, 24)
-                        embed.description += "\u2022 {} \n` - ` time left: {}\n".format(entry, "%02d:%02d:%02d:%02d" % (int(d), int(h), int(m), int(s)))
+                        embed.description += "<:checkboxsquare:942779132159356959> {} \n time left: {}\n".format(entry, "%02d:%02d:%02d:%02d" % (int(d), int(h), int(m), int(s)))
                         if entry[1] != 0:
                             if self.todo_list[entry][2] != 0:
                                 channels = []
@@ -314,7 +314,7 @@ class Todo(commands.Cog):
                                 embed.description += '   ` - `Repeat: %s' % repeat
 
                         else:
-                            embed.description += "\u2022 {}` - `time left: {}\n".format(entry, "%02d:%02d:%02d:%02d" % (int(d), int(h), int(m), int(s)))
+                            embed.description += " {}<:checkbox:942779132591370310> time left: {}\n".format(entry, "%02d:%02d:%02d:%02d" % (int(d), int(h), int(m), int(s)))
 
                     if len(embed.description + description) > 2000:
                         all_entries.append(embed)

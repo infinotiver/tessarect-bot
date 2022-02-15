@@ -8,6 +8,7 @@ import os
 import asyncio
 import sys
 import assets.otp_assets
+import assets.button_check
 import subprocess
 from subprocess import Popen, PIPE
 import shlex
@@ -133,20 +134,21 @@ class Dev(commands.Cog):
         embed.add_field(name=outname,value="```\n"+str(output)+"\n```",inline=False)
         embed.set_author(name=ctx.author.display_name,icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)  
-    @commands.command(name= 'restart',hidden=True)
+    @commands.command(name= 'restart',hidden=True,help='Hidden command, youre not supposed to access this.Now off you go. Nothing to see here.')
     @check(check_Mod)
     async def restart(self,ctx,mode:int=1):
+      
       otp_success = await assets.otp_assets.send_waitfor_otp(ctx, self.bot)
       # random otp generator. if user enters correct otp, returns true. else, returns false
       if not otp_success:
           return 
       async with ctx.typing():  
     
-        e = discord.Embed(title='🕐Restarting..',description=f' Scheduled , in approx 5 seconds(unless errors) Mode = {mode} \n 1 = Simple restart 2 = Full restart',color=discord.Color.red())
+        e = discord.Embed(title='<:reset:942782303552282624>Restarting..',description=f' Scheduled , in approx 5 seconds(unless errors) Mode = {mode} \n 1 = Simple restart 2 = Full restart',color=discord.Color.red())
         e3= discord.Embed(title='<:Protectedshield:922468797246488596> **RESTARTING BOT **',description="Unloaded cogs,Final Works , ",color=discord.Color.green())
         e2= discord.Embed(title='<a:Loading:941646457562365962>',description="Unloading cogs",color=discord.Color.blue())  
         x = await ctx.send(embed=e)
-
+        await asyncio.sleep(2)
         await x.edit(embed=e2)
         await asyncio.sleep(2)
         for filename in os.listdir("./cogs"):
@@ -174,16 +176,7 @@ class Dev(commands.Cog):
             json.dump(ctx.message.channel.id, rebootFile)                
         restart_bot(mode)  
 
-    @commands.command(name='reboot', description='Hidden command, youre not supposed to access this.\n'
-                                                 'Now off you go. Nothing to see here.')
-    @check(check_Mod)
-    async def reboot(self, ctx):
-        async with ctx.typing():
-            await ctx.send('Rebooting...')
-            with open("./storage/reboot.json", "w") as rebootFile:
-                json.dump(ctx.message.channel.id, rebootFile)
-        print(sys.argv)
-        os.execv(sys.executable, ['python'] + sys.argv)
+
 
     @commands.command(name='reload', description="Reload all/one of the bot's cogs.\n"
                                                  "This is Dev-only, so don't have any funny ideas.", )

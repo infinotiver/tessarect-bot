@@ -2,7 +2,7 @@ import os
 with open("requirements.txt") as file:
     os.system(f"pip3 install {' '.join(file.read().split())}")
 import time
-import discord
+import  discord
 import traceback
 from dislash import SelectMenu,SelectOption
 import web        
@@ -174,7 +174,8 @@ async def on_ready():
     if os.path.exists("./storage/reboot.json"):
         with open("./storage/reboot.json", "r") as readFile:
             channel_id = json.load(readFile)
-        channel = client.get_channel(id=channel_id)
+
+        channel = client.get_channel(channel_id)
         ex=discord.Embed(title="Successfully Rebooted",description="Heyo I am back after reboot ",color=discord.Color.green())
         await channel.send(embed=ex)
 
@@ -349,6 +350,7 @@ async def error(ctx,error):
 
 
 
+
 from discord.http import Route
 import uuid
 
@@ -365,7 +367,7 @@ def make_buttons(tag, data):
         for j in i:
             buttons.append({
                 'type': 2,
-                'style': 5,
+                'style': 2,
                 'custom_id': f'{tag}.{j["id"]}',
                 'label': j['name']
             })
@@ -378,7 +380,7 @@ def make_buttons(tag, data):
 
 
 @client.command('poll')
-async def poll(ctx, title, *names):
+async def poll(ctx, title):
     poll_id = uuid.uuid4().hex
 
     data = []
@@ -424,7 +426,7 @@ async def on_socket_response(msg):
         client.poll_data[poll_id]['items'][full_id]['users'].append(user_id)
     
     embed = msg['d']['message']['embeds'][0]
-    content = "\n".join(map(lambda x: f'`{data["items"][x]["name"]}` : {len(data["items"][x]["users"])}Votes', data['items']))
+    content = "\n".join(map(lambda x: f'`{data["items"][x]["name"]}` : {len(data["items"][x]["users"])} Votes', data['items']))
     embed['description'] = content
 
     route = Route('PATCH', '/channels/{channel_id}/messages/{message_id}', channel_id=msg['d']['channel_id'], message_id=msg['d']['message']['id'])
@@ -762,7 +764,13 @@ async def open_ter( id : int):
 #@slashx.slash(name="balance")
 @client.command(aliases=['bal'])
 async def balance(ctx ,user: discord.Member = None):
-
+  row = ActionRow(
+      Button(
+          style=ButtonStyle.blurple,
+          label="Terrabux!",
+          custom_id="trx"
+      )
+  )
   if user is None:
 
     user = ctx.author
@@ -2906,6 +2914,7 @@ async def add_dev(ctx, user:discord.Member=None):
         await ctx.send(f"{user} added as a Dev!")
  
 '''
+
 web.keep_alive()
 client.run(os.environ['token'],reconnect=True)
 

@@ -2,11 +2,7 @@ import discord
 from discord.ext import commands,tasks
 import subprocess
 import sys
-try:
-
-  import akinator 
-except:
-  subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'akinator.py'])
+import akinator 
 import random
 import requests
 import json

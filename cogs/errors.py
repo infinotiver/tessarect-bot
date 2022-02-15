@@ -58,7 +58,7 @@ class Errors(commands.Cog):
                 fmt = " and ".join(missing)
 
             embed = discord.Embed(
-                title="Missing Permissions",
+                title="<:error:942777902125158473> Missing Permissions",
                 description=f"I am missing **{fmt}** permissions to run this command :(",
                 color=0xFF0000,
             )
@@ -67,7 +67,7 @@ class Errors(commands.Cog):
         elif isinstance(error, commands.CommandNotFound):
           return
         elif isinstance(error, commands.DisabledCommand):
-            await ctx.send("This command has been disabled.")
+            await ctx.send("<:error:942777902125158473> This command has been disabled.")
             return
 
         elif isinstance(error, commands.CommandOnCooldown):
@@ -92,7 +92,7 @@ class Errors(commands.Cog):
             else:
                 fmt = " and ".join(missing)
             embed = discord.Embed(
-                title="Insufficient Permission(s)",
+                title=" <:error:942777902125158473>Insufficient Permission(s)",
                 description=f"You need the **{fmt}** permission(s) to use this command.",
                 color=0xFF0000,
             )
@@ -102,7 +102,7 @@ class Errors(commands.Cog):
 
         elif isinstance(error, commands.UserInputError):
             embed = discord.Embed(
-                title="Invalid Input",
+                title="<:error:942777902125158473> Invalid Input",
                 description=f"Maybe you forgot to specify inputs or gave an extra input\nSPECIFIED ERROR\n ==> `{error}`",
                 color=0xFF0000,
             )
@@ -112,14 +112,14 @@ class Errors(commands.Cog):
 
         elif isinstance(error, commands.NoPrivateMessage):
             try:
-                await ctx.author.send("This command cannot be used in direct messages.")
+                await ctx.author.send("<:error:942777902125158473> This command cannot be used in direct messages.")
             except discord.Forbidden:
                 raise error
             return
         elif isinstance(error, discord.errors.Forbidden):
             try:
                 embed = discord.Embed(
-                    title="Forbidden",
+                    title="<:error:942777902125158473> Forbidden",
                     description=f"Error - 403 - Forbidden | Missing perms",
                     color=0xFF0000,
                 )
