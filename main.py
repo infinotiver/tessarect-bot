@@ -2907,6 +2907,6 @@ async def add_dev(ctx, user:discord.Member=None):
  
 '''
 web.keep_alive()
-client.run(os.environ['token'],reconnect=True)
+client.run(os.environ['token2'],reconnect=True)
 
 
