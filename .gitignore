@@ -3,6 +3,9 @@
 *.txt
 .cache/
 *.pyc
+mainbank.json
+prefixes.json
+output.png
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
