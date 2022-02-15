@@ -32,7 +32,6 @@ It is my First bot but very advanced and designed for all your needs , from Mode
   <a href="https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE">License</a>
 </p>
 
-
 <p align="center">
 
   <a href="https://discord.gg/avpet3NjTE">
@@ -96,7 +95,6 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 [![GitHub license](https://img.shields.io/github/license/prakarsh17/tessarect-bot.svg)](https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE)
 
 
-[![Stargazers over time](https://starchart.cc/prakarsh17/tessarect-bot.svg)](https://starchart.cc/prakarsh17/tessarect-bot)
 
 <h6 align="center"> Some More Badges....</h6>
 
