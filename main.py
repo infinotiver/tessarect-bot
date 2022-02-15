@@ -790,11 +790,26 @@ async def balance(ctx ,user: discord.Member = None):
   em = discord.Embed(title=f'{user.name} Balance',color = 0x0437F2,timestamp=ctx.message.created_at)
   em.add_field(name="Wallet Balance", value=f'֍{wallet_amt:,}')
   em.add_field(name='Bank Balance',value=f'֍{bank_amt:,}')
-  em.add_field(name='Terrabux',value=f"<a:Diamond:930350459020017694> {bal['terrabux']}",inline=False)
   em.set_thumbnail(url=user.avatar_url)
-  tot = bank_amt+wallet_amt+(bal['terrabux']*10)
-  em.set_footer(text=f"🤨 {tot}")    
+
   msg=await ctx.send(embed= em)
+  on_click = msg.create_click_listener(timeout=60)
+  @on_click.not_from_user(ctx.author, cancel_others=True, reset_timeout=False)
+  async def on_wrong_user(inter):
+      # This function is called in case a button was clicked not by the author
+      # cancel_others=True prevents all on_click-functions under this function from working
+      # regardless of their checks
+      # reset_timeout=False makes the timer keep going after this function is called
+      await inter.reply("Listen dude dont click other people's button ", ephemeral=True)  
+  @on_click.matching_id("test_button")
+  async def on_test_button(inter):
+      # This function only works if the author presses the button
+      # Becase otherwise the previous decorator cancels this one
+      em.add_field(name='Terrabux',value=f"<a:Diamond:930350459020017694>{bal['terrabux']}",inline=False)
+    
+      tot = bank_amt+wallet_amt+(bal['terrabux']*10)
+      em.set_footer(text=f"🤨 {tot}")        
+      await msg.edit(embed=em)
 
 import string    
 hacking_status = ['breaching mainframe', 'accessing CPU pins', 'a couple gigabytes of RAM','Accessing Ip adress ','Getting Os info']
