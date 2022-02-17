@@ -21,7 +21,7 @@ class AddBot(commands.Cog):
 
     @property
     def pending_channel(self):
-        return self.bot.get_channel(942735432796471326)
+        return self.bot.get_channel(943726030911311922)
 
     @property
     def testing_guild(self):
@@ -77,7 +77,7 @@ class AddBot(commands.Cog):
                         return
                     bot = self.testing_guild.get_member(data['bot'])
                     if not bot:
-                        return await payload.member.send("You didn't invite the bot")
+                        return await payload.channel.send("You didn't invite the bot")
                     if str(payload.emoji) == self.emoji.checkmark:
                         embed = message.embeds[0]
                         data['staff'] = payload.member.id
@@ -151,7 +151,7 @@ class AddBot(commands.Cog):
 
     @commands.command(name='addbot')
     #@commands.has_any_role(729927579645247562, 737517726737629214)
-    @commands.cooldown(1, 86400, commands.BucketType.user)
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.max_concurrency(1, commands.BucketType.user)
     async def _addbot(self, ctx, bot: discord.User = None, *, reason: str = None):
         if ctx.guild.id !=912569937116147772:
@@ -179,7 +179,7 @@ class AddBot(commands.Cog):
         if not reason:
             await ctx.send(
                 embed=discord.Embed(title="Add Bot",
-                                description="Please provide a reason for why we should accept your bot."))
+                                description="Please provide a reason for why we should accept your bot and its prefix too."))
 
             def check(m):
                 return m.channel == ctx.channel and m.author == ctx.author
@@ -190,9 +190,9 @@ class AddBot(commands.Cog):
                 ctx.command.reset_cooldown(ctx)
                 return await ctx.send('Timed out!')
 
-        if not 50 <= len(reason) <= 1000:
+        if not 5 <= len(reason) <= 100:
             ctx.command.reset_cooldown(ctx)
-            return await ctx.send('Reason must be 50 to 1000 characters long.')
+            return await ctx.send('Reason must be 5 to 100 characters long.')
 
         await ctx.send('Please make sure your DMs are open so I can keep you updated on the status')
         data = {

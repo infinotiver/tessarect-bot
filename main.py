@@ -102,10 +102,10 @@ except:
   #subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'discord_pretty_help'])
 #import dnspython
 
-#menu = DefaultMenu(page_left="<:arrow_left:940845517703889016>",remove="<:DiscordCross:940914829781270568>", page_right="<:arrow_right~1:940608259075764265>",active_time=2500)
+menu = DefaultMenu(page_left="<:arrow_left:940845517703889016>",remove="<:DiscordCross:940914829781270568>", page_right="<:arrow_right~1:940608259075764265>",active_time=2500)
 intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
-    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Plugins 🔌",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=True))
+    command_prefix= (get_prefix),intents=intents,description="A POWERFULL DISCORD BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Help<:book:939017828852449310>",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=True))
 
 m = '֍'
 #slashx = SlashCommand(client)
@@ -180,7 +180,7 @@ async def on_ready():
         await channel.send(embed=ex)
 
         os.remove("./storage/reboot.json")            
-    update_s.start()
+    #update_s.start()
 @tasks.loop(minutes=10)
 async def update_s():
 
@@ -379,8 +379,9 @@ def make_buttons(tag, data):
     return components
 
 
-@client.command('poll')
-async def poll(ctx, title):
+
+@client.command()
+async def poll(ctx, title, *names):
     poll_id = uuid.uuid4().hex
 
     data = []
@@ -399,17 +400,16 @@ async def poll(ctx, title):
 
     embed = discord.Embed(
         title=title,
-        description="\n".join(map(lambda x: f'`{x}` : 0', names)),
+        description="\n".join(map(lambda x: f'`{x}` : 0 Votes', names)),
         color=0x58D68D
     )
-    embed.set_footer(text='TESSARECT POLLS')
+    
 
     route = Route('POST', '/channels/{channel_id}/messages', channel_id=ctx.channel.id)
     await client.http.request(route, json={
         'embed': embed.to_dict(),
         'components': make_buttons(poll_id, data)
     })
-
 
 @client.event
 async def on_socket_response(msg):
@@ -627,7 +627,8 @@ async def on_member_join(member):
 async def meme(ctx):
     x = True
     if x :
-      return await ctx.send('Sorry but this command is under maintainence due to some unexpected error | You can try other commands')
+      e = discord.Embed(title="Sorry !",description="('Sorry but this command is under maintainence due to some unexpected error | You can try other commands",color=discord.Color.red())
+      return await ctx.send(embed=e)
     #test()
     embed = discord.Embed(color=0x34363A)
     embed.set_image(url=getmeme("ProgrammerHumor"))
@@ -764,13 +765,7 @@ async def open_ter( id : int):
 #@slashx.slash(name="balance")
 @client.command(aliases=['bal'])
 async def balance(ctx ,user: discord.Member = None):
-  row = ActionRow(
-      Button(
-          style=ButtonStyle.blurple,
-          label="Terrabux!",
-          custom_id="trx"
-      )
-  )
+
   if user is None:
 
     user = ctx.author
@@ -791,93 +786,17 @@ async def balance(ctx ,user: discord.Member = None):
   em.add_field(name="Wallet Balance", value=f'֍{wallet_amt:,}')
   em.add_field(name='Bank Balance',value=f'֍{bank_amt:,}')
   em.set_thumbnail(url=user.avatar_url)
+  em.add_field(name='Terrabux',value=f"<a:Diamond:930350459020017694>{bal['terrabux']}",inline=False)
 
+  tot = bank_amt+wallet_amt+(bal['terrabux']*10)
+  em.set_footer(text=f"🤨 {tot}")        
   msg=await ctx.send(embed= em)
-  on_click = msg.create_click_listener(timeout=60)
-  @on_click.not_from_user(ctx.author, cancel_others=True, reset_timeout=False)
-  async def on_wrong_user(inter):
-      # This function is called in case a button was clicked not by the author
-      # cancel_others=True prevents all on_click-functions under this function from working
-      # regardless of their checks
-      # reset_timeout=False makes the timer keep going after this function is called
-      await inter.reply("Listen dude dont click other people's button ", ephemeral=True)  
-  @on_click.matching_id("test_button")
-  async def on_test_button(inter):
-      # This function only works if the author presses the button
-      # Becase otherwise the previous decorator cancels this one
-      em.add_field(name='Terrabux',value=f"<a:Diamond:930350459020017694>{bal['terrabux']}",inline=False)
-    
-      tot = bank_amt+wallet_amt+(bal['terrabux']*10)
-      em.set_footer(text=f"🤨 {tot}")        
-      await msg.edit(embed=em)
+
 
 import string    
 hacking_status = ['breaching mainframe', 'accessing CPU pins', 'a couple gigabytes of RAM','Accessing Ip adress ','Getting Os info']
 osd = ['unkown windows','windows 11','unknown linux','mac','arch','calinix','windows xp','andriod 2','andriod 12','A poor os ']
-def random_char(y):
-       return ''.join(random.choice(string.ascii_letters) for x in range(y))
-@client.command()
-@commands.cooldown(1, 1200, commands.BucketType.user)
-async def hack(ctx,member:discord.Member):
-
-    virus = "ZoinMot"
-    first = random.choice(hacking_status)
-    second = random.choice(hacking_status)
-    third=random.choice(hacking_status)
-   
-    third2=random.choice(hacking_status)    
-    end = 'Hack Completed'
-    osf =random.choice(osd)
-    email = member.name+random_char(4)+'cal.co'
-    _pass= random_char(10)
-    while first == second or first == third:
-        first = random.choice(hacking_status)
-    while  second== third:
-        second = random.choice(hacking_status)
-
-
-    embed = discord.Embed(colour=0x00ff55, title=f"{first}...",)
-    message = await ctx.channel.send(embed=embed)
-    await asyncio.sleep(1)
-    embed = discord.Embed(colour=0x00ff55, title=f"{second}...",)
-    await message.edit(embed=embed)
-    await asyncio.sleep(6)
-    embed = discord.Embed(colour=0x00ff55, title=f"Os :{osf}...",)
-    await message.edit(embed=embed)   
-    embed = discord.Embed(colour=0x00ff55, title=f"{third}...",)
-    await message.edit(embed=embed)       
-    await asyncio.sleep(2.5)
-
-    await message.edit(f"``[▓                    ] / {virus}-virus.exe Packing files.``")
-    list = (
-        f"``[▓▓▓                    ] / {virus}-virus.exe Packing files.``",
-        f"``[▓▓▓▓▓▓▓                ] - {virus}-virus.exe Packing files..``",
-        f"``[▓▓▓▓▓▓▓▓▓▓▓▓           ] \ {virus}-virus.exe Packing files..``",
-        f"``[▓▓▓▓▓▓▓▓▓▓▓▓▓▓         ] | {virus}-virus.exe Packing files..``",
-        f"``[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓      ] / {virus}-virus.exe Packing files..``",
-        f"``[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓   ] - {virus}-virus.exe Packing files..``",
-        f"``[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ ] \ {virus}-virus.exe Packing files..``",
-        f"``Successfully downloaded {virus}-virus.exe``",
-        "``Injecting virus.   |``",
-        "``Injecting virus..  /``",
-        "``Injecting virus... -``",
-        f"``Successfully Injected {virus}-virus.exe into {member.name}``",
-        )
-    for i in list:
-        await asyncio.sleep(1.5)
-        await message.edit(content=i)       
-    await asyncio.sleep(6)    
-    embed = discord.Embed(colour=0x00ff55, title=f"{third2}...",)
-    await message.edit(embed=embed) 
-    await asyncio.sleep(1)
-    embed = discord.Embed(colour=0x00ff55, title=f"Email:{email}...",)
-    await message.edit(embed=embed)   
-    await asyncio.sleep(3)    
-    embed = discord.Embed(colour=0x00ff55, title=f"Pass:{_pass}...",)
-    await message.edit(embed=embed)   
-    await asyncio.sleep(3)         
-    embed = discord.Embed(colour=0x00ff55, title=f"{end}...",)
-    await message.edit(embed=embed)   
+ 
  
 @client.command()
 @commands.cooldown(1, 30, commands.BucketType.user)
@@ -1018,7 +937,8 @@ async def work(ctx):
     elif user_info[str(ctx.author.id)]['career'] == 'Python Developer':
         await work_embed(ctx, 'Module Made', 6)
     else:
-        await ctx.send('DUMBASS u dont have a work to do , use job command to find one')
+        x = discord.Embed(title="No work fool",description='DUMBASS u dont have a work to do , use job command to find one')
+        await ctx.send(embed=x)
 intervals = (
     ('weeks', 604800),  # 60 * 60 * 24 * 7
     ('days', 86400),    # 60 * 60 * 24
@@ -1196,10 +1116,14 @@ async def withdraw(ctx,amount = None):
     amount = int(amount)
 
     if amount > bal[1]:
-        await ctx.send('You do not have sufficient balance')
+      
+        ex= discord.Embed(description='You do not have sufficient balance')
+        await ctx.send(embed=ex)
         return
     if amount < 0:
-        await ctx.send('Amount must be positive!')
+        ex= discord.Embed(description='Amount must be positive!')
+        await ctx.send(embed=ex)      
+
         return
 
     await update_bank(ctx.author,amount)
@@ -1361,40 +1285,6 @@ async def rob(ctx,member : discord.Member):
   await ctx.send(embed=em)
   await member.send(embed=emd)
 
-'''
-@client.command()
-async def slots(ctx,amount = None):
-    #test
-    await open_account(ctx.author)
-    if amount == None:
-        await ctx.send("Please enter the amount")
-        return
-
-    bal = await update_bank(ctx.author)
-
-    amount = int(amount)
-
-    if amount > bal[0]:
-        await ctx.send('You do not have sufficient balance')
-        return
-    if amount < 0:
-        await ctx.send('Amount must be positive!')
-        return
-    final = []
-    for i in range(3):
-        a = random.choice(['X','O','Q'])
-
-        final.append(a)
-
-    await ctx.send(str(final))
-
-    if final[0] == final[1] or final[1] == final[2] or final[0] == final[2]:
-        await update_bank(ctx.author,2*amount)
-        await ctx.send(f'You won :) {ctx.author.mention}')
-    else:
-        await update_bank(ctx.author,-1*amount)
-        await ctx.send(f'You lose :( {ctx.author.mention}')
-'''
 @client.command()
 @commands.guild_only()
 @commands.cooldown(rate=1, per=3.0, type=commands.BucketType.user)
@@ -1412,8 +1302,8 @@ async def slots( ctx, bet: int):
     if 1 > bet:
         return await ctx.send("Give some money! ;w;")
 
-    losshearts = ["🖤", "💔"]
-    doublehearts = ["❤️", "💚", "💛", "🧡", "💜", "💙"]
+    losshearts = [ "💔"]
+    doublehearts = ["❤️", "💚", "💛", "🧡", "💜", "💙","🖤",]
     triplehearts = ["💗", "💖","💟","🤎"]
     jackpothearts = ["💘"]
     hearts = {}

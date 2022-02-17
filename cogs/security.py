@@ -4,10 +4,12 @@ import random
 import string
 import Augmentor
 import os
+import requests
 import shutil
 from shutil import rmtree
 import asyncio
 import time
+
 import pytz
 from discord.ext import commands
 from discord.utils import get
@@ -20,12 +22,108 @@ import datetime
 import discapty
 import kwargs
 import json
+import requests
+import motor
+mongo_url = os.environ['warn']
+cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
+import discord_pass
 
+warndb = cluster["discord"]["warn"]
+warns=1
+reason="Used a bad word"
 class Security(commands.Cog):
     def __init__(self, client):
         self.client = client
 
- 
+
+
+    @commands.Cog.listener()
+    async def on_message(self,message):
+      try:
+
+        with open(f'./configs/{message.guild.id}.json', 'r') as jsonFile:
+            data = json.load(jsonFile)
+      except:
+        return 
+
+      if not data['antiswear'] =="enable":
+        return
+          
+
+      bad_list=[]
+      url = "https://raw.githubusercontent.com/turalus/encycloDB/master/Dirty%20Words/DirtyWords.json"
+      response = requests.get(url).json()
+      records=response["RECORDS"]
+      msg = message.content.split()
+      for i in records:
+        if i["language"] == "en": bad_list.append(i["word"])
+      member=message.author
+      for word in bad_list:
+          if word in msg:
+              
+              #await message.delete()
+              stats = await warndb.find_one({"id": member.id})
+              await message.delete() 
+              if stats is None and warns <= 5:
+                  passwor = discord_pass.secure_password_gen(10)
+                  passwor = str(passwor)
+                  newuser = {
+                      "id": member.id,
+                      "Cases": [[passwor, reason, message.author.mention, warns]],
+                      "warns": warns,
+                  }
+                  await warndb.insert_one(newuser)
+                  embed = discord.Embed(
+                      title="Warn",
+                      description=f"{member.name} has been warned with {warns} warn(s) for `{reason}` ",
+                      color=0xFF0000,
+                  )
+                  await message.channel.send(embed=embed)   
+              else:
+                  passwor = discord_pass.secure_password_gen(10)
+                  passwor = str(passwor)
+                  total_warn = stats["warns"] + warns
+                  await warndb.update_one(
+                      {"id": member.id}, {"$set": {"warns": total_warn}}
+                  )
+                  await warndb.update_one(
+                      {"id": member.id},
+                      {
+                          "$addToSet": {
+                              "Cases": [
+                                  passwor,
+                                  reason,
+                                  message.author.mention,
+                                  warns,
+                              ]
+                          }
+                      },
+                  )
+
+                  embed = discord.Embed(
+                      title="Warn",
+                      description=f"{member.name} has been warned with {warns} warn(s) for `{reason}` ",
+                      color=0xFF0000,
+                  )
+                  await message.channel.send(embed=embed)
+
+                  if total_warn >= 10:
+                    try:
+
+                      await member.kick(reason=reason)
+                      embed = discord.Embed(
+                          title="Warn",
+                          description=f"{member.name} has been kicked since the y exceeded the warn limit",
+                          color=0xFF0000,
+                      )
+                      await message.channel.send(embed=embed)
+
+                      await warndb.delete_one({"id": member.id})
+                    except Exception as e:
+                      return await message.channel.send(f'WARN LIMIT EXCEEDED | UNSUCCESSFUL MUTE\n{e}')
+
+
+      
 
     @commands.command()
     async def verify(self, ctx):
@@ -122,7 +220,7 @@ class Security(commands.Cog):
                                           description=f"{member.mention} Please return me the code written on the Captcha.",
                                           colour=discord.Colour.blue())
             captcha_embed.set_image(url="attachment://captcha.png")
-            captcha_embed.set_footer(text=f"Want this bot in your server? → s!invite")
+            captcha_embed.set_footer(text=f"Want this bot in your server? → [p]invite")
             captchaEmbed = await channel.send(file=captchaFile, embed=captcha_embed)
         except:
             pass
@@ -258,6 +356,7 @@ class Security(commands.Cog):
               await captchaLog.send(embed=embed)
             except:
               await ctx.send('SOME ERROR CAME WHILE SENDING LOGS CHECK YOUR SECURITY LOGS CHANNEL')
+
 
 
 def setup(client):

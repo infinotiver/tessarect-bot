@@ -41,15 +41,44 @@ class Dev(commands.Cog):
         # remove `foo`
         return content.strip("` \n") 
     @commands.command()    
-    async def devtest(self,ctx):
+    async def devtest(self,ctx,user:discord.Member=None):
+      if not user:
+        user=ctx.author
       with open("storage/dev.json") as f:
 
         dev_users_list = json.load(f)
-      if ctx.author.id not in dev_users_list:
-          return await ctx.send('No you are not in developer database | go away')
-      else:
-        return await ctx.send('Verified | Found entry in Database')
+      if user.id not in dev_users_list:
 
+          await ctx.send(
+              embed=discord.Embed(
+                  title="Permission Denied",
+                  description="Dude! you are not a dev,go away",
+                  color=discord.Color.red(),
+              )
+          )          
+      else:
+        await ctx.send(
+            embed=discord.Embed(
+                title="Verified",
+                description="Found entry in Database",
+                color=discord.Color.blue(),
+            )
+        )        
+
+    @commands.command()
+    @check(check_Mod)
+    async def listdev(self,ctx):
+        x = discord.Embed(title='Dev users',description="Users having Dev access for me",color=discord.Color.gold())
+        with open("storage/dev.json") as f:
+            dev_users_list = json.load(f)
+        pa =1
+        for user in dev_users_list:
+          
+          e = self.bot.get_user(user)
+          x.add_field(name=pa,value=e.mention,inline=False)
+          pa +=1
+        x.set_footer(text=f"Total users : {pa-1}")
+        await ctx.send(embed=x)
     @commands.command()
     @check(check_Mod)
     async def adddev(self,ctx, user : discord.Member):
@@ -58,13 +87,15 @@ class Dev(commands.Cog):
         with open("storage/dev.json") as f:
             dev_users_list = json.load(f)
 
-        if user.id not in dev_users_list:
+        if user.id not in dev_users_list and not user.bot:
             dev_users_list.append(user.id)
 
-        with open("storage/dev.json", "w+") as f:
-            json.dump(dev_users_list, f)
+            with open("storage/dev.json", "w+") as f:
+                json.dump(dev_users_list, f)
 
-        await ctx.send(f"{user.mention} has been added!")   
+            await ctx.send(f"{user.mention} has been added!")  
+        else:
+          await ctx.send('See Developer , either you are adding a dev again as dev or a bot (bots arent that much cool)') 
     @commands.command()
     @check(check_Mod)
     async def removedev(self,ctx, user : discord.Member):
