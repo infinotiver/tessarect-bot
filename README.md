@@ -143,6 +143,9 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 ### Wanna Like Making Tessarect Better ?
 ###### Contribute now to tessarect see  👇🏻
 [Contributing Guide](CONTRIBUTING.md)
+___
+## Stargazers
+[![Stargazers repo roster for @prakarsh17/tessarect-bot](https://reporoster.com/stars/dark/notext/prakarsh17/tessarect-bot)](https://github.com/prakarsh17/tessarect-bot/stargazers)
 ## Contributors
 
 ###### People who made Tessarect Possible  (bots too !)
