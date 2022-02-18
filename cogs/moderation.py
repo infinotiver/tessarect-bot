@@ -292,8 +292,7 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
             return await ctx.send('You cannot kick yourself. Sorry lol')
 
         if misc_checks.is_client(self.bot, member):
-            return await ctx.send('I can\'t kick myself using this command. '
-                                  'You can use the `leave` command for me to leave the server.')
+            return await ctx.send('I can\'t kick myself using this command.')
 
         otp_success = await otp_assets.send_waitfor_otp(ctx, self.bot)
         # random otp generator. if user enters correct otp, returns true. else, returns false

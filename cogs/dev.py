@@ -68,14 +68,14 @@ class Dev(commands.Cog):
     @commands.command()
     @check(check_Mod)
     async def listdev(self,ctx):
-        x = discord.Embed(title='Dev users',description="Users having Dev access for me",color=discord.Color.gold())
+        x = discord.Embed(description="Users having Dev access for me",color=0x34363A)
         with open("storage/dev.json") as f:
             dev_users_list = json.load(f)
         pa =1
         for user in dev_users_list:
           
           e = self.bot.get_user(user)
-          x.add_field(name=pa,value=e.mention,inline=False)
+          x.add_field(name="_ _",value=e.mention,inline=False)
           pa +=1
         x.set_footer(text=f"Total users : {pa-1}")
         await ctx.send(embed=x)
