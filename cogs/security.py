@@ -34,87 +34,118 @@ reason="Used a bad word"
 class Security(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.warns={}
 
 
 
     @commands.Cog.listener()
     async def on_message(self,message):
-      with open(f'./storage/scamlinks.json', 'r') as jsonFile:
-          links = json.load(jsonFile)    
-          scamlinks = links['scamlinks']
-      
-      reason = "POSTING A SCAM LINK"
-      member=message.author
-      if message.content in scamlinks:
-          stats = await warndb.find_one({"id": member.id})
-          await message.delete() 
-          if stats is None and warns <= 5:
-              passwor = discord_pass.secure_password_gen(10)
-              passwor = str(passwor)
-              newuser = {
-                  "id": member.id,
-                  "Cases": [[passwor, reason, message.author.mention, warns]],
-                  "warns": warns,
-              }
-              await warndb.insert_one(newuser)
-              embed = discord.Embed(
-                  title="Warn",
-                  description=f"{member.name} has been warned with {warns} warn(s) for `{reason}` ",
-                  color=0xFF0000,
-              )
-              await message.channel.send(embed=embed)   
+      if message.attachments:
+        r = requests.post(
+            "https://api.deepai.org/api/nsfw-detector",
+            data={
+                'image': message.attachments[0].url,
+            },
+            headers={'api-key': os.environ['deepai']}
+        )
+        print(r.json())  
+        #{'id': 'c9d5bf5b-a9ea-4aa7-a854-3ff04c0da209', 'output': {'detections': [{'confidence': '0.95', 'bounding_box': [116, 118, 187, 94], 'name': 'blah'}], 'nsfw_score': 0.7178798913955688}}    
+        # example response  
+        d= r.json()
+        nsfwscore=d['output']['nsfw_score']
+        nsfwscorer=round(nsfwscore)
+        if nsfwscorer == 1:
+          if message.channel.is_nsfw():
+            return # if it is nsfw then ok
           else:
-              passwor = discord_pass.secure_password_gen(10)
-              passwor = str(passwor)
-              total_warn = stats["warns"] + warns
-              await warndb.update_one(
-                  {"id": member.id}, {"$set": {"warns": total_warn}}
-              )
-              await warndb.update_one(
-                  {"id": member.id},
-                  {
-                      "$addToSet": {
-                          "Cases": [
-                              passwor,
-                              reason,
-                              message.author.mention,
-                              warns,
-                          ]
-                      }
-                  },
-              )
+            await message.delete()   
+            await message.channel.send(f'{message.author.mention} Stop Sending nsfw pictures in non nsfw channels')     
+      
+      with open(f'./storage/scamlinks.json', 'r') as jsonFile:
+          link = json.load(jsonFile)    
+          scamlinks = link['scamlinks']
+      
+      
+      member=message.author
+      for links in scamlinks:
+        reason = f"POSTING A SCAM LINK > {link} "
+        if links in message.content and message.author !=self.client.user:
+            if message.author.id in self.warns:
+              self.warns[message.author.id] +=1
+              print(self.warns)
+            else:
+              self.warns[message.author.id]=1
+              print(self.warns)          
+            stats = await warndb.find_one({"id": member.id})
+            await message.delete() 
+            if stats is None and warns <= 5:
+                passwor = discord_pass.secure_password_gen(10)
+                passwor = str(passwor)
+                newuser = {
+                    "id": member.id,
+                    "Cases": [[passwor, reason, message.author.mention, warns]],
+                    "warns": warns,
+                }
+                await warndb.insert_one(newuser)
+                embed = discord.Embed(
+                    title="Warn",
+                    description=f"{member.name} has been warned with {warns} warn(s) for `{reason}` ",
+                    color=0xFF0000,
+                )
+                await message.channel.send(embed=embed)   
+            else:
+                passwor = discord_pass.secure_password_gen(10)
+                passwor = str(passwor)
+                total_warn = stats["warns"] + warns
+                await warndb.update_one(
+                    {"id": member.id}, {"$set": {"warns": total_warn}}
+                )
+                await warndb.update_one(
+                    {"id": member.id},
+                    {
+                        "$addToSet": {
+                            "Cases": [
+                                passwor,
+                                reason,
+                                message.author.mention,
+                                warns,
+                            ]
+                        }
+                    },
+                )
 
-              embed = discord.Embed(
-                  title="Warn",
-                  description=f"{member.name} has been warned with {warns} warn(s) for `{reason}` ",
-                  color=0xFF0000,
-              )
-              await message.channel.send(embed=embed)
+                embed = discord.Embed(
+                    title="Warn",
+                    description=f"{member.name} has been warned with {warns} warn(s) for `{reason}` ",
+                    color=0xFF0000,
+                )
+                await message.channel.send(embed=embed)
 
-              if total_warn >= 10:
-                try:
+                if self.warns[message.author.id] >= 10:
+                  try:
 
-                  await member.kick(reason=reason)
-                  embed = discord.Embed(
-                      title="Warn",
-                      description=f"{member.name} has been kicked since the y exceeded the warn limit",
-                      color=0xFF0000,
-                  )
-                  await message.channel.send(embed=embed)
+                    await member.kick(reason=reason)
+                    embed = discord.Embed(
+                        title="Warn",
+                        description=f"{member.name} has been kicked since the y exceeded the warn limit",
+                        color=0xFF0000,
+                    )
+                    await message.channel.send(embed=embed)
 
-                  await warndb.delete_one({"id": member.id})
-                except Exception as e:
-                  return await message.channel.send(f'WARN LIMIT EXCEEDED | UNSUCCESSFUL kicj\n{e}')
+                    await warndb.delete_one({"id": member.id})
+                  except Exception as e:
+                    return await message.channel.send(f'WARN LIMIT EXCEEDED | UNSUCCESSFUL kick\n{e}')
       
       try:
 
         with open(f'./configs/{message.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
-      except:
-        return 
 
-      if not data['antiswear'] =="enable":
-        return
+
+        if not data['antiswear'] =="enable":
+          return
+      except:
+        return         
       msg = message.content.split()    
 
       bad_list=[]
@@ -174,7 +205,7 @@ class Security(commands.Cog):
                   )
                   await message.channel.send(embed=embed)
 
-                  if total_warn >= 10:
+                  if self.warns[message.author.id] >= 10:
                     try:
 
                       await member.kick(reason=reason)

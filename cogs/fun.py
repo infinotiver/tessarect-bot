@@ -9,9 +9,8 @@ from discord.ext import commands
 import aiohttp
 import json
 import aiohttp
-
+import requests
 import os
-
 from discord.ext import commands, tasks
 async def get_tinyurl(link: str):
     url = f"http://tinyurl.com/api-create.php?url={link}"
@@ -65,7 +64,7 @@ class FunUtility(commands.Cog):
         }
   
 
-    
+               
     @commands.command(
         name="coinflip", aliases=["coin", "flip"], help="Flip a coin!"
     )
@@ -125,7 +124,7 @@ class FunUtility(commands.Cog):
                     '0x000DF9',
                     '0x86007D']), 16) # These are Pride flag colors
 
-        await msg.edit(embed=embed)
+        await msg.edit(content=None,embed=embed)
     @commands.command(
         name="avatar",
         aliases=["av", "pfp"],
@@ -146,7 +145,7 @@ class FunUtility(commands.Cog):
     @commands.command(
         name="choose",
         aliases=["choice"],
-        help="Let Amteor choose the best option for you. Separate the choices with a comma (,)",
+        help="Let Tessarect choose the best option for you. Separate the choices with a comma (,)",
     )
     async def choose(self, ctx: commands.Context, *, options: str):
         items = [

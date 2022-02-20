@@ -603,40 +603,29 @@ async def on_member_join(member):
     if channel==None:
       return print('not set')
     embed = discord.Embed(colour=discord.Colour.blue())
-    req = PreparedRequest()
-    req.prepare_url(
-        url='https://api.xzusfin.repl.co/card?',
-        params={
-            'avatar': str(member.avatar_url_as(format='png')),
-            'middle': 'Welcome ',
-            'name': str(member.name),
-            'bottom': str('to  ' + member.guild.name),
-            'text': '#120A8F',
-            'avatarborder': '#34363A',
-            'avatarbackground': 'https://replit.com/@AyushSehrawat/Prakash#bg.png',
-            'background': '0x0437F2' #or image url
-        }
-    )
-    embed.set_image(url=req.url)
-    print(req.url)
+    link=f"https://api.popcat.xyz/welcomecard?background=https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png&text1={member.display_name}&text2=Welcome&text3=Have+A+Nice+Experience&avatar={str(member.avatar_url_as(format='png'))}"
+    embed.set_image(url=link)
     await channel.send(embed=embed)    
 
 
 
 @client.command()
 async def meme(ctx):
-    x = True
+    x = False
     if x :
       e = discord.Embed(title="Sorry !",description="('Sorry but this command is under maintainence due to some unexpected error | You can try other commands",color=discord.Color.red())
       return await ctx.send(embed=e)
     #test()
-    embed = discord.Embed(color=0x34363A)
-    embed.set_image(url=getmeme("ProgrammerHumor"))
-    like = random.randrange(10,1000)
-    dlike =random.randrange(0,1)
-    comm=random.randrange(100,1200)
-    trop = random.randrange(1,12)
-    embed.set_footer(text=f"👍🏻{like} 👎🏻{dlike} 💬 {comm} 🏆{trop}")
+    page = requests.get(f'https://api.popcat.xyz/meme')
+    d = json.loads(page.content)
+    title=d['title']
+    img=d['image']
+    url=d['url']
+    like = d['upvotes']
+    comm=d['comments']
+    embed = discord.Embed(title=title,url=url,color=0x34363A)
+    embed.set_image(url=img)
+    embed.set_footer(text=f"👍🏻{like} 💬 {comm} ")
     await ctx.send(embed=embed)
 
 
@@ -1334,7 +1323,7 @@ async def slots( ctx, bet: int):
     else:
         await update_bank(ctx.author,1*betresult)
     
-  
+import DiscordUtils 
 @client.group(invoke_without_command=True)
 async def shop(ctx):
     #test
@@ -2152,12 +2141,14 @@ async def fakename(ctx):
   e.add_field(name="domain_url",value=domain_url,inline=False)      
   await ctx.channel.send(embed=e)  
 @client.command()
-@commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
-async def randomtopic(ctx): 
-  page = requests.get(f'https://apiv2.spapi.ga/fun/randomtopic')
-  source = json.loads(page.content)
-  name = source["question"]  
-  await ctx.send(name)
+async def getadvice(ctx):
+    res = requests.get("https://api.senarc.org/misc/advice")
+    source = json.loads(res.content)
+    acti = source["text"]  
+
+    em = discord.Embed(title=f"Advicer", description=f"{acti}", color=discord.Color.blue())
+    em.set_footer(text="Powered by Senaric API")
+    await ctx.send(embed=em)  
 @client.command()
 async def getidea(ctx):
     res = requests.get("https://www.boredapi.com/api/activity")
