@@ -75,7 +75,7 @@ class Dev(commands.Cog):
         for user in dev_users_list:
           
           e = self.bot.get_user(user)
-          x.add_field(name="_ _",value=e.mention,inline=False)
+          x.add_field(name="_ _",value=e,inline=False)
           pa +=1
         x.set_footer(text=f"Total users : {pa-1}")
         await ctx.send(embed=x)

@@ -10,7 +10,7 @@ class Snipe(commands.Cog):
         self.description = (
             "Commands to snipe out messages that people try to hide"
         )
-        self.theme_color = discord.Color.purple()
+        self.theme_color = discord.Color.blue()
 
         self.deleted_msgs = {}
         self.edited_msgs = {}
@@ -62,7 +62,7 @@ class Snipe(commands.Cog):
                 ::-1
             ][:limit]
             snipe_embed = discord.Embed(
-                title="Message Snipe", color=self.theme_color
+                title="Message Snipe <:angry_scientist:941712157807100024>", color=self.theme_color
             )
 
             if msgs:
@@ -106,7 +106,7 @@ class Snipe(commands.Cog):
         try:
             msgs = self.edited_msgs[ctx.channel.id][::-1][:limit]
             editsnipe_embed = discord.Embed(
-                title="Edit Snipe", color=self.theme_color
+                title="Edit Snipe <:angry_scientist:941712157807100024>", color=self.theme_color
             )
 
             if msgs:

@@ -2,6 +2,7 @@ import os
 with open("requirements.txt") as file:
     os.system(f"pip3 install {' '.join(file.read().split())}")
 import time
+from discord.ext import tasks
 import  discord
 import traceback
 from dislash import SelectMenu,SelectOption
@@ -39,16 +40,17 @@ import datetime
 # Create a translator object
 #from discord_slash import SlashCommand, SlashContext
 import logging 
+ 
 # Create and configure logger
 logging.basicConfig(filename="logs.txt",
                     format='%(asctime)s %(message)s',
-                    filemode="w"
-                    )
+                    filemode='w')
  
 # Creating an object
 logger = logging.getLogger()
+ 
 # Setting the threshold of logger to DEBUG
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 import urllib.request
 from dislash import  Option, OptionType
@@ -56,13 +58,24 @@ import typing
 import random
 from PIL import Image
 import io
-
+@tasks.loop(minutes=10)
+async def deletelogs():
+  with open ('logs.txt','r') as f:
+    text = f.read()
+  try:
+    logschannel=client.get_channel(929334690073174056)
+    await logschannel.send(text)
+  except:
+    print('error')
+  os.remove('logs.txt')
 # Test messages
 logger.debug("TESTING LOGGER DEBUG")
 logger.info("Just an information")
 logger.warning("Its a Warning")
 logger.error("Error Logger Test")
 logger.critical("Testing Critical Logging")
+
+
 #subprocess.check_call([sys.executable, '-m', 'pip', 'install','dislash.py', 'discord-pretty-help','randfacts','TenGiphPy','pymongo[srv]'])
 def get_prefix(client, message):
     try:
@@ -70,7 +83,7 @@ def get_prefix(client, message):
             prefixes = json.load(f)
             return prefixes[str(message.guild.id)]
         
-    except KeyError: # if the guild's prefix cannot be found in 'prefixes.json'
+    except KeyError: 
         with open('prefixes.json', 'r') as k:
             prefixes = json.load(k)
         prefixes[str(message.guild.id)] = ['a!','amt ']
@@ -82,8 +95,7 @@ def get_prefix(client, message):
             prefixes = json.load(t)
             return prefixes[str(message.guild.id)]
         
-    except: # I added this when I started getting dm error messages
-        print("Not ok")
+    except:
         return 'a!' 
 #-----------------------------------------------------------------------------------------------------------------------
 import aiohttp
@@ -93,22 +105,19 @@ from pretty_help import DefaultMenu, PrettyHelp
 
 r = requests.head(url="https://discord.com/api/v1")
 try:
-    print(f"Rate limit {int(r.headers['Retry-After']) / 60} minutes left")
-except:
-    print('No rate limit Sire Lets do it!')
-#try:
-  #from pretty_help import PrettyHelp
-#except:
-  #subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'discord_pretty_help'])
-#import dnspython
 
-menu = DefaultMenu(page_left="<:arrow_left:940845517703889016>",remove="<:DiscordCross:940914829781270568>", page_right="<:arrow_right~1:940608259075764265>",active_time=2500)
+  print(f"Rate limit {int(r.headers['Retry-After']) / 60} minutes left")
+except:
+  print('No ratelimit')
+
+
+menu = DefaultMenu(page_left="<:arrow_left:940845517703889016>", page_right="<:arrow_right:940608259075764265>", remove="❌", active_time=15)
+
 intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
-    command_prefix= (get_prefix),intents=intents,description="A POWERFULL DISCORD BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Help<:book:939017828852449310>",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=True))
+    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Help<:book:939017828852449310>",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=True,menu=menu))
 
 m = '֍'
-#slashx = SlashCommand(client)
 
 #____emojis______
 blueokay = '<a:Tick:922450348730355712>'
@@ -144,12 +153,7 @@ for filename in os.listdir("./cogs"):
 
 
 
-# ":discord:743511195197374563" is a custom discord emoji format. Adjust to match your own custom emoji.
-#menu = DefaultMenu(page_left="◀", page_right="▶", remove="⛔", active_time=20)
 
-# Custom ending note
-#ending_note = "Hello "
-#client.help_command = PrettyHelp(menu=menu, ending_note=ending_note)
 @client.event
 async def on_ready():
     #DiscordComponents(client) 
@@ -161,8 +165,6 @@ async def on_ready():
     em.add_field(name="Cogs Count",value=len(client.cogs),inline=True)
     em.add_field(name="Cogs Loaded",value=totalcog,inline=True)
     em.add_field(name="User Count",value=len(client.users),inline=True)
-  
-
     channel=client.get_channel(929333501101215794)
     await channel.send(embed=em)
     await client.change_presence(
@@ -179,7 +181,8 @@ async def on_ready():
         ex=discord.Embed(title="Successfully Rebooted",description="Heyo I am back after reboot ",color=discord.Color.green())
         await channel.send(embed=ex)
 
-        os.remove("./storage/reboot.json")            
+        os.remove("./storage/reboot.json")  
+    deletelogs.start()              
     #update_s.start()
 @tasks.loop(minutes=10)
 async def update_s():
