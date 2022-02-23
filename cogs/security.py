@@ -15,10 +15,12 @@ from discord.ext import commands
 from discord.utils import get
 from PIL import ImageFont, ImageDraw, Image
 #from Tools.utils import   updateConfig
-from datetime import datetime
-from datetime import date
-import json
 import datetime
+#from datetime import datetime, timedelta
+#from datetime import datetime
+#from datetime import date
+import json
+#import datetime
 import discapty
 import kwargs
 import json
@@ -49,14 +51,25 @@ class Security(commands.Cog):
       try:
         with open(f'./configs/{message.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
-        antiswear =data['antiswear']   
-        antiscam =data['antiscam'] 
+        if data['antiswear']:
+
+          antiswear =data['antiswear']   
+        else:
+          data['antiswear']='disable'
+        if data['antiscam']:
+
+          antiscam =data['antiscam']
+        else:
+          data['antiscam'] ='disable'
+        with open("./configs/{message.guild.id}.json", "w") as file:
+            json.dump(data, file)          
       except:
         return
+
       #nsfw detection
       if message.attachments:
-        if not message.attachments.content_type.startswith("video") or message.attachments.content_type.startswith("image"):
-          return
+        #if not message.attachments.content_type.startswith("video") or message.attachments.content_type.startswith("image"):
+          #return
         r = requests.post(
             "https://api.deepai.org/api/nsfw-detector",
             data={
@@ -69,14 +82,17 @@ class Security(commands.Cog):
         # example response  
         d= r.json()
         nsfwscore=d['output']['nsfw_score']
+        name=d['output']['detections'][0]['name']
+        confidence=d['output']['detections'][0]['confidence']
+        
         detections=d['output']['detections']
         nsfwscorer=round(nsfwscore)
-        if nsfwscore >0.45:
+        if nsfwscore >0.45 or 'Exposed' in name.split():
           if message.channel.is_nsfw():
             return # if it is nsfw then ok
           else:
             await message.delete()   
-            em =discord.Embed(title="Nsfw Image Detected in non nsfw channel",description=f"Nsfw score: {nsfwscore}\n Nsfw : {nsfwscore >0.45} \n  Details: || {detections} ||",color=0xFF0000)
+            em =discord.Embed(title=" <:messagealert:942777256160428063> Nsfw Image Detected in non nsfw channel",description=f"Channel: {message.channel.mention} \n <:target:941990853625389126>Sent by: {message.author.mention}\n<:arrow_right:940608259075764265> Nsfw score: {nsfwscore}\n <:arrow_right:940608259075764265> Confidence : {confidence} \n  <:arrow_right:940608259075764265> Details: || <:uparrow:941994550027759616> Name: {name}`|`\n {detections} ||",color=0xFF0000)
             await message.channel.send(f'{message.author.mention} Stop Sending nsfw pictures in non nsfw channels',embed=em)     
       
 
@@ -229,8 +245,7 @@ class Security(commands.Cog):
 
                         await warndb.delete_one({"id": member.id})
                       except Exception as e:
-                        return await message.channel.send(f'WARN LIMIT EXCEEDED | UNSUCCESSFUL kicj\n{e}')
-
+                        return await message.channel.send(f'WARN LIMIT EXCEEDED | UNSUCCESSFUL kick\n{e}')
 
       
 
@@ -465,6 +480,7 @@ class Security(commands.Cog):
               await captchaLog.send(embed=embed)
             except:
               await ctx.send('SOME ERROR CAME WHILE SENDING LOGS CHECK YOUR SECURITY LOGS CHANNEL')
+
 
 
 

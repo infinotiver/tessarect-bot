@@ -18,11 +18,9 @@ from dislash import InteractionClient, ActionRow, Button, ButtonStyle
 from dislash import  ContextMenuInteraction
 import asyncio 
 import jishaku
-#from load import  printProgressBar, printProgressBar2
 import googletrans
-#needed googletrans 's  alpha version
 import sys
-
+from discord_slash import SlashCommand, SlashContext
 try:
 
   import DiscordUtils
@@ -117,7 +115,7 @@ menu = DefaultMenu(page_left="<:arrow_left:940845517703889016>", page_right="<:a
 intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
     command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD BOT YOU WILL EVER NEED",case_insensitive=True, help_command=PrettyHelp(index_title="Help<:book:939017828852449310>",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=True,menu=menu))
-
+slash = SlashCommand(client)
 m = '֍'
 
 #____emojis______
@@ -207,7 +205,7 @@ async def langlist( ctx):
 
 
     )
-    await ctx.send(embed=x)
+    await ctx.reply(embed=x)
 
 @client.command()
 async def translate(ctx, lang, *, thing):
@@ -217,7 +215,7 @@ async def translate(ctx, lang, *, thing):
     e=discord.Embed(title="Google Translation",description=f"""```yml
 Output: {translation.text}
 Input: {thing}```""",color=discord.Color.blue())
-    await ctx.send(embed=e)
+    await ctx.reply(embed=e)
 
 
 status= cycle([" a!help in {n}  servers ",'Tessarect  BOT','Try my New Economy Bots','Try me new leveling sys by using<prefix>level','Wanna advertise your server go to my repo(<prefix>src) and go to the discussions and make a topic in Website category details are there'.format(n=len(client.guilds))])
@@ -293,7 +291,7 @@ async def changeprefix(ctx, prefix): #command: a!changeprefix ...
     with open('prefixes.json', 'w') as f: #writes the new prefix into the .json
         json.dump(prefixes, f, indent=4)
 
-    await ctx.send(f'Prefix changed to: {prefix}')
+    await ctx.reply(f'Prefix changed to: {prefix}')
     #test #confirms the prefix it's been changed to
 #next step completely optional: changes bot nickname to also have prefix in the nickname
     name=f'{prefix}Tessarect '
@@ -336,7 +334,7 @@ async def shutdown(ctx):
                ]
 
     response3 = random.choice(log_out)
-    await ctx.send(response3)
+    await ctx.reply(response3)
     await client.logout()
 @shutdown.error
 async def error(ctx,error):
@@ -348,7 +346,7 @@ async def error(ctx,error):
             'You\'r words mean nothing to me!!!'
         ]
         pain = random.choice(annoyed)
-        await ctx.send(pain)
+        await ctx.reply(pain)
 
 
 
@@ -455,7 +453,7 @@ async def _eval(ctx, *, code):
     code = code.replace("```py", "")
     code = code.replace("```", "")
     if "bot.http.token" in code or "client.http.token" in code:
-        return await ctx.send(f"You can't take my token , huh {ctx.author.name}")
+        return await ctx.reply(f"You can't take my token , huh {ctx.author.name}")
 
     splitcode = []
     
@@ -492,7 +490,7 @@ async def _eval(ctx, *, code):
     embed.add_field(name="Input",value="```py\n"+code+"\n```",inline=False)
     #embed.add_field(name=outname,value="```\n"+str(output)+"\n```",inline=False)
     embed.set_author(name=ctx.author.display_name,icon_url=ctx.author.avatar_url)
-    await ctx.send(embed=embed)
+    await ctx.reply(embed=embed)
 
 @client.command()
 async def color(ctx, color: typing.Optional[discord.Color]):
@@ -506,7 +504,7 @@ async def color(ctx, color: typing.Optional[discord.Color]):
     with io.BytesIO() as image_binary:
         Image.new("RGB",(256,256),discord.Color.to_rgb(color)).save(image_binary,"PNG")
         image_binary.seek(0)
-        await ctx.send(embed=embed,file=discord.File(fp=image_binary, filename="image.png"))
+        await ctx.reply(embed=embed,file=discord.File(fp=image_binary, filename="image.png"))
 
 
 
@@ -520,7 +518,7 @@ async def color(ctx, color: typing.Optional[discord.Color]):
     #embed.add_field(name="Display Name", value=f"{ctx.author.display_name}")
     #embed.add_field(name="Display Name", value=f'{r}')
     #embed.set_thumbnail(url=f"{ctx.guild.icon}")
-    #await ctx.send(embed=embed)
+    #await ctx.reply(embed=embed)
 @client.command(aliases=['namaste','hi','bonjour'],hidden=True) 
 async def hello(ctx):
   #test 
@@ -566,7 +564,7 @@ async def links(ctx):
     )   
     embed=discord.Embed(title="Links",description="Important Links ",color=discord.Color.green())
     embed.set_thumbnail(url=client.user.avatar_url)
-    msg =await ctx.send(embed=embed,components=[row])
+    msg =await ctx.reply(embed=embed,components=[row])
 
 
     
@@ -592,7 +590,7 @@ async def setwelcomechannel(ctx,channel:discord.TextChannel):
     with open('storage/welcome.json', 'w') as f: #writes the new prefix into the .json
         json.dump(wel, f, indent=4)
 
-    await ctx.send(f'Changed welcome channel to {channel}') #confirms the prefix it's been changed to
+    await ctx.reply(f'Changed welcome channel to {channel}') #confirms the prefix it's been changed to
 
 # ...
 
@@ -634,7 +632,7 @@ async def meme(ctx):
     x = False
     if x :
       e = discord.Embed(title="Sorry !",description="('Sorry but this command is under maintainence due to some unexpected error | You can try other commands",color=discord.Color.red())
-      return await ctx.send(embed=e)
+      return await ctx.reply(embed=e)
     #test()
     page = requests.get(f'https://api.popcat.xyz/meme')
     d = json.loads(page.content)
@@ -646,7 +644,7 @@ async def meme(ctx):
     embed = discord.Embed(title=title,url=url,color=0x34363A)
     embed.set_image(url=img)
     embed.set_footer(text=f"👍🏻{like} 💬 {comm} ")
-    await ctx.send(embed=embed)
+    await ctx.reply(embed=embed)
 
 
 
@@ -661,7 +659,7 @@ def searchyt(song):
 
 @client.command()
 async def yt(ctx, *, url):
-    await ctx.send(searchyt(url))
+    await ctx.reply(searchyt(url))
 
 
 
@@ -677,7 +675,7 @@ async def pyjoke(ctx):
     jk=pyjokes.get_joke(language='en', category= 'neutral')
     em = discord.Embed(title="Joke", description=jk,color=discord.Color.red())
     
-    await ctx.send(embed = em)
+    await ctx.reply(embed = em)
 
 
 
@@ -711,7 +709,7 @@ async def lyrics(ctx, *, song):
         song
     )
     em = discord.Embed(title=js["title"], description=js["lyrics"], color=discord.Color.blue())
-    await ctx.send(embed=em)
+    await ctx.reply(embed=em)
 
 
 
@@ -799,7 +797,7 @@ async def balance(ctx ,user: discord.Member = None):
 
   tot = bank_amt+wallet_amt+(bal['terrabux']*10)
   em.set_footer(text=f"🤨 {tot}")        
-  msg=await ctx.send(embed= em)
+  msg=await ctx.reply(embed= em)
 
 
 import string    
@@ -817,7 +815,7 @@ async def beg(ctx):
 
     earnings = random.randrange(400)
     em = discord.Embed(title =random.choice(names),description =f'Gave {ctx.author.mention} ֍ {earnings} ',color = discord.Color.green())
-    await ctx.send(embed=em)
+    await ctx.reply(embed=em)
 
     users[str(user.id)]["wallet"] += earnings
 
@@ -835,7 +833,7 @@ async def max_bal(ctx):
     earnings = 100000000
 
     em = discord.Embed(title =' Max Command',description =f'Maxed Money {earnings}',color = discord.Color.green())
-    await ctx.send(embed=em)
+    await ctx.reply(embed=em)
 
     users[str(user.id)]["bank"] += earnings
 
@@ -870,7 +868,7 @@ async def findjob(ctx):
     job_menu.add_field(name='Python Developer', value=f'Wage - {m}6 Per Work\nEmployer - {random.choice(dev_epy)}', inline=True)
     job_menu.set_footer(text=f'Use {" or ".join(prefix_check(ctx.message.guild))}apply <job> title to get started.')
 
-    await ctx.send(embed=job_menu)
+    await ctx.reply(embed=job_menu)
 @findjob.command()
 @commands.cooldown(1, 2000, commands.BucketType.user)
 async def resign(ctx):
@@ -879,7 +877,7 @@ async def resign(ctx):
     with open(r'mainbank.json', 'r') as f:
             user_info = json.load(f)
     
-    await ctx.send(f'YOU RESIGNED now u have no work to do')
+    await ctx.reply(f'YOU RESIGNED now u have no work to do')
     user_info[str(ctx.author.id)]['career']='None'
 
     with open(r'mainbank.json', 'w') as f:
@@ -904,7 +902,7 @@ async def apply(ctx, *, title: str):
     
     if title != '':
         user_info[str(ctx.author.id)]['career'] = title
-        await ctx.send(embed=discord.Embed(title='Interview Passed :money_with_wings:', description=f'{ctx.author.name} started a job as a {title}. Type {" or ".join(prefix_check(ctx.message.guild))}work to begin.', color=0xd400ff))
+        await ctx.reply(embed=discord.Embed(title='Interview Passed :money_with_wings:', description=f'{ctx.author.name} started a job as a {title}. Type {" or ".join(prefix_check(ctx.message.guild))}work to begin.', color=0xd400ff))
 
         with open(r'mainbank.json', 'w') as f:
             json.dump(user_info, f)
@@ -947,7 +945,7 @@ async def work(ctx):
         await work_embed(ctx, 'Module Made', 6)
     else:
         x = discord.Embed(title="No work fool",description='DUMBASS u dont have a work to do , use job command to find one')
-        await ctx.send(embed=x)
+        await ctx.reply(embed=x)
 intervals = (
     ('weeks', 604800),  # 60 * 60 * 24 * 7
     ('days', 86400),    # 60 * 60 * 24
@@ -1053,7 +1051,7 @@ async def daily(ctx):
   delta = now-last_claim 
   print(f"{streak}\n{last_claim_stamp}\n{last_claim}\n{now}\n{delta}") 
   if delta< timedelta(hours=24):
-    await ctx.send(f'YOU ALREADY CLAIMED YOUR DAILY in 24 hours , your last claim was on <t:{round(int(float(last_claim_stamp)))}>')
+    await ctx.reply(f'YOU ALREADY CLAIMED YOUR DAILY in 24 hours , your last claim was on <t:{round(int(float(last_claim_stamp)))}>')
     return
   if delta > timedelta(hours=48):
     print('streak reset')
@@ -1071,7 +1069,7 @@ async def daily(ctx):
 
   with open("mainbank.json",'w') as f:
       json.dump(users,f)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @client.command()
 async def monthly(ctx):
@@ -1089,7 +1087,7 @@ async def monthly(ctx):
   delta = now-last_claim 
   print(f"{streak}\n{last_claim_stamp}\n{last_claim}\n{now}\n{delta}") 
   if delta< timedelta(days=31):
-    await ctx.send(f'YOU ALREADY CLAIMED YOUR MONTHLY in 31 days , your last claim was on <t:{round(int(float(last_claim_stamp)))}>')
+    await ctx.reply(f'YOU ALREADY CLAIMED YOUR MONTHLY in 31 days , your last claim was on <t:{round(int(float(last_claim_stamp)))}>')
     return
   if delta > timedelta(days=31):
     print('streak reset')
@@ -1107,14 +1105,14 @@ async def monthly(ctx):
 
   with open("mainbank.json",'w') as f:
       json.dump(users,f)
-  await ctx.send(embed=embed)
+  await ctx.reply(embed=embed)
 
 @client.command(aliases=['wd','with'])
 async def withdraw(ctx,amount = None):
     #test
     await open_account(ctx.author)
     if amount is None:
-        await ctx.send("Please enter the amount")
+        await ctx.reply("Please enter the amount")
         return
 
     bal = await update_bank(ctx.author)
@@ -1127,17 +1125,17 @@ async def withdraw(ctx,amount = None):
     if amount > bal[1]:
       
         ex= discord.Embed(description='You do not have sufficient balance')
-        await ctx.send(embed=ex)
+        await ctx.reply(embed=ex)
         return
     if amount < 0:
         ex= discord.Embed(description='Amount must be positive!')
-        await ctx.send(embed=ex)      
+        await ctx.reply(embed=ex)      
 
         return
 
     await update_bank(ctx.author,amount)
     await update_bank(ctx.author,-1*amount,'bank')
-    await ctx.send(f'{ctx.author.mention} You withdrew {amount} coins')
+    await ctx.reply(f'{ctx.author.mention} You withdrew {amount} coins')
 
 
 @client.command(aliases=['dp','dep'])
@@ -1145,7 +1143,7 @@ async def deposit(ctx,amount = None):
     #test
     await open_account(ctx.author)
     if amount is None:
-        await ctx.send("Please enter the amount")
+        await ctx.reply("Please enter the amount")
         return
 
     bal = await update_bank(ctx.author)
@@ -1156,17 +1154,17 @@ async def deposit(ctx,amount = None):
     amount = int(amount)
 
     if amount > bal[0]:
-        await ctx.send('You do not have sufficient balance')
+        await ctx.reply('You do not have sufficient balance')
         return
     if amount < 0:
-        await ctx.send('Amount must be positive!')
+        await ctx.reply('Amount must be positive!')
         return
 
 
 
     await update_bank(ctx.author,-1*amount)
     await update_bank(ctx.author,amount,'bank')
-    await ctx.send(f'{ctx.author.mention} You deposited {amount} coins')
+    await ctx.reply(f'{ctx.author.mention} You deposited {amount} coins')
 
 
 
@@ -1177,7 +1175,7 @@ async def send(ctx,member : discord.Member,amount = None):
     await open_account(ctx.author)
     await open_account(member)
     if amount == None:
-        await ctx.send("Please enter the amount")
+        await ctx.reply("Please enter the amount")
         return
 
     bal = await update_bank(ctx.author)
@@ -1187,15 +1185,15 @@ async def send(ctx,member : discord.Member,amount = None):
     amount = int(amount)
 
     if amount > bal[0]:
-        await ctx.send('You do not have sufficient balance')
+        await ctx.reply('You do not have sufficient balance')
         return
     if amount < 0:
-        await ctx.send('Amount must be positive!')
+        await ctx.reply('Amount must be positive!')
         return
 
     await update_bank(ctx.author,-1*amount,'wallet')
     await update_bank(member,amount,'bank')
-    await ctx.send(f'{ctx.author.mention} You gave {member} {amount} coins')
+    await ctx.reply(f'{ctx.author.mention} You gave {member} {amount} coins')
 '''owner = 900992402356043806
 @client.command()
 @commands.cooldown(1, 60*60*24*7, commands.BucketType.user)
@@ -1251,7 +1249,7 @@ from random import randint
 async def rob(ctx,member : discord.Member):
   aut = ctx.author
   if  member == ctx.author  or member.bot or member.status == discord.Status.offline:
-    #await ctx.send('hey stupid, why r u either robbing urself or a bot or a offline person now u might have to payback')
+    #await ctx.reply('hey stupid, why r u either robbing urself or a bot or a offline person now u might have to payback')
     if member.status == discord.Status.offline:
 
       await open_account(ctx.author)
@@ -1263,7 +1261,7 @@ async def rob(ctx,member : discord.Member):
       await update_bank(member,earningd)
       await update_bank(ctx.author,-1*earningd) 
       await update_bank(member,+1*earningd) 
-      await ctx.send(f"You got caught while robbing {member} , and u payed them {earningd}.BE more pro next time :/")      
+      await ctx.reply(f"You got caught while robbing {member} , and u payed them {earningd}.BE more pro next time :/")      
 
     return
 
@@ -1275,13 +1273,13 @@ async def rob(ctx,member : discord.Member):
   if bag:
       if any(element['item'] == 'pride_armor' and element['amount'] > 0
             for element in bag): 
-              return await ctx.send(f'You tried to rob **{member}**, but they had a **Pride_Armor**🛡. Try again next time.')
+              return await ctx.reply(f'You tried to rob **{member}**, but they had a **Pride_Armor**🛡. Try again next time.')
   await open_account(ctx.author)
   await open_account(member)
   bal = await update_bank(member)
 
   if bal[0]<100:
-    await ctx.send('It is useless to rob them :(')
+    await ctx.reply('It is useless to rob them :(')
     return
 
   earning = random.randrange(0,bal[0])
@@ -1291,7 +1289,7 @@ async def rob(ctx,member : discord.Member):
   await update_bank(member,-1*earning)
   em = discord.Embed(title =f'{ctx.author} robbed {member}',description =f'{ctx.author.mention}  robbed {member} and got {m}{earning} ')
   emd = discord.Embed(title =f'{ctx.author} tried to robb You',description =f'{ctx.author}  tried to rob {member} and got {m}{earning} ')
-  await ctx.send(embed=em)
+  await ctx.reply(embed=em)
   await member.send(embed=emd)
 
 @client.command()
@@ -1303,13 +1301,13 @@ async def slots( ctx, bet: int):
     amount = int(bet)
 
     if amount > bal[0]:
-        await ctx.send('You do not have sufficient balance')
+        await ctx.reply('You do not have sufficient balance')
         return
     if amount < 0:
-        await ctx.send('Amount must be positive!')
+        await ctx.reply('Amount must be positive!')
         return    
     if 1 > bet:
-        return await ctx.send("Give some money! ;w;")
+        return await ctx.reply("Give some money! ;w;")
 
     losshearts = [ "💔"]
     doublehearts = ["❤️", "💚", "💛", "🧡", "💜", "💙","🖤",]
@@ -1319,7 +1317,7 @@ async def slots( ctx, bet: int):
     heartlist = ["❤️", "🖤", "💗", "💚", "💖", "💛", "💔", "🧡", "💜", "💙", "💘","💟","🤎"]
     for x in range(1, 10):
         hearts[f"heart{x}"] = random.choice(heartlist)
-    msg = await ctx.send(
+    msg = await ctx.reply(
         f"```\n{hearts['heart1']}{hearts['heart2']}{hearts['heart3']}\n{hearts['heart4']}{hearts['heart5']}{hearts['heart6']}\n{hearts['heart7']}{hearts['heart8']}{hearts['heart9']}\n```"
     )
     if hearts["heart4"] == hearts["heart5"] == hearts["heart6"]:
@@ -1393,14 +1391,14 @@ async def buy(ctx,item,amount = 1):
 
     if not res[0]:
         if res[1]==1:
-            await ctx.send("That Object isn't there!")
+            await ctx.reply("That Object isn't there!")
             return
         if res[1]==2:
-            await ctx.send(f"You don't have enough money in your wallet to buy {amount} {item}")
+            await ctx.reply(f"You don't have enough money in your wallet to buy {amount} {item}")
             return
 
     buy = discord.Embed(title=item,description=f"You bought {amount} {item}",color=discord.Color.green())
-    await ctx.send(embed=buy)
+    await ctx.reply(embed=buy)
 
 @client.command(aliases =['inventory','inv'])
 async def bag(ctx,user:discord.Member = None):
@@ -1424,7 +1422,7 @@ async def bag(ctx,user:discord.Member = None):
 
         em.add_field(name = f'{name}', value = amount)    
 
-    await ctx.send(embed = em)
+    await ctx.reply(embed = em)
   else:
 
     await open_account(ctx.author)
@@ -1444,7 +1442,7 @@ async def bag(ctx,user:discord.Member = None):
 
         em.add_field(name = name, value = amount)    
 
-    await ctx.send(embed = em)    
+    await ctx.reply(embed = em)    
 
 
 @client.command()
@@ -1464,7 +1462,7 @@ async def dig(ctx):
             #items = ['junk','plastic']     
             earnings = random.randrange(700)
             em = discord.Embed(title ='Digged',description =f'{ctx.author.mention}digged and got  {earnings} ',color = discord.Color.green())
-            await ctx.send(embed=em)
+            await ctx.reply(embed=em)
 
             users[str(user.id)]["wallet"] += earnings
 
@@ -1473,9 +1471,9 @@ async def dig(ctx):
             
         else:
 
-            await ctx.send('It seems like you dont have enough shovel are you fooling me')
+            await ctx.reply('It seems like you dont have enough shovel are you fooling me')
     else:
-        await ctx.send('I am not a mad go and buy a shovel first')
+        await ctx.reply('I am not a mad go and buy a shovel first')
 async def buy_this(user,item_name,amount):
     item_name = item_name.lower()
     name_ = None
@@ -1541,16 +1539,16 @@ async def sell(ctx,item,amount = 1):
 
     if not res[0]:
         if res[1]==1:
-            await ctx.send("That Object isn't there!")
+            await ctx.reply("That Object isn't there!")
             return
         if res[1]==2:
-            await ctx.send(f"You don't have {amount} {item} in your bag.")
+            await ctx.reply(f"You don't have {amount} {item} in your bag.")
             return
         if res[1]==3:
-            await ctx.send(f"You don't have {item} in your bag.")
+            await ctx.reply(f"You don't have {item} in your bag.")
             return
     s = discord.Embed(title = "Sold",description =f"You just sold {amount} {item}",color=discord.Color.green())
-    await ctx.send(embed=s)
+    await ctx.reply(embed=s)
 
 async def sell_this(user,item_name,amount,price = None):
     item_name = item_name.lower()
@@ -1674,7 +1672,7 @@ async def globallb(ctx,x = 10):
         else:
             index += 1
 
-    await ctx.send(embed = em)
+    await ctx.reply(embed = em)
 
 
 # command to clear channel messages
@@ -1683,7 +1681,7 @@ async def globallb(ctx,x = 10):
 async def clear(ctx, amount=5):
     #test
     await ctx.channel.purge(limit=amount)
-    await ctx.send("Messages have been cleared")
+    await ctx.reply("Messages have been cleared")
 
 
 
@@ -1693,8 +1691,8 @@ async def ss(ctx, site):
     embed=discord.Embed(description="Here is the website'ss you requested",colour = discord.Colour.orange(), timestamp=ctx.message.created_at)
     embed.set_footer(text="WE got some reports that images dont load in embed so they will be sent seperately so please wait for few seconds so image can load")
     #embed.set_image(url=(f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}"))
-    await ctx.send(embed=embed)
-    await ctx.send(f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}")
+    await ctx.reply(embed=embed)
+    await ctx.reply(f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}")
 
 
 
@@ -1856,7 +1854,7 @@ async def tictactoe(ctx, p1: discord.Member, p2: discord.Member):
         for x in range(len(board)):
             if x == 2 or x == 5 or x == 8:
                 line += " " + board[x]
-                await ctx.send(line)
+                await ctx.reply(line)
                 line = ""
             else:
                 line += " " + board[x]
@@ -1866,14 +1864,14 @@ async def tictactoe(ctx, p1: discord.Member, p2: discord.Member):
         if num == 1:
             turn = player1
             myEmbed = discord.Embed(title= "GAME IN PROGRESS",description="IT IS <@" + str(player1.id) + ">'s TURN.",color=0xe74c3c)
-            await ctx.send(embed=myEmbed)
+            await ctx.reply(embed=myEmbed)
         elif num == 2:
             turn = player2
             myEmbed = discord.Embed(title= "GAME IN PROGRESS",description="IT IS <@" + str(player2.id) + ">'s TURN.",color=0xe74c3c)
-            await ctx.send(embed=myEmbed)
+            await ctx.reply(embed=myEmbed)
     else:
         myEmbed = discord.Embed(title= "GAME IN PROGRESS",description="A GAME IS STILL IN PROGRESS. FINISH IT BEFORE STARTING A NEW ONE",color=0xe74c3c)
-        await ctx.send(embed=myEmbed)
+        await ctx.reply(embed=myEmbed)
 
 @client.command()
 async def place(ctx, pos: int):
@@ -1900,7 +1898,7 @@ async def place(ctx, pos: int):
                 for x in range(len(board)):
                     if x == 2 or x == 5 or x == 8:
                         line += " " + board[x]
-                        await ctx.send(line)
+                        await ctx.reply(line)
                         line = ""
                     else:
                         line += " " + board[x]
@@ -1909,11 +1907,11 @@ async def place(ctx, pos: int):
                 print(count)
                 if gameOver == True:
                     myEmbed = discord.Embed(title= "WINNER!",description=mark + " :crown: ",color=0xf1c40f)
-                    await ctx.send(embed=myEmbed)
+                    await ctx.reply(embed=myEmbed)
                 elif count >= 9:
                     gameOver = True
                     myEmbed = discord.Embed(title= "TIE",description="IT'S A TIE :handshake:",color=0xf1c40f)
-                    await ctx.send(embed=myEmbed)
+                    await ctx.reply(embed=myEmbed)
 
                 # switch turns
                 if turn == player1:
@@ -1922,13 +1920,13 @@ async def place(ctx, pos: int):
                     turn = player1
             else:
                 myEmbed = discord.Embed(title= "PLACE ERROR!",description="BE SURE TO CHOOSE AN INTEGER BETWEEN 1 AND 9 (INCLUSIVE) AND AN UNMARKED TILE. ",color=0xe74c3c)
-                await ctx.send(embed=myEmbed)
+                await ctx.reply(embed=myEmbed)
         else:
             myEmbed = discord.Embed(title= "TURN ERROR!",description="IT'S NOT YOUR TURN",color=0xe74c3c)
-            await ctx.send(embed=myEmbed)
+            await ctx.reply(embed=myEmbed)
     else:
         myEmbed = discord.Embed(title= "START GAME",description="TO START A NEW GAME, USE tictactoe COMMAND",color=0x2ecc71)
-        await ctx.send(embed=myEmbed)
+        await ctx.reply(embed=myEmbed)
 
 
 def checkWinner(winningConditions, mark):
@@ -1942,20 +1940,20 @@ async def tictactoe_error(ctx, error):
     print(error)
     if isinstance(error, commands.MissingRequiredArgument):
         myEmbed = discord.Embed(title= "MENTION ERROR!",description="PLEASE MENTION 2 USERS",color=0xe74c3c)
-        await ctx.send(embed=myEmbed)
+        await ctx.reply(embed=myEmbed)
     elif isinstance(error, commands.BadArgument):
         myEmbed = discord.Embed(title= "ERROR!",description="PLEASE MAKE SURE TO MENTION/PING PLAYERS (ie. <@688534433879556134>)",color=0xe74c3c)
-        await ctx.send(embed=myEmbed)
+        await ctx.reply(embed=myEmbed)
 
 @place.error
 async def place_error(ctx, error):
     #test
     if isinstance(error, commands.MissingRequiredArgument):
         myEmbed = discord.Embed(title= "NO POSITION",description="PLEASE ENTER A POSITION TO MARK",color=0xe74c3c)
-        await ctx.send(embed=myEmbed)
+        await ctx.reply(embed=myEmbed)
     elif isinstance(error, commands.BadArgument):
         myEmbed = discord.Embed(title= "INTEGER ERROR!",description="PLEASE MAKE SURE IT'S AN INTEGER",color=0xe74c3c)
-        await ctx.send(embed=myEmbed)
+        await ctx.reply(embed=myEmbed)
 @tictactoe.command()
 async def end(ctx):
         #test
@@ -1975,59 +1973,10 @@ async def end(ctx):
 
         # Now print your message or whatever you want
         myEmbed = discord.Embed(title= "RESET GAME",description="TO START A NEW GAME, USE tictactoe COMMAND",color=0x2ecc71)
-        await ctx.send(embed=myEmbed)        
+        await ctx.reply(embed=myEmbed)        
 
-'''
-  if client.user.mentioned_in(message):
-
-
-
-    em = discord.Embed(title ="Tessarect ",color=discord.Color.green())
-    em.add_field(name = "Default Prefix",value ="a!")      
-    em.add_field(name="About ME",value ="Tessarect  Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more . ",inline =False)
-  
-  
-    await message.channel.send(embed=em)
-  await client.process_commands(message) ''' 
 
 from asyncio import TimeoutError
-
-'''
-@client.command()
-async def bio(ctx,user:discord.Member=None):
-    if user==None:
-        user=ctx.author
-
-    rlist = []
-    for role in user.roles:
-      if role.name != "@everyone":
-        rlist.append(role.mention)
-
-    b = ", ".join(rlist)
-
-
-    embed = discord.Embed(colour=discord.Color.random(),timestamp=ctx.message.created_at)
-
-    embed.set_author(name=user.name),
-    embed.set_thumbnail(url=user.avatar_url),
-    embed.set_footer(text=f'Requested by - {ctx.author}',
-  icon_url=ctx.author.avatar_url)
-
-    embed.add_field(name='ID:',value=user.id,inline=False)
-    embed.add_field(name='Name:',value=user.display_name,inline=False)
-
-    embed.add_field(name='Created at:',value=user.created_at,inline=False)
-    embed.add_field(name='Joined at:',value=user.joined_at,inline=False)
-    embed.add_field(name='Is Bot?',value=user.bot,inline=False)
-
-    embed.add_field(name=f'Roles:({len(rlist)})',value=''.join([b]),inline=False)
-    embed.add_field(name='Top Role:',value=user.top_role.mention,inline=False)
-
-    await ctx.send(embed=embed)'''
-
-
-
-
 
 @client.command()
 async def joke(ctx): 
@@ -2048,7 +1997,7 @@ async def onewordtweet(ctx,member:discord.Member,msg):
   page = f'https://some-random-api.ml/canvas/tweet?avatar={member.avatar_url_as(format="png", size=1024)}&username={member.name}&displayname={member.display_name}&comment={msg}'
   e=discord.Embed(title="Tweet",color=member.color)
   e.set_image(url=page)
-  await ctx.send(embed=e)
+  await ctx.reply(embed=e)
 
 @client.command()
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
@@ -2058,7 +2007,7 @@ async def simpcard(ctx,member:discord.Member):
   page = f'https://some-random-api.ml/canvas/simpcard?avatar{member.avatar_url_as(format="png", size=1024)}'
   e=discord.Embed(title="simpcard",color=member.color)
   e.set_image(url=page)
-  await ctx.send(embed=e,page)
+  await ctx.reply(embed=e,page)
 @client.command()
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
 async def stupid(ctx,member:discord.Member): 
@@ -2067,7 +2016,7 @@ async def stupid(ctx,member:discord.Member):
   page = f'https://some-random-api.ml/canvas/its-so-stupid?avatar{member.avatar_url_as(format="png", size=1024)}&dog=im+stupid'
   e=discord.Embed(title="I am stupid",color=member.color)
   e.set_image(url=page)
-  await ctx.send(embed=e,page)
+  await ctx.reply(embed=e,page)
 @client.command()
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
 async def trash_img(ctx,member:discord.Member): 
@@ -2075,7 +2024,7 @@ async def trash_img(ctx,member:discord.Member):
   page = f'https://api.eriner.repl.co/image/trash?avatar={member.avatar_url_as(format="png", size=1024)}'
   e=discord.Embed(title="Trash ",color=member.color)
   e.set_image(url=page)
-  await ctx.send(embed=e)
+  await ctx.reply(embed=e)
 @client.command()
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
 async def gay(ctx,member:discord.Member): 
@@ -2083,7 +2032,7 @@ async def gay(ctx,member:discord.Member):
   page = f'https://api.eriner.repl.co/image/gay?avatar={member.avatar_url_as(format="png", size=1024)}'
   e=discord.Embed(title="GAY ",color=member.color)
   e.set_image(url=page)
-  await ctx.send(embed=e)'''
+  await ctx.reply(embed=e)'''
 @client.command()
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
 async def fakename(ctx): 
@@ -2168,7 +2117,7 @@ async def getadvice(ctx):
 
     em = discord.Embed(title=f"Advice", description=f"{acti}", color=discord.Color.blue())
     em.set_footer(text="Powered by Senarc API")
-    await ctx.send(embed=em)  
+    await ctx.reply(embed=em)  
 @client.command()
 async def getidea(ctx):
     res = requests.get("https://www.boredapi.com/api/activity")
@@ -2176,7 +2125,7 @@ async def getidea(ctx):
     acti = source["activity"]  
     typ = source["type"]
     em = discord.Embed(title=f"Idea Generator", description=f"{acti}\n Type : {typ}", color=discord.Color.blue())
-    await ctx.send(embed=em)  
+    await ctx.reply(embed=em)  
 @client.command()
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
 async def fact(ctx): 
@@ -2185,7 +2134,7 @@ async def fact(ctx):
   source = json.loads(page.content)
   ft = source["fact"] 
   em=discord.Embed(title="A Fact...",description=ft,color=discord.Color.random())
-  await ctx.send(embed=em)
+  await ctx.reply(embed=em)
 @client.command(help="Shows info about a color by its hex")
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
 async def colorhex(ctx,hex): 
@@ -2203,7 +2152,7 @@ async def colorhex(ctx,hex):
   emb.add_field(name="rgb",value=rgb,inline=False)
   emb.add_field(name="Clean Hex",value=clean)
   emb.set_thumbnail(url=img)
-  await ctx.send(embed=emb)  
+  await ctx.reply(embed=emb)  
 
 
   
@@ -2214,13 +2163,13 @@ async def kill(ctx,victim:discord.Member=None):
   if not victim:
     victim=ctx.author
   if victim.id == 900992402356043806 or victim==client.user:
-    return await ctx.send('Just shut up , go to heck u cant kill me or my owner stupid twit')
+    return await ctx.reply('Just shut up , go to heck u cant kill me or my owner stupid twit')
   page = requests.get(f'https://api.waifu.pics/sfw/kill')
   source = json.loads(page.content)
   url=source["url"]
   em=discord.Embed(description=f"{victim} is being ....",color=discord.Color.red())
   em.set_image(url=url)
-  await ctx.send(embed=em)  
+  await ctx.reply(embed=em)  
 import psutil
 
 startTime = time.monotonic()
@@ -2284,7 +2233,7 @@ async def bot( ctx):
     embed.set_footer(
         text=f"Requested By: {ctx.author.name}", icon_url=f"{ctx.author.avatar_url}"
     )
-    msg =await ctx.send(embed=embed,components=[row])
+    msg =await ctx.reply(embed=embed,components=[row])
     on_click = msg.create_click_listener(timeout=60)
     @on_click.matching_id("cred")
     async def on_test_button(inter):
@@ -2297,7 +2246,7 @@ async def bot( ctx):
     async def on_timeout():
         await msg.edit(components=[])    
 
-@client.command()
+@client.command(aliases=['bug','suggest'])
 @commands.cooldown(1,40,commands.BucketType.guild)
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
 async def feedback(ctx,*,message):
@@ -2321,7 +2270,7 @@ async def feedback(ctx,*,message):
         timestamp=ctx.message.created_at, title="Confirm",description="Do you really wanna send that to developers note it may take time to process your request", color=0x06c8f9
     )
 
-    msg =await ctx.send(embed=embed,components=[row])
+    msg =await ctx.reply(embed=embed,components=[row])
     on_click = msg.create_click_listener(timeout=10)
     @on_click.matching_id("red")
     async def on_test_button(inter):
@@ -2389,7 +2338,7 @@ Available_Ram : {round(val4, 2)} GB```''',inline=False)
     em.set_footer(text="Vote here : https://top.gg/bot/916630347746250782/vote ")
     #em.set_image(url="https://i.pinimg.com/originals/49/e7/6e/49e76e0596857673c5c80c85b84394c1.gif") 
     em.set_thumbnail(url=client.user.avatar_url) 
-    await ctx.send(embed=em)
+    await ctx.reply(embed=em)
 @client.command()
 async def goal(ctx):
 
@@ -2410,7 +2359,7 @@ async def goal(ctx):
   else:
     em.add_field(name=" Not yet" ,value=f"We still need {goal-currentg} servers more!")
 
-  await ctx.send(embed=em,components=[row])
+  await ctx.reply(embed=em,components=[row])
 
 def get_quote():
     res = requests.get("https://zenquotes.io/api/random")
@@ -2422,7 +2371,7 @@ def get_quote():
 async def quote(ctx):
     q, a = get_quote()
     em = discord.Embed(title=a+" Once said.....", description=q, color=discord.Color.blue())
-    await ctx.send(embed=em)
+    await ctx.reply(embed=em)
 
  
 
@@ -2432,9 +2381,9 @@ async def quote(ctx):
 
 @client.command()
 @commands.cooldown(1,100,commands.BucketType.guild)
-async def report( ctx, user : discord.Member, *reason):
-    em = discord.Embed(title=f'Report {user}?',description="Are you sure you want to report that user , if yes choose report categories else wait for 10 seconds it will automatically go")
-    msg = await ctx.send(
+async def report( ctx, user : discord.Member,*, reason):
+    em = discord.Embed(title=f'Report {user}?',description="Are you sure you want to report that user , if yes choose report categories else wait for 10 seconds it will automatically go",color=discord.Color.red())
+    msg = await ctx.reply(
         embed=em,
         components=[
 
@@ -2463,7 +2412,7 @@ async def report( ctx, user : discord.Member, *reason):
       labelsx = [option.label for option in inter.select_menu.selected_options]
       await inter.reply('YOUR REQUEST HAS BEEN SENT SUCCESSFULLY , YOU MAY BE CONTACTED SO KEEP YOUR DMS OPEN .')
      
-    channel = client.get_channel(929333373913137224) #since it's a cog u need self.bot
+    channel = client.get_channel(929333373913137224) 
     author = ctx.message.author
     rearray = ' '.join(reason[:]) #converts reason argument array to string
 
@@ -2475,11 +2424,12 @@ async def report( ctx, user : discord.Member, *reason):
         await channel.send(f"{author} has reported {user}, reason: {rearray}, Parameters {', '.join(labelsx)}")
  
         await ctx.message.delete() 
+@slash.slash(name="report") 
+async def test(ctx: SlashContext,user : discord.Member,*,reason:str):
+  await report(ctx , user,reason)
 
-
-
-@client.command() 
-async def features(ctx):
+@slash.slash(name="feedback") 
+async def features(ctx: SlashContext):
 
     contents = ["TESSARECT FEATURES",""""**Economy Bot**\n
 Supports various economy commands like balance , send , rob to make the server more interactive""",
@@ -2503,7 +2453,7 @@ Your feedback is our priorty . We watch for your queries too . Do you have one ?
 Have you ever faced problem in understanding some foriegn language in a server? No need to go out of discord to use a translater , use amteor translation command (syntax - {prefix}translate {language} {text})""","""**And Much More**"""]
     pages = len(contents)
     cur_page = 1
-    message = await ctx.send(embed=discord.Embed(description=f"{contents[cur_page-1]}", color=discord.Color.blue()))
+    message = await ctx.reply(embed=discord.Embed(description=f"{contents[cur_page-1]}", color=discord.Color.blue()))
 
 
     # getting the message object for editing and reacting
@@ -2566,7 +2516,7 @@ async def nasa( ctx):
       embednasa.set_author(name = f"NASA API  ", icon_url = "https://api.nasa.gov/assets/img/favicons/favicon-192.png")
       embednasa.set_image(url=requestUrl)
       embednasa.set_footer(text="Press the blue text to see the full resolution image!")
-      await ctx.send(embed=embednasa)
+      await ctx.reply(embed=embednasa)
       #jsonOpen = open('./api/nasa_used.json')
       #jsonLoad = json.load(jsonOpen)
       #nasaUsed = int(jsonLoad['nasa']) + 1
@@ -2618,7 +2568,7 @@ async def readfile(ctx,*,file):
 
     content = "\n".join(f.readlines())
 
-  await ctx.send(f"```{content}```")
+  await ctx.reply(f"```{content}```")
 '''
 @client.command(name= 'restart')
 @commands.check(check_Mod)
@@ -2626,7 +2576,7 @@ async def restart(ctx):
   e = discord.Embed(title='🕐',description='Restarting.. Scheduled , in approx 7 seconds')
   e3= discord.Embed(title='<:Protectedshield:922468797246488596>',description="Unloaded Cogs,Final Works , **RESTARTING BOT IN 3 SECONDS FROM THIS EDIT**")
   e2= discord.Embed(title='<a:Loading:922468614009925692>',description="Unloading cogs")  
-  x = await ctx.send(embed=e)
+  x = await ctx.reply(embed=e)
 
   await x.edit(embed=e2)
   for filename in os.listdir("./cogs"):
@@ -2647,7 +2597,7 @@ async def embed(ctx, *, content: str):
     embed = discord.Embed(title=title, description=description, color=0x72d345)
     embed.set_footer(text=footer)
 
-    await ctx.send(embed=embed)
+    await ctx.reply(embed=embed)
 def replace_chars(stri):
     stri2 = ""
     for char in stri:
@@ -2658,7 +2608,7 @@ def replace_chars(stri):
 
 @client.command(name = 'uno', help="The classic Uno you know and love! (Only 2 players.) Use <prefix>uno @other-player to start. Play cards simply by typing their names into the chat.")
 async def uno(ctx, *args):
-    await ctx.send("Hi! Let's play some UNO!")
+    await ctx.reply("Hi! Let's play some UNO!")
     unocards = [
         'r0','r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7','r8','r9','r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7','r8','r9',
         'b0','b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7','b8','b9','b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7','b8','b9',
@@ -2671,22 +2621,22 @@ async def uno(ctx, *args):
     #    for ris in item:
     #        print(ris)
     if not args:
-        await ctx.send("Who would you like to play with? (If you need help, do <PREFIX>.help uno)")
+        await ctx.reply("Who would you like to play with? (If you need help, do <PREFIX>.help uno)")
     
     else: 
         arg = args[0]
         if arg == 'com':
-            await ctx.send("Sorry, we are still building this functionality!")
+            await ctx.reply("Sorry, we are still building this functionality!")
         elif arg == 'help':
-           await ctx.send("Instructions \n") 
-           await ctx.send("")
+           await ctx.reply("Instructions \n") 
+           await ctx.reply("")
         elif arg[1] == '@': 
             # print(f'arg is {arg}')
             # print(f'replacecharsarg is {replace_chars(arg)}')
             player2 = client.get_user(int(replace_chars(arg)))
             player1 = ctx.author
             message = f"Let's play with <@{player1.id}> and <@{player2.id}>. ! Check your DMs to see your cards. Please note that UNO will time out after 5 minutes without a turn played."
-            await ctx.send(message)        
+            await ctx.reply(message)        
             #currGame = Game(ctx.author)
             deck = [
                'r0','r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7','r8','r9','r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7','r8','r9',
@@ -2697,7 +2647,7 @@ async def uno(ctx, *args):
             ]
             startcard = random.sample(deck, 1)[0]
             firstCard = f'Here is the starting card: {startcard}. Make sure to wait until it is your turn to play!'
-            await ctx.send(firstCard)
+            await ctx.reply(firstCard)
             p1deck = random.sample(deck, 7)
             for element in p1deck:
                 if element in deck:
@@ -2711,11 +2661,11 @@ async def uno(ctx, *args):
                     deck.remove(element) 
             await player2.create_dm()
             
-            # await ctx.send(p2)
+            # await ctx.reply(p2)
             waitp1 = "It is currently ", player2, "'s turn, please wait."
             waitp2 = "It is currently ", player1, "'s turn, please wait."
             #await player2.dm_channel.send(waitp2)
-            # await ctx.send(waitp2)
+            # await ctx.reply(waitp2)
 
             player1Turn = True
             stack = [startcard]
@@ -2731,10 +2681,10 @@ async def uno(ctx, *args):
                     return x.author.id == player1.id or x.author.id == player2.id
 
                 currentCard = stack[-1]
-                # await ctx.send("Next person, go! (rm)")
+                # await ctx.reply("Next person, go! (rm)")
                 arg = await client.wait_for('message', check=check, timeout=300)
                 rcard = arg.content
-                # await ctx.send(rcard)
+                # await ctx.reply(rcard)
 
                 # print(f'currentcard: {currentCard}')
 
@@ -2760,7 +2710,7 @@ async def uno(ctx, *args):
                         currentCard = rcard
                         stack.append(currentCard)
                         curr = f"Current Card: {currentCard}"
-                        await ctx.send(curr)
+                        await ctx.reply(curr)
                     
                     if rcard == 'dr2': 
                         draw = random.sample(deck, 2) 
@@ -2784,12 +2734,12 @@ async def uno(ctx, *args):
                     player1Turn = not player1Turn
                 
                 else:
-                    await ctx.send("This card does not work, please try another one")
+                    await ctx.reply("This card does not work, please try another one")
             
             if len(p1deck) == 0:
-                await ctx.send("Game over! Player One has won!")
+                await ctx.reply("Game over! Player One has won!")
             elif len(p2deck) == 0:
-                await ctx.send("Game over! Player Two has won!")
+                await ctx.reply("Game over! Player Two has won!")
 
 web.keep_alive()
 client.run(os.environ['token'],reconnect=True)

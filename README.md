@@ -109,7 +109,8 @@ ___
 <a href="https://top.gg/bot/916630347746250782" >
   <img src="https://top.gg/api/widget/916630347746250782.svg">
 </a>
-  
+
+
 # Features
 - [x] Economy Bot
 - [x] Utility Commands
@@ -120,8 +121,8 @@ ___
 - [x] Translation
 - [x] Moderator Commands (More commands Under development)
 - [x] Images Commands (Fixed Again)
-- [ ] AUTOMOD ( development startd)
-- [ ] Advanced Economy Features
+- [x] AUTOMOD (Made 3 filters , more soon)
+- [ ] Advanced Economy Features (surprise awaits)
 # Cogs (Plugins)
 **40+ Cogs(plugins) for better experience and more features** 
 
@@ -154,7 +155,10 @@ ___
 [Contributing Guide](CONTRIBUTING.md)
 ___
 ## Stargazers
-[![Stargazers repo roster for @prakarsh17/tessarect-bot](https://reporoster.com/stars/dark/notext/prakarsh17/tessarect-bot)](https://github.com/prakarsh17/tessarect-bot/stargazers)
+[![Stargazers repo roster for @prakarsh17/tessarect-bot](https://reporoster.com/stars/prakarsh17/tessarect-bot)](https://github.com/prakarsh17/tessarect-bot/stargazers)
+## Forkers
+[![Forkers repo roster for @prakarsh17/tessarect-bot](https://reporoster.com/forks/prakarsh17/tessarect-bot)](https://github.com/prakarsh17/tessarect-bot/network/members)
+
 ## Contributors
 
 ###### People who made Tessarect Possible  (bots too !)

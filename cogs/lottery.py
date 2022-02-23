@@ -38,7 +38,7 @@ class Lottery(commands.Cog):
         lottery["end"] = end.strftime("%d/%m/%y")
         with open("lottery.json", "w") as file:
             json.dump(lottery, file)
-        message = (f'**Lottery Started**\n@everyone\nStarted on {datetime.datetime.utcnow().strftime("%d/%m/%y")}. Will be ending on {end.strftime("%d/%m/%y")}. The tickets can be bought for {price:,}  each.')
+        message = (f'**Lottery Started**\n\nStarted on {datetime.datetime.utcnow().strftime("%d/%m/%y")}. Will be ending on {end.strftime("%d/%m/%y")}. The tickets can be bought for {price:,}  each.')
         await lottery_channel.send(message)
 
     @commands.has_any_role(perms.captain_role, perms.owner_role)
@@ -74,7 +74,7 @@ class Lottery(commands.Cog):
                 list.append(name)
         winner = random.choice(list)
         await ctx.send(f"{winner} has won the lottery. They won {len(list)*lottery['price']:,} gems")
-        await lottery_channel.send(f"**Lotery ended**\n@eve ryone\nThere were {len(list)} tickets sold for {lottery['price']:,} gems.\n**The Winner was {winner} and the win {len(list)*lottery['price']:,} **")
+        await lottery_channel.send(f"**Lotery ended**\n\nThere were {len(list)} tickets sold for {lottery['price']:,} gems.\n**The Winner was {winner} and the win {len(list)*lottery['price']:,} **")
         lottery["price"] = 0
         lottery["end"] = "None"
         lottery["buyers"] = {}
@@ -85,7 +85,7 @@ class Lottery(commands.Cog):
     async def buy(self, ctx, ign: str, tickets: int):
         '''Request to buy a lottery ticket'''
         todo_channel = self.bot.get_channel(929333807893598238)
-        await todo_channel.send(f"@everyone user {ctx.author.mention} wants to buy {tickets:,} tickets for the lottery. Their ign is `{ign}`. Please collect {tickets*lottery['price']:,} gems from them in game")
+        await todo_channel.send(f" user {ctx.author.mention} wants to buy {tickets:,} tickets for the lottery. Their ign is `{ign}`. Please collect {tickets*lottery['price']:,} gems from them in game")
         await ctx.send(f"You have brough {tickets} tickets. This will cost you {tickets*lottery['price']:,} gems")
 
 def setup(bot):
