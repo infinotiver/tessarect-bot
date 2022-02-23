@@ -157,7 +157,7 @@ ___
 ## Stargazers
 [![Stargazers repo roster for @prakarsh17/tessarect-bot](https://reporoster.com/stars/dark/prakarsh17/tessarect-bot)](https://github.com/prakarsh17/tessarect-bot/stargazers)
 ## Forkers
-[![Forkers repo roster for @prakarsh17/tessarect-bot](https://reporoster.com/forks/dark/sprakarsh17/tessarect-bot)](https://github.com/prakarsh17/tessarect-bot/network/members)
+[![Forkers repo roster for @prakarsh17/tessarect-bot](https://reporoster.com/forks/dark/prakarsh17/tessarect-bot)](https://github.com/prakarsh17/tessarect-bot/network/members)
 
 ## Contributors
 
