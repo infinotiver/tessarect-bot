@@ -40,7 +40,7 @@ import datetime
 # Create a translator object
 #from discord_slash import SlashCommand, SlashContext
 import logging 
- 
+'''
 # Create and configure logger
 logging.basicConfig(filename="logs.txt",
                     format='%(asctime)s %(message)s',
@@ -51,7 +51,14 @@ logger = logging.getLogger()
  
 # Setting the threshold of logger to DEBUG
 logger.setLevel(logging.DEBUG)
+# Test messages
+logger.debug("TESTING LOGGER DEBUG")
+logger.info("Just an information")
+logger.warning("Its a Warning")
+logger.error("Error Logger Test")
+logger.critical("Testing Critical Logging")
 
+'''
 import urllib.request
 from dislash import  Option, OptionType
 import typing
@@ -68,12 +75,6 @@ async def deletelogs():
   except:
     print('error')
   os.remove('logs.txt')
-# Test messages
-logger.debug("TESTING LOGGER DEBUG")
-logger.info("Just an information")
-logger.warning("Its a Warning")
-logger.error("Error Logger Test")
-logger.critical("Testing Critical Logging")
 
 
 #subprocess.check_call([sys.executable, '-m', 'pip', 'install','dislash.py', 'discord-pretty-help','randfacts','TenGiphPy','pymongo[srv]'])
@@ -138,13 +139,12 @@ from itertools import cycle
 from discord.ext import  tasks
 not_lo=[]
 not_lox=[]
-totalcog=0
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
         try:
 
           client.load_extension(f"cogs.{filename[:-3]}")
-          totalcog +=1
+
         except Exception as e:
           not_lo.append(filename)
           not_lox.append(str(e))
@@ -153,18 +153,18 @@ for filename in os.listdir("./cogs"):
 
 
 
-
 @client.event
 async def on_ready():
     #DiscordComponents(client) 
     print(f'{client.user} - Tessarect  has connected to Discord! Enjoy ')  
-
     em = discord.Embed(title ="<:online_status:930347639172657164> Monitor Up",description=f"Tessarect Monitor Up  ",color =discord.Color.green())
+    em.set_author(name=client.user.name,icon_url=client.user.avatar_url)
+    em.set_thumbnail(url=client.user.avatar_url)
     em.add_field(name="Cogs not loaded",value=f"{','.join(not_lo)} \n **Reason(order wise)**\n {' | '.join(not_lox)}")
-    em.add_field(name="Server Count",value=len(client.guilds),inline=True)
-    em.add_field(name="Cogs Count",value=len(client.cogs),inline=True)
-    em.add_field(name="Cogs Loaded",value=totalcog,inline=True)
-    em.add_field(name="User Count",value=len(client.users),inline=True)
+    em.add_field(name="Server Count",value=len(client.guilds),inline=False)
+    em.add_field(name="Cogs Count",value=len(client.cogs),inline=False)
+   # em.add_field(name="Cogs Loaded",value=totalcog,inline=True)
+    em.add_field(name="User Count",value=len(client.users),inline=False)
     channel=client.get_channel(929333501101215794)
     await channel.send(embed=em)
     await client.change_presence(
@@ -182,7 +182,7 @@ async def on_ready():
         await channel.send(embed=ex)
 
         os.remove("./storage/reboot.json")  
-    deletelogs.start()              
+    #deletelogs.start()              
     #update_s.start()
 @tasks.loop(minutes=10)
 async def update_s():
@@ -606,10 +606,27 @@ async def on_member_join(member):
     if channel==None:
       return print('not set')
     embed = discord.Embed(colour=discord.Colour.blue())
-    link=f"https://api.popcat.xyz/welcomecard?background=https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png&text1={member.display_name}&text2=Welcome&text3=Have+A+Nice+Experience&avatar={str(member.avatar_url_as(format='png'))}"
+    name=member.display_name.split()
+    finalname='+'.join(name)
+    link=f"https://api.popcat.xyz/welcomecard?background=https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png&text1={finalname}&text2=Welcome&text3=Have+A+Nice+Experience&avatar={str(member.avatar_url_as(format='png'))}"
     embed.set_image(url=link)
     await channel.send(embed=embed)    
 
+@client.event
+async def on_member_remove(member):
+    with open('storage/welcome.json', 'r') as f:
+        wel = json.load(f)  
+    if str(member.guild.id) not in wel:
+        return
+    channel = client.get_channel(wel[str(member.guild.id)])
+    if channel==None:
+      return print('not set')
+    embed = discord.Embed(colour=discord.Colour.red())
+    name=member.display_name.split()
+    finalname='+'.join(name)
+    link=f"https://api.popcat.xyz/welcomecard?background=https://media.discordapp.net/attachments/929332390432735243/945522028985872424/9k.png&text1={finalname}&text2=Left&text3=Hope+They+had+a+Good+time+and+maybe+join+back&avatar={str(member.avatar_url_as(format='png'))}"
+    embed.set_image(url=link)
+    await channel.send(embed=embed)    
 
 
 @client.command()
@@ -2149,8 +2166,8 @@ async def getadvice(ctx):
     source = json.loads(res.content)
     acti = source["text"]  
 
-    em = discord.Embed(title=f"Advicer", description=f"{acti}", color=discord.Color.blue())
-    em.set_footer(text="Powered by Senaric API")
+    em = discord.Embed(title=f"Advice", description=f"{acti}", color=discord.Color.blue())
+    em.set_footer(text="Powered by Senarc API")
     await ctx.send(embed=em)  
 @client.command()
 async def getidea(ctx):
@@ -2773,46 +2790,6 @@ async def uno(ctx, *args):
                 await ctx.send("Game over! Player One has won!")
             elif len(p2deck) == 0:
                 await ctx.send("Game over! Player Two has won!")
-def check_Mod(ctx):
-    with open('Dev.txt') as f: # do change the 'Mod.txt' to the name that suits you. Ensure that this file is in the same directory as your code!
-        
-        if str(ctx.author.id) in f.read(): # this is reading the text file and checking if there's a matching string
-            return ctx.author.id 
-        
-          
-
-'''
-@client.command(hidden=True)
-@commands.check(check_Mod)
-async def add_dev(ctx, user:discord.Member=None):
-    if user == None:
-        await ctx.send("Please provide a user to add as a Mod!")
-        return
-
-    # First we'll make some functions for cleaner, more readable code #
-
-    def is_Mod(user_id): 
-    ## This function will check if the given id is already in the file. True if in file, False if not ##
-        with open('Dev.txt', 'r') as f:
-            if str(user_id) in f.read():
-                return True
-            else:
-                return False
-
-    def add_Mod(user_id):
-    ## This function will add the given user id into the given text file, Mod.txt ##
-        with open('Dev.txt', 'a') as f: # 'a' is used for appending, since we don't want to overwrite all the ids already in the file
-            f.write(f"{str(user_id)}\n")
-            f.close()
-
-    # Now we put those functions to use #
-    if is_Mod(user.id) == True:
-        await ctx.send(f"The user {user} is already a Dev!")
-    else:
-        add_Mod(user.id)
-        await ctx.send(f"{user} added as a Dev!")
- 
-'''
 
 web.keep_alive()
 client.run(os.environ['token'],reconnect=True)

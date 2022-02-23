@@ -74,7 +74,7 @@ class invite_tracker(commands.Cog):
         await message_channel.send(embed=eme)
 
     @commands.Cog.listener()
-    async def on_member_remove(self, member,ctx):
+    async def on_member_remove(self, member):
         message_channel_id = self.modlogsFile.get(str(member.guild.id))
         if message_channel_id is None:
             return

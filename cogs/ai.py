@@ -89,5 +89,24 @@ class AI(commands.Cog):
       em=discord.Embed(color=0x34363A)
       em.set_image(url=out)     
       await ctx.send(embed=em)     
+    @commands.command(
+        name="enhance",help="Super Resolution API"
+    )
+    async def enhance(self, ctx,*,url=None):
+      if not url:
+        url=str(ctx.author.avatar_url_as(format='png'))
+
+      r = requests.post(
+          "https://api.deepai.org/api/torch-srgan",
+          data={
+              'image': url,
+          },
+          headers={'api-key': os.environ['deepai']}
+      )
+      d=r.json()
+      out=d['output_url']
+      em=discord.Embed(color=0x34363A)
+      em.set_image(url=out)     
+      await ctx.send(embed=em)          
 def setup(bot):
     bot.add_cog(AI(bot))

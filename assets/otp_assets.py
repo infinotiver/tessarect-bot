@@ -1,6 +1,6 @@
 import asyncio
 import random
-
+import pyfiglet
 import discord
 
 
@@ -12,19 +12,25 @@ def get_otp(digits=4):
 
 
 async def send_waitfor_otp(ctx, bot):
-    final_otp = get_otp()
-    embed = discord.Embed(title=f"{ctx.author.display_name}, Please enter the code given below to confirm this action.",
-                          description=f"**{final_otp}**", color=ctx.author.color)
+    final_otp = get_otp(4)
+    embed = discord.Embed(description=f"{ctx.author.mention}, Please enter the code given below to confirm this action.", color=0x34363A)
+    ascii_text = pyfiglet.figlet_format(final_otp)
+    embed.add_field(name="_ _",value=f"```{final_otp}```")
+    embed.set_thumbnail(url=bot.user.avatar_url)
+
     embed.set_footer(text="Timeout: 15 seconds")
-    await ctx.send(embed=embed)
+    msg=await ctx.send(embed=embed)
     try:
         message_otp = await bot.wait_for("message", check=lambda message: message.author == ctx.author,
                                          timeout=15)
         if str(message_otp.content) == final_otp:
-            await message_otp.add_reaction("✅")
+            su=discord.Embed(description="Correct Otp" ,color=0x34363A)
+            await msg.edit(content=None,embed=su)
+            await message_otp.add_reaction("<:sucess:935052640449077248>")
             return True
         else:
-            await ctx.send("Incorrect Code - Aborting...")
+            er=discord.Embed(description="Incorrect Code - Aborting..." ,color=0x34363A)
+            await msg.edit(embed=er)
     except asyncio.TimeoutError:
-        await ctx.send("Timed out - Aborting...")
+        await msg.edit(embed=er)
         return False

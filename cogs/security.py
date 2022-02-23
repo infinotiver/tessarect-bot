@@ -35,12 +35,28 @@ class Security(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.warns={}
+        self.links=requests.get("https://raw.githubusercontent.com/Dogino/Discord-Phishing-URLs/main/scam-urls.txt").content.decode().split("\n")
+        
+
 
 
 
     @commands.Cog.listener()
     async def on_message(self,message):
+      
+      msg = message.content.split()  
+      member=message.author
+      try:
+        with open(f'./configs/{message.guild.id}.json', 'r') as jsonFile:
+            data = json.load(jsonFile)
+        antiswear =data['antiswear']   
+        antiscam =data['antiscam'] 
+      except:
+        return
+      #nsfw detection
       if message.attachments:
+        if not message.attachments.content_type.startswith("video") or message.attachments.content_type.startswith("image"):
+          return
         r = requests.post(
             "https://api.deepai.org/api/nsfw-detector",
             data={
@@ -53,113 +69,29 @@ class Security(commands.Cog):
         # example response  
         d= r.json()
         nsfwscore=d['output']['nsfw_score']
+        detections=d['output']['detections']
         nsfwscorer=round(nsfwscore)
-        if nsfwscorer == 1:
+        if nsfwscore >0.45:
           if message.channel.is_nsfw():
             return # if it is nsfw then ok
           else:
             await message.delete()   
-            await message.channel.send(f'{message.author.mention} Stop Sending nsfw pictures in non nsfw channels')     
+            em =discord.Embed(title="Nsfw Image Detected in non nsfw channel",description=f"Nsfw score: {nsfwscore}\n Nsfw : {nsfwscore >0.45} \n  Details: || {detections} ||",color=0xFF0000)
+            await message.channel.send(f'{message.author.mention} Stop Sending nsfw pictures in non nsfw channels',embed=em)     
       
-      with open(f'./storage/scamlinks.json', 'r') as jsonFile:
-          link = json.load(jsonFile)    
-          scamlinks = link['scamlinks']
-      
-      
-      member=message.author
-      for links in scamlinks:
-        reason = f"POSTING A SCAM LINK > {link} "
-        if links in message.content and message.author !=self.client.user:
-            if message.author.id in self.warns:
-              self.warns[message.author.id] +=1
-              print(self.warns)
-            else:
-              self.warns[message.author.id]=1
-              print(self.warns)          
-            stats = await warndb.find_one({"id": member.id})
-            await message.delete() 
-            if stats is None and warns <= 5:
-                passwor = discord_pass.secure_password_gen(10)
-                passwor = str(passwor)
-                newuser = {
-                    "id": member.id,
-                    "Cases": [[passwor, reason, message.author.mention, warns]],
-                    "warns": warns,
-                }
-                await warndb.insert_one(newuser)
-                embed = discord.Embed(
-                    title="Warn",
-                    description=f"{member.name} has been warned with {warns} warn(s) for `{reason}` ",
-                    color=0xFF0000,
-                )
-                await message.channel.send(embed=embed)   
-            else:
-                passwor = discord_pass.secure_password_gen(10)
-                passwor = str(passwor)
-                total_warn = stats["warns"] + warns
-                await warndb.update_one(
-                    {"id": member.id}, {"$set": {"warns": total_warn}}
-                )
-                await warndb.update_one(
-                    {"id": member.id},
-                    {
-                        "$addToSet": {
-                            "Cases": [
-                                passwor,
-                                reason,
-                                message.author.mention,
-                                warns,
-                            ]
-                        }
-                    },
-                )
 
-                embed = discord.Embed(
-                    title="Warn",
-                    description=f"{member.name} has been warned with {warns} warn(s) for `{reason}` ",
-                    color=0xFF0000,
-                )
-                await message.channel.send(embed=embed)
+      if antiscam =="enable": 
 
-                if self.warns[message.author.id] >= 10:
-                  try:
-
-                    await member.kick(reason=reason)
-                    embed = discord.Embed(
-                        title="Warn",
-                        description=f"{member.name} has been kicked since the y exceeded the warn limit",
-                        color=0xFF0000,
-                    )
-                    await message.channel.send(embed=embed)
-
-                    await warndb.delete_one({"id": member.id})
-                  except Exception as e:
-                    return await message.channel.send(f'WARN LIMIT EXCEEDED | UNSUCCESSFUL kick\n{e}')
-      
-      try:
-
-        with open(f'./configs/{message.guild.id}.json', 'r') as jsonFile:
-            data = json.load(jsonFile)
-
-
-        if not data['antiswear'] =="enable":
-          return
-      except:
-        return         
-      msg = message.content.split()    
-
-      bad_list=[]
-      url = "https://raw.githubusercontent.com/turalus/encycloDB/master/Dirty%20Words/DirtyWords.json"
-      response = requests.get(url).json()
-      records=response["RECORDS"]
-      msg = message.content.split()
-      for i in records:
-        if i["language"] == "en": bad_list.append(i["word"])
-      member=message.author
-      for word in bad_list:
-          if word in msg:
-              
-              #await message.delete()
+        reason = f"POSTING A SCAM LINK >  "
+                    
+        for word in self.links:
+            if word in msg:
+              if message.author.id in self.warns:
+                self.warns[message.author.id] +=1
+                print(self.warns)
+              else:
+                self.warns[message.author.id]=1
+                print(self.warns)          
               stats = await warndb.find_one({"id": member.id})
               await message.delete() 
               if stats is None and warns <= 5:
@@ -173,7 +105,7 @@ class Security(commands.Cog):
                   await warndb.insert_one(newuser)
                   embed = discord.Embed(
                       title="Warn",
-                      description=f"{member.name} has been warned with {warns} warn(s) for `{reason}` ",
+                      description=f"{member.name} has been warned with {warns} warn(s) for {reason} ",
                       color=0xFF0000,
                   )
                   await message.channel.send(embed=embed)   
@@ -200,7 +132,7 @@ class Security(commands.Cog):
 
                   embed = discord.Embed(
                       title="Warn",
-                      description=f"{member.name} has been warned with {warns} warn(s) for `{reason}` ",
+                      description=f"{member.name} has been warned with {warns} warn(s) for {reason} ",
                       color=0xFF0000,
                   )
                   await message.channel.send(embed=embed)
@@ -218,7 +150,86 @@ class Security(commands.Cog):
 
                       await warndb.delete_one({"id": member.id})
                     except Exception as e:
-                      return await message.channel.send(f'WARN LIMIT EXCEEDED | UNSUCCESSFUL kicj\n{e}')
+                      return await message.channel.send(f'WARN LIMIT EXCEEDED | UNSUCCESSFUL kick\n{e}')
+        
+      if antiswear =="enable":
+
+  
+
+        bad_list=[]
+        url = "https://raw.githubusercontent.com/turalus/encycloDB/master/Dirty%20Words/DirtyWords.json"
+        response = requests.get(url).json()
+        records=response["RECORDS"]
+        msg = message.content.split()
+        for i in records:
+          if i["language"] == "en": 
+
+            bad_list.append(i["word"])
+        member=message.author
+        reason="Used a swear and /or bad and/or blacklisted word"
+        for word in bad_list:
+            if word in msg:
+                
+                #await message.delete()
+                stats = await warndb.find_one({"id": member.id})
+                await message.delete() 
+                if stats is None and warns <= 5:
+                    passwor = discord_pass.secure_password_gen(10)
+                    passwor = str(passwor)
+                    newuser = {
+                        "id": member.id,
+                        "Cases": [[passwor, reason, message.author.mention, warns]],
+                        "warns": warns,
+                    }
+                    await warndb.insert_one(newuser)
+                    embed = discord.Embed(
+                        title="Warn",
+                        description=f"{member.name} has been warned with {warns} warn(s) for {reason} ",
+                        color=0xFF0000,
+                    )
+                    await message.channel.send(embed=embed)   
+                else:
+                    passwor = discord_pass.secure_password_gen(10)
+                    passwor = str(passwor)
+                    total_warn = stats["warns"] + warns
+                    await warndb.update_one(
+                        {"id": member.id}, {"$set": {"warns": total_warn}}
+                    )
+                    await warndb.update_one(
+                        {"id": member.id},
+                        {
+                            "$addToSet": {
+                                "Cases": [
+                                    passwor,
+                                    reason,
+                                    message.author.mention,
+                                    warns,
+                                ]
+                            }
+                        },
+                    )
+
+                    embed = discord.Embed(
+                        title="Warn",
+                        description=f"{member.name} has been warned with {warns} warn(s) for {reason} ",
+                        color=0xFF0000,
+                    )
+                    await message.channel.send(embed=embed)
+
+                    if self.warns[message.author.id] >= 10:
+                      try:
+
+                        await member.kick(reason=reason)
+                        embed = discord.Embed(
+                            title="Warn",
+                            description=f"{member.name} has been kicked since the y exceeded the warn limit",
+                            color=0xFF0000,
+                        )
+                        await message.channel.send(embed=embed)
+
+                        await warndb.delete_one({"id": member.id})
+                      except Exception as e:
+                        return await message.channel.send(f'WARN LIMIT EXCEEDED | UNSUCCESSFUL kicj\n{e}')
 
 
       

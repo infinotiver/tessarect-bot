@@ -27,10 +27,12 @@ def check_Mod(ctx):
           return False
 
   return True
-    
+
+
 class Dev(commands.Cog):
     def __init__(self, client):
         self.bot = client
+  
     @staticmethod
     def cleanup_code(content):
         """Automatically removes code blocks from the code."""
@@ -52,7 +54,7 @@ class Dev(commands.Cog):
           await ctx.send(
               embed=discord.Embed(
                   title="Permission Denied",
-                  description="Dude! you are not a dev,go away",
+                  description="Dude! that's  not a dev,go away",
                   color=discord.Color.red(),
               )
           )          
@@ -61,7 +63,7 @@ class Dev(commands.Cog):
             embed=discord.Embed(
                 title="Verified",
                 description="Found entry in Database",
-                color=discord.Color.blue(),
+                color=discord.Color.green(),
             )
         )        
 
@@ -114,57 +116,50 @@ class Dev(commands.Cog):
             json.dump(dev_users_list, f)
 
         await ctx.send(f"{user.mention} has been removed!")                   
-    @commands.command(name="evaldev",hidden=True)
-    @check(check_Mod)
-    async def _eval(self,ctx, *, code):
+    @commands.command(aliases=["m","evaldev","deveval"])
+    @check(check_Mod)  
+    async def python_shell(self, ctx, *, text):
         env = {
             "ctx": ctx,
             "discord": discord,
             "commands": commands,
-            "bot": ctx.bot,
-            "client":ctx.bot,
-            "__import__": __import__
-        }
+            "bot": self.bot,
+            "client":self.bot,
+            "__import__": __import__,
+            "guild":ctx.guild
+        }           
+        print("Python Shell", text, str(ctx.author))
+        if str(ctx.author.guild.id) == "912569937116147772":
+            try:
+                text = text.replace("```py", "")
+                text = text.replace("```", "")
+                a = eval(text,env)
+                print(text)
+                em = discord.Embed(
+                    title="Successfully Execueted",
+                    description=f"```py\n{str(a)}\n```",
+                    color=discord.Color.green(),
+                )
+                await ctx.send(embed=em)
+         
+            except Exception as e:
+                desired_trace = traceback.format_exc()
+                await ctx.send(
+                    embed=discord.Embed(
+                        title="Oops ! there was a error",
+                        description=f'```py\n{desired_trace}\n```',
+                        color=0xff0000,
+                    )
+                )
+        else:
 
-        if "bot.http.token" in code or "client.http.token" in code:
-            return await ctx.send(f"You can't take my token , huh {ctx.author.name}")
-        code = code.replace("```py", "")
-        code = code.replace("```", "")
-        splitcode = []
-        for line in code.splitlines():            
-            splitcode.append(line)
-        
-        try:
-            compile(splitcode[len(splitcode)-1],"<stdin>","eval")
-            splitcode[len(splitcode)-1] = f"return {splitcode[len(splitcode)-1]}"
-        except:
-            pass
-        
-        parsedcode = []
-
-        for line in splitcode:
-            parsedcode.append("  "+line)
-
-        parsedcode = "\n".join(parsedcode)
-
-        fn = f"async def eval_fn():\n{parsedcode}"
-
-        exec(fn,env)
-
-        try:
-            output = (await eval("eval_fn()",env))
-            ecolor = discord.Color.green()
-            outname = "Output"
-        except Exception as error:
-            output = error.__class__.__name__+": "+str(error)
-            ecolor = discord.Color.red()
-            outname = "Error"
-
-        embed = discord.Embed(title="Eval",colour=ecolor)
-        embed.add_field(name="Input",value="```py\n"+code+"\n```",inline=False)
-        embed.add_field(name=outname,value="```\n"+str(output)+"\n```",inline=False)
-        embed.set_author(name=ctx.author.display_name,icon_url=ctx.author.avatar_url)
-        await ctx.send(embed=embed)  
+      
+          re = discord.Embed(
+              title="Unverified Server",
+              description=f"{ctx.author.mention} This command is now only for the main server which is Tessa Bot Developers",
+              color=discord.Color.blue(),
+          )
+          await ctx.send(embed=re)                 
     @commands.command(name= 'restart',hidden=True,help='Hidden command, youre not supposed to access this.Now off you go. Nothing to see here.')
     @check(check_Mod)
     async def restart(self,ctx,mode:int=1):
@@ -201,7 +196,7 @@ class Dev(commands.Cog):
 
                 activity=discord.Activity(
                     type=discord.ActivityType.watching,
-                    name= f"🌠 System Reboot [DONT USE ]"
+                    name= f"🌠 System Reboot [DONT USE]"
                 ))
         with open("./storage/reboot.json", "w") as rebootFile:
             json.dump(ctx.message.channel.id, rebootFile)                
@@ -215,8 +210,7 @@ class Dev(commands.Cog):
     async def reload(self, ctx, cog=None):
         async with ctx.typing():
             if not cog:
-                embed = discord.Embed(title="Reloading cogs!", color=discord.Color.random(),
-                                      timestamp=ctx.message.created_at)
+                embed = discord.Embed(title="Reloading cogs!",timestamp=ctx.message.created_at,color=discord.Color.blue())
                 for ext in os.listdir("./cogs/"):
                     if ext.endswith(".py") and not ext.startswith("_"):
                         try:
@@ -224,9 +218,11 @@ class Dev(commands.Cog):
                             self.bot.load_extension(f"cogs.{ext[:-3]}")
                             embed.add_field(
                                 name=f"Reloaded: `{ext}`", value='\uFEFF', inline=False)
+
                         except Exception as e:
                             embed.add_field(
                                 name=f"Failed to reload: `{ext}`", value=str(e), inline=False)
+
                         await asyncio.sleep(0.5)
                 await ctx.send(embed=embed)
                 return
@@ -234,11 +230,12 @@ class Dev(commands.Cog):
             """ Now the code for reloading One cog comes into play"""
 
             embed = discord.Embed(
-                title="Reloading cogs!", color=discord.Color.random(), timestamp=ctx.message.created_at)
+                title="Reloading cogs!", timestamp=ctx.message.created_at)
             ext = f"{cog.lower()}.py"
             if not os.path.exists(f"./cogs/{ext}"):
                 embed.add_field(
                     name=f"Failed to reload: `{ext}`", value="This cog does not exist.", inline=False)
+                embed.color=discord.Color.red()
 
             elif ext.endswith(".py") and not ext.startswith("_"):
                 try:
@@ -246,25 +243,29 @@ class Dev(commands.Cog):
                     self.bot.load_extension(f"cogs.{ext[:-3]}")
                     embed.add_field(
                         name=f"Reloaded: `{ext}`", value='\uFEFF', inline=False)
+                    embed.color=discord.Color.green()
                 except Exception:
                     desired_trace = traceback.format_exc()
                     embed.add_field(
                         name=f"Failed to reload: `{ext}`", value=desired_trace, inline=False)
+                embed.color=discord.Color.red()
             await ctx.send(embed=embed)
 
     @commands.command(name='load', description='Loads a cog. Mention the python file\'s name as `cog_file_name`')
     @check(check_Mod)
     async def load_cog(self, ctx, cog_file_name):
-        embed = discord.Embed(title=f"Loading Cog {cog_file_name}.py!", color=discord.Color.random(),
+        embed = discord.Embed(title=f"Loading Cog {cog_file_name}.py!", 
                               timestamp=ctx.message.created_at)
         if os.path.exists(f"./cogs/{cog_file_name}.py"):
             try:
                 self.bot.load_extension(f"cogs.{cog_file_name}")
                 embed.add_field(
                     name=f"Loaded: `{cog_file_name}.py`", value='\uFEFF', inline=False)
+                embed.color=discord.Color.green()
             except Exception as e:
                 embed.add_field(
                     name=f"Failed to load: `{cog_file_name}.py`", value=str(e), inline=False)
+                embed.color=discord.Color.red()
             await ctx.send(embed=embed)
 
     @commands.command(name='unload', description="Unloads a cog. Mention the python file\'s name as `cog_file_name`")
@@ -277,12 +278,14 @@ class Dev(commands.Cog):
                 self.bot.unload_extension(f"cogs.{cog_file_name}")
                 embed.add_field(
                     name=f"Unloaded: `{cog_file_name}.py`", value='\uFEFF', inline=False)
+                embed.color=discord.Color.green()
             except Exception as e:
                 embed.add_field(
                     name=f"Failed to unload: `{cog_file_name}.py`", value=str(e), inline=False)
+                embed.color=discord.Color.red()
             await ctx.send(embed=embed)
 
-    @commands.command(name="update")
+    @commands.command(name="gitpull")
     @commands.guild_only()
     async def update(self, ctx):
         async with ctx.typing():
@@ -308,8 +311,10 @@ class Dev(commands.Cog):
             except commands.ExtensionAlreadyLoaded:
                 pass
             except commands.ExtensionNotFound:
-                return await ctx.send("Could not load!")
-            await ctx.send("Loaded!")
+                em =discord.Embed(description="Couldnt not Load jsk")
+                return await ctx.send(embed=em)
+            em =discord.Embed(description="Loaded")    
+            await ctx.send(embed=em)
 
     @commands.command(name="unloadjsk")
     @check(check_Mod)
