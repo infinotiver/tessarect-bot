@@ -16,6 +16,7 @@ class Tickets(commands.Cog):
     @commands.command(aliases = ['createticket', 'ticketnew'])
     @cooldown(1, 10, BucketType.user)
     async def new(self, ctx, *, reason = None):
+
         em = discord.Embed(title = "Confirm New Ticket", color =  ctx.author.color)
         em.add_field(name = "Reason:", value = "We don't want people to spam!")
         em.add_field(name = "NEXT:", value = "Type `confirm` in the chat to confirm this ticket!")
@@ -48,7 +49,7 @@ class Tickets(commands.Cog):
                     if _channel.name == channelname:
                         return await ctx.channel.send(f"You already have a ticket! Please contact staff in {_channel.mention}!")
 
-                warning = f"""{ctx.author.mention} it is good to provide a reason for your inquires with the Lords\nNext time try `[p] new <reason>`
+                warning = f"""{ctx.author.mention} it is good to provide a reason for your inquires with the Support Staff\nNext time try `[p] new <reason>`
                 """
                 tickets = await self.get_tickets()
                 guild = ctx.guild
@@ -62,8 +63,9 @@ class Tickets(commands.Cog):
                     return
                 # Getting the role made!
                 ticketrole = tickets[str(ctx.guild.id)]["ticketrole"]
-                role_id = int(ticketrole)
-                helper_role = ctx.guild.get_role(role_id)
+                helper_role=[]
+                #role_id = int(ticketrole)
+
                 # Setting up the Channel
                 channel = await ctx.guild.create_text_channel(f'ticket-{ctx.author.name}')
                 # Creating the embed
@@ -78,8 +80,13 @@ class Tickets(commands.Cog):
                 await channel.set_permissions(ctx.author, read_messages = True, send_messages = True)
                 # Make sure everyone else should not be able to see anything, cause it should be private
                 await channel.set_permissions(ctx.guild.default_role, read_messages = False, send_messages = False)
+                for xx in ticketrole:
+                  x=ctx.guild.get_role(int(xx))
+                  
+                  await channel.set_permissions(x, read_messages = True, send_messages = True)
+                             
                 # And now make sure the helper_role should see this, incase the owner is busy
-                await channel.set_permissions(helper_role, read_messages = True, send_messages = True)
+                #await channel.set_permissions(helper_role, read_messages = True, send_messages = True)
                 """
                 and before you ask, how are we gonna set our Perms
                 if we can manage_channels (create a channel), then hell ye
@@ -137,10 +144,11 @@ class Tickets(commands.Cog):
         if str(ctx.guild.id) not in tickets:
             em.add_field(name = "Switch:", value = f"`None` => {role.mention}")
             tickets[str(guild.id)] = {}
-            tickets[str(guild.id)]["ticketrole"] = int(role.id)
+            tickets[str(guild.id)]["ticketrole"]=[]
+            tickets[str(guild.id)]["ticketrole"].append(int(role.id))
         else:
             role_id = tickets[str(guild.id)]["ticketrole"]
-            tickets[str(guild.id)]["ticketrole"]=int(role.id)
+            tickets[str(guild.id)]["ticketrole"].append(int(role.id))
             em.add_field(name = "Role:", value = f"{role.mention}")
         em.add_field(name = "Features:", value = "Users can now type `[p] new <reason>`")
         em.add_field(name = "Reason:", value = f"`{reason}`")

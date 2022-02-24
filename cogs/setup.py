@@ -1,6 +1,6 @@
 import json
 import os
-
+import DiscordUtils
 import discord
 from discord.ext import commands
 import motor.motor_asyncio
@@ -28,7 +28,7 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
     async def setup_welcome(self, ctx):
         embed = discord.Embed(title='Setup Tessarect.',
                               timestamp=ctx.message.created_at,
-                              color=discord.Color.random())
+                              color=0x34363A)
 
 
 
@@ -49,13 +49,26 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
                               f' (Member must be an actual role).\n'
                               f'If you want to turn off MemberRole, make a role, assign the member role to that role, and delete the role. It is for verify command',
                         inline=False)
+        embed2=discord.Embed(timestamp=ctx.message.created_at,
+                              color=0x34363A)
+        embed2.add_field(name="Switch antiswear filter for this server",value=f"Tessarect offers a very advanced antiswear filter to keep your server safe , to enable by disable it do `[p]antiswear [enable/disable]`")           
+        embed2.add_field(name="Switch antiscam filter for this server",value=f"Tessarect offers a very advanced antiscam filter to keep your server safe , to enable by disable it do `[p]antiscam [enable/disable]`")                                    
         embed.add_field(name='Set the Security Logs channel [important]',
                         value=f'Set the security logs channel use `[p]securitylogschannel <channel>`',
                         inline=False)                        
-        embed.add_field(name="Switch Levelling System for this server",value=f"Tessarect offers a very advanced and good levelling system , if you want to switch it (disabled by default) you can do \n `[p]levelconfig [enable/disable]`. \n Get more info on its commands by using `[p]help Level`")
-        embed.set_footer(text=f' Note there are other setups too for each cog you are requested to go through it while using them | Requested by {ctx.author.name}')
-        embed.set_thumbnail(url=self.bot.user.avatar_url)
-        await ctx.send(embed=embed)
+        embed2.add_field(name="Switch Levelling System for this server",value=f"Tessarect offers a very advanced and good levelling system , if you want to switch it (disabled by default) you can do \n `[p]levelconfig [enable/disable]`. \n Get more info on its commands by using `[p]help Level`")
+       
+        embed2.set_footer(text=f' Note there are other setups too for each cog you are requested to go through it while using them | Requested by {ctx.author.name}')
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx,remove_reactions=True)
+        embeds = [embed, embed2]
+        paginator.add_reaction('<:arrow_left:940845517703889016>', "first")
+        paginator.add_reaction('<:leftarrow:941994549935472670>', "back")
+        
+        paginator.add_reaction('<:rightarrow:941994550124245013>', "next")
+        paginator.add_reaction('<:arrow_right:940608259075764265>', "last")
+        paginator.add_reaction('<:DiscordCross:940914829781270568>', "lock")
+        await paginator.run(embeds)
+
 
 
 
@@ -147,8 +160,48 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
         await Setup.set_mute_role(self, ctx, mutedRole)
 
 
+    @commands.command(name='antiswear', description='Toggle Antiswear filter (enable or disable only)')
+    @commands.has_permissions(manage_guild=True)
+    @commands.guild_only()
+    async def antiswear(self, ctx, *, choice):
+        lst = ["enable", "disable"]
+        if choice in lst:      
 
+          if os.path.exists(f'./configs/{ctx.guild.id}.json'):
+              with open(f'./configs/{ctx.guild.id}.json', 'r') as jsonFile:
+                  data = json.load(jsonFile)
+          else:
+              data = {}
 
+          data['antiswear'] = str(choice)
+
+          with open(f'./configs/{ctx.guild.id}.json', 'w') as jsonFile:
+              json.dump(data, jsonFile, indent=4)
+
+          await ctx.send(f'**Changes Saved | Choice : {choice}**')
+        else:
+          await ctx.send('Invalid Choice')
+    @commands.command(name='antiscam', description='Toggle Antiscam filter (enable or disable only)')
+    @commands.has_permissions(manage_guild=True)
+    @commands.guild_only()
+    async def antiscam(self, ctx, *, choice):
+        lst = ["enable", "disable"]
+        if choice in lst:      
+
+          if os.path.exists(f'./configs/{ctx.guild.id}.json'):
+              with open(f'./configs/{ctx.guild.id}.json', 'r') as jsonFile:
+                  data = json.load(jsonFile)
+          else:
+              data = {}
+
+          data['antiscam'] = str(choice)
+
+          with open(f'./configs/{ctx.guild.id}.json', 'w') as jsonFile:
+              json.dump(data, jsonFile, indent=4)
+
+          await ctx.send(f'**Changes Saved | Choice : {choice}**')
+        else:
+          await ctx.send('Invalid Choice')          
     @commands.command(aliases=["levelling"], description="Enable or disable levelling")
     @commands.has_permissions(administrator=True)
     async def levelconfig(self, ctx, choice):

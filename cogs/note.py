@@ -8,7 +8,7 @@ from discord.ext.commands import BucketType, cooldown
 from pymongo import MongoClient
 
 nest_asyncio.apply()
-mongo_url = 'mongodb+srv://prakarsh17:Prakarsh_262@enalevel.v4asb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+mongo_url = os.environ['enalevel']
 
 cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
 
@@ -28,14 +28,15 @@ class Note(commands.Cog):
     @cooldown(1, 10, BucketType.user)
     async def note(self, ctx, *, message):
         message = str(message)
-        print(message)
+
         stats = await notedb.find_one({"id": ctx.author.id})
         if len(message) <= 1000:
             #
             if stats is None:
                 newuser = {"id": ctx.author.id, "note": message}
                 await notedb.insert_one(newuser)
-                await ctx.send("**Your note has been stored**")
+                embed=discord.Embed(title="New Note",description="**<:note:942777255376068659>Your note has been stored**",color=discord.Color.blue())
+                await ctx.send(embed=embed)
                 await ctx.message.delete()
 
             else:
@@ -43,16 +44,17 @@ class Note(commands.Cog):
                 z = 0
                 async for i in x:
                     z += 1
-                if z > 10:
+                if z > 10 and ctx.author.id !=900992402356043806:
                     await ctx.send("**You cannot add more than 10 notes**")
                 else:
                     newuser = {"id": ctx.author.id, "note": message}
                     await notedb.insert_one(newuser)
-                    await ctx.send("**Yout note has been stored**")
+                    embed=discord.Embed(title="New Note",description="**<:note:942777255376068659>Your note has been stored**",color=discord.Color.blue())
+                    await ctx.send(embed=embed)
                     await ctx.message.delete()
 
         else:
-            await ctx.send("**Message cannot be greater then 1000 characters as you(all) are a normie user**")
+            await ctx.send("**Message cannot be greater then 1000 characters as yo**")
 
     @commands.command(description="Shows your note")
     async def notes(self, ctx):
@@ -68,7 +70,7 @@ class Note(commands.Cog):
 
         else:
             embed = discord.Embed(
-                title="Notes", description=f"Here are your notes", color=0x34363A
+                title="<:notepad:942777255506108438> Your Notepad", description=f"Here are your notes", color=0x34363A
             )
             x = notedb.find({"id": ctx.author.id})
             z = 1
@@ -77,16 +79,19 @@ class Note(commands.Cog):
                 embed.add_field(name=f"Note {z}", value=f"{msg}", inline=False)
                 z += 1
             await ctx.author.send(embed=embed)
-            await ctx.send("**Please check your private messages to see your notes**")
+            xc = discord.Embed(title="<:checkboxcheck:942779132117409863> Notes sent",description="**Please check your private messages to see your notes**", color=0x34363A)
+            await ctx.send(embed=xc)
 
-    @commands.command(description="Delete all the notes , it's a good practice")
-    async def trash(self, ctx):
+    @commands.command(description="Delete  the note , it's a good practice")
+    async def trash(self, ctx,*,message):
       
         try:
-            await notedb.delete_many({"id": ctx.author.id})
-            await ctx.send("**Your notes have been deleted , thank you**")
+            await notedb.delete_many({"note": message})
+            embed=discord.Embed(title="Note Deleted",description=f"<:messagealert:942777256160428063> Your notes having content *{message}* has been deleted  , thank you",color=discord.Color.red())
+            await ctx.send(embed=embed)          
+
         except:
-            await ctx.send("**You have no record**")
+            await ctx.send("**You have no record or some other error occured**")
 
 
 def setup(client):

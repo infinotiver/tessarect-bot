@@ -13,12 +13,7 @@
 
 ___
 It is my First bot but very advanced and designed for all your needs , from Moderation to cool Economy Features .
-<h2 align="center">Top.gg</h2>
-<h6 align="center">Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support</6>
-<p align="center">
-<a href="https://top.gg/bot/916630347746250782" >
-  <img src="https://top.gg/api/widget/916630347746250782.svg">
-</a>
+
 
 </a>
 </p>
@@ -89,10 +84,9 @@ It is my First bot but very advanced and designed for all your needs , from Mode
     <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white">
   </a>
   </p>
-  <h6 align="center">Github Stats </h6>
 
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
-[![GitHub license](https://img.shields.io/github/license/prakarsh17/tessarect-bot.svg)](https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE)
+
+
 
 
 
@@ -101,6 +95,22 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 
 [![ForTheBadge powered-by-electricity](http://ForTheBadge.com/images/badges/powered-by-electricity.svg)](http://ForTheBadge.com)
 [![ForTheBadge makes-people-smile](http://ForTheBadge.com/images/badges/makes-people-smile.svg)](http://ForTheBadge.com)
+___
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+[![GitHub license](https://img.shields.io/github/license/prakarsh17/tessarect-bot.svg)](https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE)
+[![Issues](https://img.shields.io/github/issues/prakarsh17/tessarect-bot.svg?colorB=3333ff)](https://github.com/Gorialis/jishaku/issues)
+[![Commit activity](https://img.shields.io/github/commit-activity/w/prakarsh17/tessarect-bot.svg)](https://github.com/Gorialis/jishaku/commits)
+
+<h2 align="center">Top.gg</h2>
+<h6 align="center">Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support .Vote for it NOW !</h6>
+
+
+<p align="center">
+<a href="https://top.gg/bot/916630347746250782" >
+  <img src="https://top.gg/api/widget/916630347746250782.svg">
+</a>
+
+
 # Features
 - [x] Economy Bot
 - [x] Utility Commands
@@ -111,8 +121,8 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 - [x] Translation
 - [x] Moderator Commands (More commands Under development)
 - [x] Images Commands (Fixed Again)
-- [ ] AUTOMOD ( development startd)
-- [ ] Advanced Economy Features
+- [x] AUTOMOD (Made 3 filters , more soon)
+- [ ] Advanced Economy Features (surprise awaits)
 # Cogs (Plugins)
 **40+ Cogs(plugins) for better experience and more features** 
 
@@ -143,6 +153,12 @@ It is my First bot but very advanced and designed for all your needs , from Mode
 ### Wanna Like Making Tessarect Better ?
 ###### Contribute now to tessarect see  👇🏻
 [Contributing Guide](CONTRIBUTING.md)
+___
+## Stargazers
+[![Stargazers repo roster for @prakarsh17/tessarect-bot](https://reporoster.com/stars/dark/prakarsh17/tessarect-bot)](https://github.com/prakarsh17/tessarect-bot/stargazers)
+## Forkers
+[![Forkers repo roster for @prakarsh17/tessarect-bot](https://reporoster.com/forks/dark/prakarsh17/tessarect-bot)](https://github.com/prakarsh17/tessarect-bot/network/members)
+
 ## Contributors
 
 ###### People who made Tessarect Possible  (bots too !)

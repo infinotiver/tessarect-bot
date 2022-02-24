@@ -4,38 +4,9 @@ import random
 import aiohttp
 import os
 import ast
-import discord
-from discord.ext import commands
 import aiohttp
 import vacefron
 
-
-async def aiohttp_get(url: str):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            response = (await response.content.read()).decode('utf-8')
-            return response
-
-
-async def aiohttp_get_binary(url: str):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            response = (await response.content.read())
-            return response
-
-
-async def aiohttp_post(url: str, data: dict = None, params: dict = None):
-    async with aiohttp.ClientSession() as session:
-        async with session.post(url, data=data, params=params) as response:
-            response = (await response.content.read()).decode('utf-8')
-            return response
-
-
-async def aiohttp_post_binary(url: str, data: dict = None, params: dict = None):
-    async with aiohttp.ClientSession() as session:
-        async with session.post(url, data=data, params=params) as response:
-            response = (await response.content.read())
-            return response
 import discord
 
 
@@ -44,21 +15,13 @@ def get_color(user: discord.Member):
     if str(color) == "#000000":
         color = discord.Color.random()
     return color
-import asyncio
-import random
-
-import discord
-
-
-
-
 
 
 sadness = 'https://media0.giphy.com/media/OPU6wzx8JrHna/giphy.gif'
 
 randomcolor = random.choice([discord.Color.red(), discord.Color.blue(), discord.Color.green(), discord.Color.purple(), discord.Color.magenta(), discord.Color.gold()])
 
-class Attack(commands.Cog):
+class Image(commands.Cog):
     """I like this category"""
 
     def __init__(self, bot):
@@ -227,4 +190,4 @@ class Attack(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Attack(bot))
+    bot.add_cog(Image(bot))
