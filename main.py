@@ -85,7 +85,7 @@ def get_prefix(client, message):
     except KeyError: 
         with open('prefixes.json', 'r') as k:
             prefixes = json.load(k)
-        prefixes[str(message.guild.id)] = ['a!','amt ']
+        prefixes[str(message.guild.id)] = ['td.','t. ']
 
         with open('prefixes.json', 'w') as j:
             json.dump(prefixes, j, indent = 4)
@@ -94,8 +94,9 @@ def get_prefix(client, message):
             prefixes = json.load(t)
             return prefixes[str(message.guild.id)]
         
-    except:
-        return 'a!' 
+    except: # I added this when I started getting dm error messages
+        print("Not ok")
+        return ['td.','t. ']
 #-----------------------------------------------------------------------------------------------------------------------
 import aiohttp
 import warnings
@@ -311,7 +312,7 @@ async def on_guild_join(guild): #when the bot joins the guild
     with open('prefixes.json', 'r') as f: #read the prefix.json file
         prefixes = json.load(f) #load the json file
 
-    prefixes[str(guild.id)] = ['a!','amt ']#default prefix
+    prefixes[str(guild.id)] = ['td.','t. ']#default prefix
 
     with open('prefixes.json', 'w') as f: #write in the prefix.json "message.guild.id": "a!"
         json.dump(prefixes, f, indent=4) #the indent is to make everything look a bit neater
@@ -2748,6 +2749,6 @@ async def checkblack(message):
           raise discord.ext.commands.CommandError(f'You are blacklisted')
 
 web.keep_alive()
-client.run(os.environ['token'],reconnect=True)
+client.run(os.environ['token2'],reconnect=True)
 
 
