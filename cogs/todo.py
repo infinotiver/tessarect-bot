@@ -1,3 +1,4 @@
+# Main source https://github.com/appu1232/Discord-Selfbot
 import re
 import discord
 import asyncio

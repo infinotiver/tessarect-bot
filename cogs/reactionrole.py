@@ -61,8 +61,9 @@ class ReactionRoles(commands.Cog):
     @commands.command()
     async def reaction_add(
         self, ctx, emote, role: discord.Role, channel: discord.TextChannel, message_id
-    ):
-        self.add_reaction(ctx.guild.id, emote, role.id, channel.id, message_id)
+    ): 
+        message_id=self.bot.fetch_message(message_id)
+        self.message_id.add_reaction(ctx.guild.id, emote, role.id, channel.id)
 
     @commands.has_permissions(manage_channels=True)
     @commands.command()

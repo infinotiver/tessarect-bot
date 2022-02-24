@@ -22,7 +22,7 @@ levelling = cluster["discord"]["levelling"]
 isitenabled = cluster["discord"]["enalevel"]
 
 
-class Levelsys(commands.Cog):
+class Level(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.vac_api = vacefron.Client()
@@ -125,9 +125,9 @@ class Levelsys(commands.Cog):
                 elif rank ==3:
                   emoji ="🥉"
                 elif rank ==2:
-                  emoji ="🥈"
+                  emoji ="<:2rd:939020302426460220>"
                 elif rank ==1:
-                  emoji ="🥇"                                   
+                  emoji ="<:1st:939020133702201344>"               '''                    
                 embed = discord.Embed(
                     timestamp=ctx.message.created_at,
                     title=f"{user.name}'s Level stats",
@@ -147,7 +147,7 @@ class Levelsys(commands.Cog):
                 )
                 embed.set_thumbnail(url=user.avatar_url)
 
-                '''
+                
                 args = {
                
                   'profile_image' : user.avatar_url, # User profile picture link
@@ -175,10 +175,10 @@ class Levelsys(commands.Cog):
                             current_xp = xp,
                             next_level_xp = int(200* ((1/2)*lvl)),  # you will need calculate this according the current_xp.
                             previous_level_xp = 0,  # you will need calculate this according the current_xp.
-                            custom_background = 'https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/footer-bg.jpg',  # optional custom background.
+                            custom_background = 'https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png',  # optional custom background.
                             xp_color = '7FFFD4',  # optional progress bar color. Defaults to #fcba41. 
                             #is_boosting = ,  # optional server boost icon next to username.
-                            circle_avatar = False  # optional circle avatar instead of a square.
+                            circle_avatar = True  # optional circle avatar instead of a square.
                             )
                 rank_image = discord.File(fp = await gen_card.read(), filename = f"{user.name}_rank.png")
                 await ctx.channel.send(file = rank_image) 
@@ -231,4 +231,4 @@ class Levelsys(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(Levelsys(client))
+    client.add_cog(Level(client))

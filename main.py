@@ -2256,13 +2256,13 @@ async def feedback(ctx,*,message):
             style=ButtonStyle.success,
             label="Confirm!",
             custom_id="gr",
-            emoji="<:like_blue_purple:939021441213562890>"
+            emoji="<:sucess:935052640449077248>"
         ),
         Button(
             style=ButtonStyle.danger,
             label="Cancel!",
             custom_id="red",
-            emoji="<:dislike_blue_purple:939021398284857364>"
+            emoji="<:DiscordCross:940914829781270568>"
         )        
     )   
   
@@ -2740,6 +2740,12 @@ async def uno(ctx, *args):
                 await ctx.reply("Game over! Player One has won!")
             elif len(p2deck) == 0:
                 await ctx.reply("Game over! Player Two has won!")
+@client.before_invoke
+async def checkblack(message):
+  with open("storage/black.json") as f:
+      users_list = json.load(f)
+      if message.author.id  in users_list:
+          raise discord.ext.commands.CommandError(f'You are blacklisted')
 
 web.keep_alive()
 client.run(os.environ['token'],reconnect=True)

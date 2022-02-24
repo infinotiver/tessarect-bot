@@ -10,7 +10,7 @@ import copy
 from functools import cached_property
 from discord.ext import commands
 from dislash import InteractionClient, ActionRow, Button, ButtonStyle
-
+from discord.utils import get
 class TBD(commands.Cog):
 
     def __init__(self, bot):
@@ -248,7 +248,29 @@ class TBD(commands.Cog):
         async def on_test_button(inter):
           embedx.set_field_at(0, name='Status', value=f"This bot is claimed by {inter.author.mention},kindly let them only review the bot")
           await msg.edit(embed=embedx,components=[row2])
-        
+    @commands.command(name='hire',help="For admins only")
+    @commands.has_any_role(912569937153892361, 912569937116147778) 
+    async def hire(self,ctx,member:discord.Member,role,*,reason):
+      allowed=['br','mod']
+      check=self.bot.get_channel(945682930846560326)
+      tasks=self.bot.get_channel(945682067667181648)
+      guide=self.bot.get_channel(945683048605814804)
+      mod=ctx.guild.get_role(945679632424923189)
+      if role not in allowed:
+        return await ctx.send('Sire, that role isnt valid the valid roles are `br` and ``mod`')
+      if role =='br':
+        getrole="Trial Bot Reviewer"
+      else:
+        getrole="Trial Moderator"
+      if role=="mod":
+        e=discord.Embed(title=f"New hired staff",description=f"Hi, {member} your application for Moderator has been Accepted. *P.S: You are selected by CL/PL to be a Trial Moderator for a valid reasons. But they would like to see your skills.* New Hired {role}| Reason {reason} , Check out {tasks.mention} and {guide.mention}",color=discord.Color.green())
+        e.set_author(name="Tessa Bot Developer Staff team",icon_url=ctx.guild.icon_url)
+        e.set_footer(text="Please take a note, if you leak the staff information will get you fired.")
+        e2=discord.Embed(title="New Hired Staff!",description=f":white_medium_square: Member {member.mention}\n:white_medium_square:Position {getrole}\n :white_medium_square: Role given {mod}",color=discord.Color.blue())
+        e2.add_field(name="Who hired",value=ctx.author.mention)
+        await member.add_roles(mod)
+        await check.send(content=member.mention,embed=e2)
+        await member.send(embed=e)
 
 def setup(bot):
     bot.add_cog(TBD(bot))

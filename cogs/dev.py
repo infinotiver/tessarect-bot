@@ -2,6 +2,8 @@ import datetime
 import traceback
 import discord
 import requests
+from  colorama import Fore , Style
+
 from discord.ext import commands
 from discord.ext.commands import check
 import os
@@ -13,6 +15,7 @@ import subprocess
 from subprocess import Popen, PIPE
 import shlex
 import json
+
 #from main import check_Mod
 def restart_bot(mode): 
   if mode ==1:
@@ -32,7 +35,7 @@ def check_Mod(ctx):
 class Dev(commands.Cog):
     def __init__(self, client):
         self.bot = client
-  
+
     @staticmethod
     def cleanup_code(content):
         """Automatically removes code blocks from the code."""
@@ -123,18 +126,22 @@ class Dev(commands.Cog):
             "ctx": ctx,
             "discord": discord,
             "commands": commands,
-            "bot": self.bot,
             "client":self.bot,
             "__import__": __import__,
             "guild":ctx.guild
-        }           
-        print("Python Shell", text, str(ctx.author))
+        }         
+        if  "client.http.token" in text:
+          return await ctx.send('not my token') 
+        print(f"{Fore.GREEN}Python Shell Invoked: {Style.RESET_ALL}")
+        print(Fore.CYAN,text, str(ctx.author))
+
+        print(Style.RESET_ALL)
         if str(ctx.author.guild.id) == "912569937116147772":
             try:
                 text = text.replace("```py", "")
                 text = text.replace("```", "")
                 a = eval(text,env)
-                print(text)
+
                 em = discord.Embed(
                     title="Successfully Execueted",
                     description=f"```py\n{str(a)}\n```",
@@ -327,6 +334,42 @@ class Dev(commands.Cog):
             except commands.ExtensionNotFound:
                 return await ctx.send("Could not unload!")
             await ctx.send("Unloaded!")
+    @commands.command()
+    @check(check_Mod)
+    async def blacklist(self,ctx, user : discord.Member):
+  
+
+        with open("storage/black.json") as f:
+            users_list = json.load(f)
+
+        if user.id not in users_list  :
+            users_list.append(user.id)
+
+            with open("storage/black.json", "w+") as f:
+                json.dump(users_list, f)
+
+            await ctx.send(f"{user.mention} has been added!")  
+        else:
+          await ctx.send('See Developer , either you are adding a dev again as dev or a bot (bots arent that much cool)') 
+    @commands.command()
+    @check(check_Mod)
+    async def unblacklist(self,ctx, user : discord.Member):
+     
+
+        with open("storage/black.json") as f:
+            users_list = json.load(f)
+
+        if user.id in users_list:
+            users_list.remove(user.id)
+        else:
+            await ctx.send(f"{user.mention} is not in the list, so they cannot be removed!")
+            return
+
+        with open("storage/black.json", "w+") as f:
+            json.dump(users_list, f)
+
+        await ctx.send(f"{user.mention} has been removed!")  
+
 
 def setup(client):
     client.add_cog(Dev(client))

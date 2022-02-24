@@ -171,7 +171,9 @@ class Errors(commands.Cog):
           
           with open ('storage/errors.json', 'w') as f:
               json.dump(data, f, indent=4)
-          uem=discord.Embed(title="Oops!",description=f'It seems like an unexpected error happened',color=0xff0800).add_field(name="Error",value=f"```py \n{error}``` \n Click the button below to get your Error id for reference")
+          uem=discord.Embed(title="Oops!",description=f'It seems like an unexpected error happened',color=0xff0800).add_field(name="Error",value=f"""```diff
+- {error}
+``` \n Click the button below to get your Error id for reference""")
           msg2=await ctx.send(embed=uem,components=[row2])
           on_click = msg2.create_click_listener(timeout=60)
 
@@ -183,21 +185,22 @@ class Errors(commands.Cog):
 
 
             await inter.reply(embed=discord.Embed(title="TROUBLESHOOTING",description="""```yml
-- Retry again\n 
-- Check bot's/your permissions \n 
-- check command help \n 
-- Ask developers \n 
-- Try after sometime \n 
+- Retry again
+- Check bot's/your permissions 
+- check command help 
+- Ask developers 
+- Try after sometime 
+- Note if you are Blacklisted you cant use anything 
 - Drink milk and enjoy other commands
           ```""",color=discord.Color.green()))
           @on_click.timeout
           async def on_timeout():
               await msg2.edit(components=[])
-        print("Ignoring exception in command {}:".format(ctx.command), file=sys.stderr)
+          print("Ignoring exception in command {}:".format(ctx.command), file=sys.stderr)
 
-        traceback.print_exception(
-            type(error), error, error.__traceback__, file=sys.stderr
-        )
+          traceback.print_exception(
+              type(error), error, error.__traceback__, file=sys.stderr
+          )
 
 def setup(bot):
     bot.add_cog(Errors(bot))

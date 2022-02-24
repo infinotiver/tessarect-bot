@@ -68,8 +68,12 @@ class Security(commands.Cog):
 
       #nsfw detection
       if message.attachments:
-        #if not message.attachments.content_type.startswith("video") or message.attachments.content_type.startswith("image"):
-          #return
+        if message.author==self.bot.user:
+          return
+        for attachment in message.attachments:
+            if not attachment.content_type in ('image/jpeg', 'image/jpg', 'image/png','video/mp4'):
+              return
+
         r = requests.post(
             "https://api.deepai.org/api/nsfw-detector",
             data={

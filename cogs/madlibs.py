@@ -88,13 +88,18 @@ Do not enter the "channel" argument to clear the madlibs channel entry from my d
         value = madlibs_dict.get("value")[:-1]
         user_results = []
         for x in range(len(blanks)):  # get the input from the user for each entry in the blanks list
-            await ctx.send(f"**{x + 1}/{len(blanks)}** - "
-                           f"_{ctx.author.display_name}_, I need "
+            em = discord.Embed(description=f"**{x + 1}/{len(blanks)}** - "
+                           f"{ctx.author.mention}, I need "
                            f"{'an' if blanks[x][0].lower() in self.vowels else 'a'} "  # vowels
-                           f"{blanks[x]}")
+                           f"{blanks[x]}",color=0x34363A)
+            em.set_footer(text="Type cancel to end the game")
+            await ctx.send(embed=em)
             user_input_message = await self.bot.wait_for(
                 "message", check=lambda message: message.channel == ctx.message.channel and message.author == ctx.author
                 , timeout=15)
+
+            if user_input_message.content=='cancel':
+              return await ctx.send('Oh Ok , Lets end this game')
 
             user_results.append(f"**{user_input_message.content}**")  # append results to another dict
         string = ""
