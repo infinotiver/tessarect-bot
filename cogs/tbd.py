@@ -69,9 +69,9 @@ class TBD(commands.Cog):
                         data['staff'] = payload.member.id
                         embed.set_footer(text=f'Approved by {payload.member}')
                         data['status'] = 1
-                        embed.set_field_at(0, name='Status', value='Pending admin approval')
+                        embed.set_field_at(0, name='Status', value='Pending admin approval and invite to server')
                         embed.add_field(name='Approved by',
-                                        value=payload.member.mention + ' (' + str(payload.member) + ')',inline=False)
+                                        value=payload.member.mention + ' (' + str(payload.member.id) + ')',inline=False)
                         embed.description = 'React to get an invite link'
                         embed.color = discord.Color.blue()
                         embed.set_thumbnail(url=embed.author.avatar_url)
@@ -89,12 +89,16 @@ class TBD(commands.Cog):
                         data['status'] = -1
                         embed.set_field_at(0, name='Status', value='Declined',inline=False)
                         embed.add_field(name='Declined by',
-                                        value=payload.member.mention + ' (' + str(payload.member) + ')',inline=False)
+                                        value=payload.member.mention + ' (' + str(payload.member.id) + ')',inline=False)
                         embed.description = 'Declined'
                         embed.color = discord.Color.red()
                         embed.set_author(name=embed.author.name, icon_url=embed.author.icon_url)
                         embed.timestamp = datetime.datetime.now(datetime.timezone.utc)
                         await message.edit(content=json.dumps(data), embed=embed,components=[])
+                        print(data['user'])
+                        print(type(data['user']))
+                        user=self.bot.get_user(data['user'])
+                        await user.send(embed=embed)
                         await message.clear_reaction(self.emoji.checkmark)
                         await message.clear_reaction(self.emoji.cross)
                 elif data['status'] == 1:
@@ -110,6 +114,10 @@ class TBD(commands.Cog):
                         embed.set_field_at(0, name='Status', value='Admin adding bot...')
                         data['status'] = 2
                         await message.edit(content=json.dumps(data), embed=embed)
+                        print(data['user'])
+                        print(type(data['user']))
+                        user=self.bot.get_user(data['user'])
+                        await user.send(embed=embed)                        
                         await message.clear_reaction(self.emoji.link)
                         
                         def check(m):
@@ -142,9 +150,11 @@ class TBD(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.max_concurrency(1, commands.BucketType.user)
     async def _addbot(self, ctx, bot: discord.User = None, *, reason: str = None):
-          
+        
         if ctx.guild.id !=912569937116147772:
           return await ctx.send('Heyo this command is only for my support server . Join it and use this command to add your bot  \n https://discord.gg/avpet3NjTE ')
+        if ctx.channel.id !=929334024411951155:
+          return await ctx.send('This command works only in <#929334024411951155>')
         if not bot:
             await ctx.send(
                 embed=discord.Embed(title="Add Bot", description="What is the user ID of your bot? (Right click->Copy ID)",color=discord.Color.blurple()))
@@ -155,12 +165,14 @@ class TBD(commands.Cog):
             try:
                 bot = await commands.UserConverter().convert(ctx, (
                     await self.bot.wait_for('message', check=check, timeout=30)).content)
+              
             except asyncio.TimeoutError:
                 ctx.command.reset_cooldown(ctx)
                 return await ctx.send('Timed out!')
             except commands.BadArgument:
                 ctx.command.reset_cooldown(ctx)
                 return await ctx.send('Invalid user!')
+   
         if not bot.bot:
             return await ctx.send("That isn't a bot...")
         if bot in ctx.guild.members:
@@ -175,19 +187,21 @@ class TBD(commands.Cog):
 
             try:
                 reason = (await self.bot.wait_for('message', check=check, timeout=30)).clean_content
+                
+                
             except asyncio.TimeoutError:
                 ctx.command.reset_cooldown(ctx)
                 return await ctx.send('Timed out!')
         bott=self.bot.get_user(int(bot.id))
-
-        d= discord.Embed(description=f"Sucessfuly Sent entry\n**Botname** > {bot}\n**Bot Id ** > {bot.id} \n **Your reason +prefix** > {reason}",color=discord.Color.green())
+        await ctx.message.delete()
+        await ctx.channel.purge(limit=3)
+        d= discord.Embed(description=f"<:sucess:935052640449077248> Sucessfuly Sent entry\n**Botname** > {bot}\n**Bot Id ** > {bot.id} \n **Your reason +prefix** > {reason}",color=discord.Color.green(),timestamp=ctx.message.created_at)
+        d.add_field(name="<:Info:939018353396310036> Info",value="Kindly wait for a bot reviewer to review your bot  and dont send same bot entry again and again | Also you should be the owner of the bot | Keep your dms open")
         try:
-          d.set_thumbnail(url=bott.avatar_url)
+            d.set_thumbnail(url=bott.avatar_url)
         except:
-          return await ctx.send('Oh ho , seems like I never met this bot before , kindly add me in a common server with your bot and then apply again :wink:')
-          await ctx.send(embed=d)
-        
-     
+            return await ctx.send('Oh ho , seems like I never met this bot before , kindly add me in a common server with your bot and then apply again :wink:')
+        await ctx.send(embed=d) 
         data = {
             'user': ctx.author.id,
             'bot': bot.id,
@@ -246,7 +260,7 @@ class TBD(commands.Cog):
         on_click = msg.create_click_listener(timeout=10)
         @on_click.matching_id("cl")
         async def on_test_button(inter):
-          embedx.set_field_at(0, name='Status', value=f"This bot is claimed by {inter.author.mention},kindly let them only review the bot")
+          embedx.set_field_at(0, name='Status', value=f"This bot is claimed by {inter.author.mention},kindly let them review the bot")
           await msg.edit(embed=embedx,components=[row2])
     @commands.command(name='hire',help="For admins only")
     @commands.has_any_role(912569937153892361, 912569937116147778) 

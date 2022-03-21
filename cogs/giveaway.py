@@ -16,10 +16,23 @@ import discord
 from discord.ext import commands
 import asyncio
 import random
+import motor.motor_asyncio
+import nest_asyncio
+import requests
+from discord.ext import commands, tasks, timers
+import os
+from pymongo import MongoClient
+import datetime
 
+#import time
+nest_asyncio.apply()
+mongo_url = os.environ.get("tst")
+cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
+give = cluster["tst"]["give"]
 class Giveaway(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.checker.start()
 
     @commands.command()
     #@commands.has_role(config['giveaway_role'])
@@ -53,7 +66,7 @@ class Giveaway(commands.Cog):
             try:
                 msg = await self.client.wait_for('message', timeout=30, check=check)
             except asyncio.TimeoutError:
-                embed = discord.Embed(title=":gift: **Giveaway Setup Wizard**",
+                embed = discord.Embed(title=":gift: **Giveaway Wizard**",
                                       description=":x: You didn't answer in time!",color=discord.Color.random())
                 await ctx.send(embed=embed)
                 return
@@ -63,27 +76,28 @@ class Giveaway(commands.Cog):
         try:
             c_id = int(answers[0][2: -1])
         except:
-            embed = discord.Embed(title=":gift: **Giveaway Setup Wizard**",
+            embed = discord.Embed(title=":gift: **Giveaway Wizard**",
                                   description=":x: You didn't specify a channel correctly!",color=discord.Color.random())
             await ctx.send(embed=embed)
             return
 
         channel = self.client.get_channel(c_id)
 
-        time = convert(answers[1])
+        time = datetime.datetime.now()
+        time = time + datetime.timedelta(seconds=convert(answers[1]))
         if time == -1:
-            embed = discord.Embed(title=":gift: **Giveaway Setup Wizard**",
+            embed = discord.Embed(title=":gift: **Giveaway Wizard**",
                                   description=":x: You didn't set a proper time unit!",color=discord.Color.random())
             await ctx.send(embed=embed)
             return
         elif time == -2:
-            embed = discord.Embed(title=":gift: **Giveaway Setup Wizard**",
+            embed = discord.Embed(title=":gift: **Giveaway Wizard**",
                                   description=":x: Time unit **MUST** be an integer",color=discord.Color.random())
             await ctx.send(embed=embed)
             return
         prize = answers[2]
 
-        embed = discord.Embed(title=":gift: **Giveaway Setup Wizard**",
+        embed = discord.Embed(title=":gift: **Giveaway Wizard**",
                               description="Okay, all set. The Giveaway will now begin!",color=discord.Color.random())
         embed.add_field(name="Hosted Channel:", value=f"{channel.mention}")
         embed.add_field(name="Time:", value=f"{answers[1]}")
@@ -97,26 +111,46 @@ class Giveaway(commands.Cog):
         embed.add_field(name="Lasts:", value=answers[1])
         embed.add_field(name=f"Hosted By:", value=ctx.author.mention)
         msg = await channel.send(embed=embed)
-
+        newuser = {
+            "Time": time,
+            "Prize":prize,
+            "msg":msg.id,
+            "Channel": ctx.channel.id,
+        }
+        await give.insert_one(newuser)
         await msg.add_reaction('🎉')
-        await asyncio.sleep(time)
-
-        new_msg = await channel.fetch_message(msg.id)
-        users = await new_msg.reactions[0].users().flatten()
-        users.pop(users.index(self.client.user))
-
-        winner = random.choice(users)
-
-        await channel.send(f":tada: Congratulations! {winner.mention} won: **{prize}**!")
-        print(f"New Winner! User: {winner.mention} | Prize: {prize}")
-        print("------")
-
-        embed2 = discord.Embed(title=f":gift: **GIVEAWAY FOR: {prize}**",
-                               description=f":trophy: **Winner:** {winner.mention}",color=discord.Color.random())
-        embed2.set_footer(text="Giveaway Has Ended")
-        await msg.edit(embed=embed2)
 
 
+
+    @tasks.loop(seconds=1)
+    async def checker(self):
+        try:
+            all = give.find({})
+            current = datetime.datetime.now()
+            async for x in all:
+                if current >= x["Time"]:
+                    channel = self.client.get_channel(x["Channel"])
+                    prize=['Prize']
+                    #msg = await channel.fetch_message(x["msg"])
+                    new_msg = await channel.fetch_message(x["msg"])
+                    users = await new_msg.reactions[0].users().flatten()
+                    users.pop(users.index(self.client.user))
+
+                    winner = random.choice(users)
+
+                    await channel.send(f":tada: Congratulations! {winner.mention} won: **{prize}**!")
+                    print(f"New Winner! User: {winner.mention} | Prize: {prize}")
+                    print("------")
+                    await give.delete_one(x)
+                    #embed2 = discord.Embed(title=f":gift: **GIVEAWAY FOR: {prize}**",
+                                          #description=f":trophy: **Winner:** {winner.mention}",color=discord.Color.random())
+                    #embed2.set_footer(text="Giveaway Has Ended")
+                    #await msg.edit(embed=embed2)
+                    
+                else:
+                    pass
+        except Exception:
+            pass
 
 def setup(client):
     client.add_cog(Giveaway(client))

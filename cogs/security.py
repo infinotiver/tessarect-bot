@@ -16,9 +16,7 @@ from discord.utils import get
 from PIL import ImageFont, ImageDraw, Image
 #from Tools.utils import   updateConfig
 import datetime
-#from datetime import datetime, timedelta
-#from datetime import datetime
-#from datetime import date
+
 import json
 #import datetime
 import discapty
@@ -39,7 +37,6 @@ class Security(commands.Cog):
         self.warns={}
         self.links=requests.get("https://raw.githubusercontent.com/Dogino/Discord-Phishing-URLs/main/scam-urls.txt").content.decode().split("\n")
         
-
 
 
 
@@ -68,7 +65,7 @@ class Security(commands.Cog):
 
       #nsfw detection
       if message.attachments:
-        if message.author==self.bot.user:
+        if message.author==self.client.user:
           return
         for attachment in message.attachments:
             if not attachment.content_type in ('image/jpeg', 'image/jpg', 'image/png','video/mp4'):
@@ -262,14 +259,16 @@ class Security(commands.Cog):
             member_role_id = data.get('member_role')
             captchaLog = self.client.get_channel(int(data['securitylogs']))
         except:
-          return await ctx.send('AN ERROR DEDUCTED | MOST PROBABLY YOU HAVENT SET MEMBER ROLE AND/OR SECURITY LOGS CHANNEL')
+          error=discord.Embed(title="Setup Not found",description="AN ERROR DEDUCTED | MOST PROBABLY YOU HAVENT SET MEMBER ROLE AND/OR SECURITY LOGS CHANNEL",color=discord.Color.dark_red())
+          return await ctx.send(embed=error)
         
         xb=await ctx.send('<a:Loading:941646457562365962> Making Captcha .... Please wait')
         await asyncio.sleep(2)
         #captchaChannel = self.client.get_channel(data["captchaChannel"])
-        
-        await ctx.message.delete()
-
+        try:
+          await ctx.message.delete()
+        except:
+          return
 
         # Create captcha
         image = np.zeros(shape=(100, 350, 3), dtype=np.uint8)

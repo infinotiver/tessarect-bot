@@ -158,18 +158,27 @@ class Song:
     def create_embed(self):
         embed = (
             discord.Embed(
-                title="Now playing :musical_note: ",
+                title="Now playing <a:dj:946653289175461899> ",
                 description="```css\n{0.source.title}\n```".format(self),
-                color=discord.Color.blurple(),
+                color=discord.Color.blue(),
             )
-            .add_field(name="Duration", value=self.source.duration)
-            .add_field(name="Requested by", value=self.requester.mention)
+           # .add_field(name="Description", value=self.source.description)
+            .add_field(name="<:timer:941993935507689492> Duration", value=self.source.duration)
+            .add_field(name="Requested by", value=self.requester.mention,inline=False)
             .add_field(
                 name="Uploader",
                 value="[{0.source.uploader}]({0.source.uploader_url})".format(self),
             )
+           # .add_field(
+                #name="Tags",
+                #value=f",".join(self.source.tags[5]),
+            #)            
+            .set_footer(
+                text="Views: {0.source.views} Likes: {0.source.likes} Dislikes: {0.source.dislikes} ".format(self,self,self),
+            )            
             .add_field(name="URL", value="[Click]({0.source.url})".format(self))
         )
+        embed.set_thumbnail(url='{0.source.thumbnail}'.format(self))
 
         return embed
 
@@ -353,7 +362,7 @@ class Music(commands.Cog):
         await ctx.voice_state.stop()
         del self.voice_states[ctx.guild.id]
         embed = discord.Embed(
-            title="Disconnected to Music <:rainbowBlob:940103490557071360>", color=0xFF0000
+            title="Disconnected to Music ", color=0xFF0000
         )
         await ctx.send(embed=embed)
 
@@ -433,8 +442,8 @@ class Music(commands.Cog):
             )
 
         embed = discord.Embed(
-            description="**{} tracks:**\n\n{}".format(len(ctx.voice_state.songs), queue)
-        ).set_footer(text=" <:LibraryMusic:912648429400911883> Viewing page {}/{}".format(page, pages))
+            description="<:LibraryMusic:912648429400911883> **{} tracks:**\n\n{}".format(len(ctx.voice_state.songs), queue)
+        ).set_footer(text=" Viewing page {}/{}".format(page, pages))
         await ctx.send(embed=embed)
 
     @commands.command(name="shuffle")
@@ -444,7 +453,7 @@ class Music(commands.Cog):
             return await ctx.send("Empty queue.")
 
         ctx.voice_state.songs.shuffle()
-        await ctx.message.add_reaction("✅")
+        await ctx.message.add_reaction("<:sucess:935052640449077248>")
 
     @commands.command(name="remove")
     async def _remove(self, ctx: commands.Context, index: int):
@@ -453,7 +462,7 @@ class Music(commands.Cog):
             return await ctx.send("Empty queue.")
 
         ctx.voice_state.songs.remove(index - 1)
-        await ctx.message.add_reaction("✅")
+        await ctx.message.add_reaction("<:sucess:935052640449077248>")
 
     @commands.command(name="play")
     async def _play(self, ctx: commands.Context, *, search: str):
@@ -494,7 +503,8 @@ class Music(commands.Cog):
             return await ctx.send('Volume must be between 0 and 100')
 
         ctx.voice_state.volume = volume / 100
-        await ctx.send('Volume of the player set to {}%'.format(volume))
+        self._volume = volume / 100
+        await ctx.send('Volume  set to {}%'.format(volume))
     @commands.command(name='loop')
     async def _loop(self, ctx: commands.Context):
         """Loops the currently playing song.
@@ -506,7 +516,7 @@ class Music(commands.Cog):
 
         # Inverse boolean value to loop and unloop.
         ctx.voice_state.loop = not ctx.voice_state.loop
-        await ctx.message.add_reaction('✅')
+        await ctx.message.add_reaction('<:sucess:935052640449077248>')
 
 def setup(client):
     client.add_cog(Music(client))

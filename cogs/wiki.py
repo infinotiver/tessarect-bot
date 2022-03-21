@@ -8,13 +8,14 @@ from discord.ext import commands
 from discord.ext.commands import BucketType, cooldown
 
 
-class Wiki(commands.Cog):
+class Study(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.description="Know some good stuff"
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Wiki cog loaded successfully")
+        print("Study cog loaded successfully")
 
     @commands.command(
         cooldown_after_parsing=True, description="Shows wikipedia summary"
@@ -54,4 +55,4 @@ class Wiki(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(Wiki(client))
+    client.add_cog(Study(client))

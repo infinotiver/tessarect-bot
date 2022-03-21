@@ -7,12 +7,13 @@
 <p align="center">
 
   <a href="https://discord.gg/avpet3NjTE">
-    <img src="https://raw.githubusercontent.com/prakarsh17/tessarect-bot/main/Tessarect%20New%20Final.jpg" height=200 width=200 alt="Tessarect Logo">
+    <img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/Tessarect.png" height=200 width=200 alt="Tessarect Logo">
   </a>
 </p>
 
 ___
-It is my First bot but very advanced and designed for all your needs , from Moderation to cool Economy Features .
+##### Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .
+###### It is my First bot but very advanced and designed for all your needs , from Moderation to cool Economy Features .
 
 
 </a>
@@ -27,10 +28,10 @@ It is my First bot but very advanced and designed for all your needs , from Mode
   <a href="https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE">License</a>
 </p>
 
-<p align="center">
+
 
   <a href="https://discord.gg/avpet3NjTE">
-    <img src="https://discordapp.com/api/guilds/912569937116147772/widget.png?style=shield" alt="Discord Server">
+    <img src="https://discordapp.com/api/guilds/912569937116147772/widget.png?style=shield" alt="Tbd">
   </a>
 
 
@@ -46,8 +47,8 @@ It is my First bot but very advanced and designed for all your needs , from Mode
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg">
   </a>
   <br>
-  </p>
-  <h6 align="center"> Services Used In the Project</h6>
+
+  <h6 align="center"> Services Used In the Bot</h6>
   <p align="center">
   <a href="https://www.mongodb.com/">
     <img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white">
@@ -71,7 +72,7 @@ It is my First bot but very advanced and designed for all your needs , from Mode
     <img src="https://img.shields.io/badge/google-4285F4?style=for-the-badge&logo=google&logoColor=white">
   </a>
   <a href="https://discord.gg/avpet3NjTE">
-    <img src="https://img.shields.io/badge/%3CTessarect Official%3E-%237289DA.svg?style=for-the-badge&logo=discord&logoColor=white">
+    <img src="https://img.shields.io/badge/%3CTessa Network Official%3E-%237289DA.svg?style=for-the-badge&logo=discord&logoColor=white">
   </a>
 
 
@@ -101,7 +102,7 @@ ___
 [![Issues](https://img.shields.io/github/issues/prakarsh17/tessarect-bot.svg?colorB=3333ff)](https://github.com/Gorialis/jishaku/issues)
 [![Commit activity](https://img.shields.io/github/commit-activity/w/prakarsh17/tessarect-bot.svg)](https://github.com/Gorialis/jishaku/commits)
 
-<h2 align="center">Top.gg</h2>
+<h3 align="center">Top.gg</h3>
 <h6 align="center">Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support .Vote for it NOW !</h6>
 
 
@@ -121,7 +122,7 @@ ___
 - [x] Translation
 - [x] Moderator Commands (More commands Under development)
 - [x] Images Commands (Fixed Again)
-- [x] AUTOMOD (Made 3 filters , more soon)
+- [x] AutoMod and filters (Made 3 filters , more soon)
 - [ ] Advanced Economy Features (surprise awaits)
 # Cogs (Plugins)
 **40+ Cogs(plugins) for better experience and more features** 
@@ -133,6 +134,7 @@ ___
 | [`calc`](./cogs/calc.py) | Calculator |
 | [`Covid `](./cogs/covid.py) | Covid Stats |
 | [`developer`](./cogs/dev.py) |  For the Developers of Tessarect to control the bot from within Discord |
+| [`Tessarect`](./cogs/system.py) | Control and other important features for maintaining and keeping bot safe also a self control plugin |
 | [`enalevel`](./cogs/enalevel.py) | Toggle Level Commands |
 | [`Encyrpt`](./cogs/encyrpted.py) | 👀 Code / Decode some secret Messages |
 | [`Fun and Utility`](./cogs/fun.py) | Self Explanatory |
@@ -148,6 +150,8 @@ ___
 | [`Madlibs`](./cogs/madlibs.py) | PLay and Test|
 | [`Mod`](./cogs/mod.py) | 🔨 Moderators Commands ( New and under development )|
 | [`Music`](./cogs/music.py) | 🎶 Listen to some Music Dude|
+| [`Setup`](./cogs/setup.py) | The basic Cog for setting and starting up with Tessarect |
+| [`Sniper`](./cogs/snipe.py) | 🔫 Sniper for sniping people who try to hide |
 | [`Much MORE`](./cogs) | 10 + Cogs in the cogs Folder |
 ###### And Much more cogs hidden for making your experience Better Note : All cogs arent Listed here go to the cogs folder to see all the cogs
 ### Wanna Like Making Tessarect Better ?
@@ -161,7 +165,7 @@ ___
 
 ## Contributors
 
-###### People who made Tessarect Possible  (bots too !)
+<h6 align=center>People who made Tessarect Possible  (bots too !)</h6>
   <a href="https://github.com/prakarsh17/tessarect-bot">
-    <img src="https://contrib.rocks/image?repo=prakarsh17/tessarect-bot">
+    <img src="https://contrib.rocks/image?repo=prakarsh17/tessarect-bot" align=center>
   </a>

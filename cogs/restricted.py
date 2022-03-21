@@ -15,10 +15,6 @@ class Restricted(commands.Cog):
     def __init__(self,bot):
         self.bot=bot
 
-    ##DANGEROUS-> "https://stackoverflow.com/questions/34385014/how-do-i-set-the-output-of-exec-to-variable-python"
-    ##BUT RUNNING FROM SERVERS LIKE heroku TILL NOW HAVE NOT SHOWN ANY AFFECT ON THE CODING COMPUTER EVEN WITH OS MODULE CODES
-    ##THE OUTPUT IS : "py"
-    ##eval command->executes any python code and displays output(work in progress)
 
     @commands.is_owner()
     @commands.command(hidden=True)

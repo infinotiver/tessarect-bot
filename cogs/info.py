@@ -14,10 +14,11 @@ async def hastebin(content, session=None):
             return "https://hastebin.com/" + result["key"]
         else:
             return "Error with creating Hastebin. Status: %s" % resp.status
-'''Module for server commands.'''
+           
+'''Module for Information server info command inspired by https://github.com/appu1232/Discord-Selfbot'''
 
 
-class Server(commands.Cog):
+class Info(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -80,7 +81,7 @@ class Server(commands.Cog):
             role_count = len(server.roles)
             emoji_count = len(server.emojis)
 
-            em = discord.Embed(color=0xea7938)
+            em = discord.Embed(color=0xea7938,timestamp=ctx.message.created_at)
             em.add_field(name='<:Servers:946289809289281566> Name', value=server.name)
             em.add_field(name='<:owner:946288312220536863> Owner', value=server.owner, inline=False)
             em.add_field(name='<:Members:946289063810441248> Members', value=server.member_count)
@@ -88,15 +89,16 @@ class Server(commands.Cog):
             em.add_field(name='<:Channel:946288872583725076> Text Channels', value=str(channel_count))
             em.add_field(name='<:Discord_Region:946289542330196028> Region', value=server.region)
             em.add_field(name='Verification Level', value=str(server.verification_level))
+            em.add_field(name="Nitro Boosts",value="{} (level {})".format(server.premium_subscription_count,server.premium_tier))
             #em.add_field(name='Highest role', value=server.role_hierarchy[0])
             em.add_field(name='Number of roles', value=str(role_count))
             em.add_field(name='Number of emotes', value=str(emoji_count))
-            #url = await hastebin(str(all), self.bot.session)
-            #hastebin_of_users = '[List of all {} users in this server]({})'.format(server.member_count, url)
-            #em.add_field(name='Users', value=hastebin_of_users)
+            em.add_field(name="AFK Channel", value=server.afk_channel.mention)
+            em.add_field(name="Considered Large", value=server.large, inline=True)
+            em.add_field(name="Shard ID", value="{}/{}".format(server.shard_id+1, self.bot.shard_count))
             em.add_field(name='Created At', value=server.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S'))
             em.set_thumbnail(url=server.icon_url)
-            em.set_author(name='Server Info', icon_url=self.bot.user.avatar_url)
+            em.set_author(name='Server Info', icon_url=ctx.author.avatar_url)
             em.set_footer(text='Server ID: %s' % server.id)
             await ctx.send(embed=em)
             await ctx.message.delete()
@@ -114,28 +116,12 @@ class Server(commands.Cog):
         await ctx.send("".join(emojis))
         await ctx.message.delete()
 
-    @serverinfo.command(pass_context=True)
-    async def avi(self, ctx, msg: str = None):
-        """Get server avatar image link."""
-        if msg:
-            server, found = self.find_server(msg)
-            if not found:
-                return await ctx.send(server)
-        else:
-            server = ctx.message.guild
 
-            em = discord.Embed()
-            em.set_image(url=server.icon_url)
-            await ctx.send(embed=em)
-
-        await ctx.message.delete()
 
     @serverinfo.command()
-    async def role(self, ctx, msg):
+    async def role(self, ctx, msg, guild=None):
         """Get more info about a specific role. Ex: [p]server role Admins
-
-        You need to quote roles with spaces. """
-        guild=ctx.guild
+        You need to quote roles with spaces. You may also specify a server to check the role for. Ex. [p]server role "Dev" 299293492645986307"""
         if guild:
             guild, found = self.find_server(guild)
             if not found:
@@ -156,10 +142,11 @@ class Server(commands.Cog):
                 em.add_field(name='Role color hex value', value=str(role.color))
                 em.add_field(name='Role color RGB value', value=role.color.to_rgb())
                 em.add_field(name='Mentionable', value=role.mentionable)
+                em.add_field(name='Guild', value=guild.name)
                 if len(role.members) > 10:
                     all_users = all_users.replace(', ', '\n')
-                    #url = await hastebin(str(all_users), self.bot.session)
-                    #em.add_field(name='All users', value='{} users. [List of users posted to Hastebin.]({})'.format(len(role.members), url), inline=False)
+                    url = await hastebin(str(all_users), self.bot.session)
+                    em.add_field(name='All users', value='{} users. [List of users posted to Hastebin.]({})'.format(len(role.members), url), inline=False)
                 elif len(role.members) >= 1:
                     em.add_field(name='All users', value=all_users, inline=False)
                 else:
@@ -330,5 +317,21 @@ class Server(commands.Cog):
         )
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def sharedservers(self, ctx,member:discord.User=None):
+        """Lists how many servers you share with the bot."""
+        if not member:
+          member = ctx.author          
+        count = 0
+        for guild in self.bot.guilds:
+            for mem in guild.members:
+                if mem.id == member.id:
+                    count += 1
+        if ctx.author.id == member.id:
+            targ = "You share"
+        else:
+            targ = "__{}__ shares".format(member.display_name)
+        em = discord.Embed(description="{} **{:,}** server{} with me. <a:happyblob:946284960271175710> ".format(targ,count,"" if count==1 else "s"),color=discord.Color.gold())
+        await ctx.send(embed=em)
 def setup(bot):
-    bot.add_cog(Server(bot))
+    bot.add_cog(Info(bot))

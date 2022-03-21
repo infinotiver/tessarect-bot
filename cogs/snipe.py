@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 from discord.ext.commands import has_permissions, MissingPermissions
-
+import datetime 
 
 class Snipe(commands.Cog):
     def __init__(self, bot):
@@ -62,21 +62,24 @@ class Snipe(commands.Cog):
                 ::-1
             ][:limit]
             snipe_embed = discord.Embed(
-                title="Message Snipe <:angry_scientist:941712157807100024>", color=self.theme_color
+                title="Message Snipe",description=f"Most recent deleted messages\n Channel {ctx.channel.mention}", color=self.theme_color
             )
 
-            if msgs:
-                top_author: discord.Member = await self.bot.fetch_user(
-                    msgs[0].author.id
-                )
 
-                if top_author:
-                    snipe_embed.set_thumbnail(url=str(top_author.avatar_url))
 
+
+
+            snipe_embed.set_thumbnail(url='https://cdn.discordapp.com/emojis/941712157807100024.webp?size=96&quality=lossless')
+
+            sc=1
             for msg in msgs:
+                a=str(msg.created_at)
+                b = datetime.datetime.strptime(a, '%Y-%m-%d %H:%M:%S.%f')
+                c = b.timestamp()
                 snipe_embed.add_field(
-                    name=str(msg.author), value=msg.content, inline=False
+                    name=f"{sc}. {msg.author}", value=f"Content <:arrow_right:940608259075764265>{msg.content} \nSent at<:arrow_right:940608259075764265><t:{round(c)}>", inline=False
                 )
+                sc+=1
 
             await ctx.send(embed=snipe_embed)
 
@@ -106,7 +109,7 @@ class Snipe(commands.Cog):
         try:
             msgs = self.edited_msgs[ctx.channel.id][::-1][:limit]
             editsnipe_embed = discord.Embed(
-                title="Edit Snipe <:angry_scientist:941712157807100024>", color=self.theme_color
+                title="Edit Snipe", color=self.theme_color
             )
 
             if msgs:

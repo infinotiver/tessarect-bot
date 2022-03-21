@@ -27,6 +27,13 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
 
 
+    @commands.command(name="clear",aliases=['purge'],pass_context=True)
+    @commands.has_permissions(manage_channels=True)
+    async def clear(self,ctx, limit: int):
+            messages = await ctx.channel.history(limit=limit).flatten()
+            await ctx.channel.purge(limit=limit)
+            em=discord.Embed(description=f"<:Channel:946288872583725076> Channel:  {ctx.channel.mention}\n<:command:941986813013274625> Action: Clear\n📄 Request:  {limit}\n<:Hacker:922468796852224061> Fetched: {str(len(messages))}\n<:user:941986233574367253> Moderator:  {ctx.author.mention}",color=0x34363A)
+            await ctx.send(embed=em)
 
     @commands.command(name='mute', description='Mutes the person mentioned. Time period is optional.')
     @commands.has_permissions(manage_roles=True)

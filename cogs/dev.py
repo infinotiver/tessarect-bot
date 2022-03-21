@@ -3,10 +3,27 @@ import traceback
 import discord
 import requests
 from  colorama import Fore , Style
-
+# Common imports that can be used by the debugger.
+import requests
+import json
+import gc
+import datetime
+import time
+import traceback
+import re
+import io
+import asyncio
+import discord
+import random
+import subprocess
+from bs4 import BeautifulSoup
+import urllib
+import psutil
 from discord.ext import commands
 from discord.ext.commands import check
 import os
+import textwrap
+from contextlib import redirect_stdout
 import asyncio
 import sys
 import assets.otp_assets
@@ -15,26 +32,25 @@ import subprocess
 from subprocess import Popen, PIPE
 import shlex
 import json
-
-#from main import check_Mod
 def restart_bot(mode): 
   if mode ==1:
     os.execv(sys.executable, ['python'] + sys.argv)
   if mode==2:
     os.system('busybox reboot')
-  
+def progress_bar(progress):
+    return '[{0}{1}] {2}%'.format('█'*(int(round(progress/2))), ' '*(50-(int(round(progress/2)))), progress)
 def check_Mod(ctx):
   with open("storage/dev.json") as f:
       dev_users_list = json.load(f)
       if ctx.author.id not in dev_users_list:
           return False
-
   return True
 
 
 class Dev(commands.Cog):
     def __init__(self, client):
         self.bot = client
+        self._last_result = None
 
     @staticmethod
     def cleanup_code(content):
@@ -45,7 +61,7 @@ class Dev(commands.Cog):
 
         # remove `foo`
         return content.strip("` \n") 
-    @commands.command()    
+    @commands.command(help="The main command check that you are a lost dev")    
     async def devtest(self,ctx,user:discord.Member=None):
       if not user:
         user=ctx.author
@@ -62,15 +78,16 @@ class Dev(commands.Cog):
               )
           )          
       else:
+        owner=True if user.id==900992402356043806 else False
         await ctx.send(
             embed=discord.Embed(
                 title="Verified",
-                description="Found entry in Database",
+                description=f"Found entry in Database \n Owner? {owner}",
                 color=discord.Color.green(),
             )
         )        
 
-    @commands.command()
+    @commands.command(help="Lists Some poor souls having dev access for me")
     @check(check_Mod)
     async def listdev(self,ctx):
         x = discord.Embed(description="Users having Dev access for me",color=0x34363A)
@@ -84,7 +101,22 @@ class Dev(commands.Cog):
           pa +=1
         x.set_footer(text=f"Total users : {pa-1}")
         await ctx.send(embed=x)
-    @commands.command()
+
+    @commands.command(help="Lists Some idiots who cant even use me")
+    @check(check_Mod)
+    async def listblack(self,ctx):
+        x = discord.Embed(description="Blacklisted User",color=0x34363A)
+        with open("storage/black.json") as f:
+            dev_users_list = json.load(f)
+        pa =1
+        for user in dev_users_list:
+          
+          e = self.bot.get_user(user)
+          x.add_field(name=e,value=e.id,inline=False)
+          pa +=1
+        x.set_footer(text=f"Total users : {pa-1}")
+        await ctx.send(embed=x)        
+    @commands.command(help="Dont have silly juicy ideas used for adding some more devs (imagine my owner is too poor)")
     @check(check_Mod)
     async def adddev(self,ctx, user : discord.Member):
   
@@ -101,11 +133,9 @@ class Dev(commands.Cog):
             await ctx.send(f"{user.mention} has been added!")  
         else:
           await ctx.send('See Developer , either you are adding a dev again as dev or a bot (bots arent that much cool)') 
-    @commands.command()
+    @commands.command(help="Removes a silly soul having dev access ")
     @check(check_Mod)
     async def removedev(self,ctx, user : discord.Member):
-     
-
         with open("storage/dev.json") as f:
             dev_users_list = json.load(f)
 
@@ -119,7 +149,7 @@ class Dev(commands.Cog):
             json.dump(dev_users_list, f)
 
         await ctx.send(f"{user.mention} has been removed!")                   
-    @commands.command(aliases=["m","evaldev","deveval"])
+    @commands.command(aliases=["m","evaldev","deveval"],help="Execuete some stuff")
     @check(check_Mod)  
     async def python_shell(self, ctx, *, text):
         env = {
@@ -128,7 +158,8 @@ class Dev(commands.Cog):
             "commands": commands,
             "client":self.bot,
             "__import__": __import__,
-            "guild":ctx.guild
+            "guild":ctx.guild,
+            "_":self._last_result
         }         
         if  "client.http.token" in text:
           return await ctx.send('not my token') 
@@ -140,7 +171,7 @@ class Dev(commands.Cog):
             try:
                 text = text.replace("```py", "")
                 text = text.replace("```", "")
-                a = eval(text,env)
+                a = eval(text)
 
                 em = discord.Embed(
                     title="Successfully Execueted",
@@ -166,53 +197,68 @@ class Dev(commands.Cog):
               description=f"{ctx.author.mention} This command is now only for the main server which is Tessa Bot Developers",
               color=discord.Color.blue(),
           )
-          await ctx.send(embed=re)                 
-    @commands.command(name= 'restart',hidden=True,help='Hidden command, youre not supposed to access this.Now off you go. Nothing to see here.')
+          await ctx.send(embed=re)      
+
+               
+    @commands.command(name= 'restart',help='Hidden command, youre not supposed to access this.Now off you go. Nothing to see here.',aliases=['reboot'])
     @check(check_Mod)
     async def restart(self,ctx,mode:int=1):
-      
+      listd=[1,2] 
+      if mode not in listd:
+        dd = discord.Embed(title='Invalid Input',description=f' Invalid Mode = {mode} \n Accepted mode {listd}',color=discord.Color.red())          
+        await ctx.send(embed=dd)     
+        return
       otp_success = await assets.otp_assets.send_waitfor_otp(ctx, self.bot)
       # random otp generator. if user enters correct otp, returns true. else, returns false
       if not otp_success:
-          return 
+          return await ctx.send('Restart Command Aborted')
+      if len(self.bot.voice_clients)>0:
+        await ctx.send(embed=discord.Embed(description=f"There are {len(self.bot.voice_clients)} servers listening to music through Tessarect, Do you wanna restart?"))
+        otp_success = await assets.otp_assets.send_waitfor_otp(ctx, self.bot)
+        if not otp_success:
+            return await ctx.send('Restart Command Aborted')
       async with ctx.typing():  
-    
-        e = discord.Embed(title='<:reset:942782303552282624>Restarting..',description=f' Scheduled , in approx 5 seconds(unless errors) Mode = {mode} \n 1 = Simple restart 2 = Full restart',color=discord.Color.red())
-        e3= discord.Embed(title='<:Protectedshield:922468797246488596> **RESTARTING BOT **',description="Unloaded cogs,Final Works , ",color=discord.Color.green())
-        e2= discord.Embed(title='<a:Loading:941646457562365962>',description="Unloading cogs",color=discord.Color.blue())  
+        e = discord.Embed(title='Restart  Invoked',description=f'**Mode = {mode}** \n 1 = Simple restart 2 = Full restart',color=discord.Color.dark_gold())
+        e.add_field(name="Progress",value=progress_bar(10))
         x = await ctx.send(embed=e)
+        await asyncio.sleep(1)  
+        e.set_field_at(0,name="Progress",value=progress_bar(30))
+        await x.edit(embed=e)
         await asyncio.sleep(2)
-        await x.edit(embed=e2)
-        await asyncio.sleep(2)
+        e.set_field_at(0,name="Progress",value=progress_bar(50))
+        e.add_field(name="Status",value='Unloading Cogs')
+        await x.edit(embed=e)        
+
         for filename in os.listdir("./cogs"):
           if filename.endswith(".py"):
               try:
 
                 self.bot.unload_extension(f"cogs.{filename[:-3]}")
               except Exception as e:
-                e2.set_footer(text=f"{filename} - {e}") 
-                await x.edit(embed=e2)
-                await asyncio.sleep(2)
+                print(f'{filename} - {e}')           
 
-
-        await x.edit(embed=e3)
-        e3.set_footer(text="Changing Status")
-        await x.edit(embed=e3)
-  
+        e.set_field_at(0,name="Progress",value=progress_bar(100))
+        
+        e.set_field_at(1,name="Status",value='Changing Status')
+        await x.edit(embed=e)
         await self.bot.change_presence(
-
+                status=discord.Status.idle,
                 activity=discord.Activity(
+                    
                     type=discord.ActivityType.watching,
                     name= f"🌠 System Reboot [DONT USE]"
                 ))
         with open("./storage/reboot.json", "w") as rebootFile:
-            json.dump(ctx.message.channel.id, rebootFile)                
+            json.dump(ctx.message.channel.id, rebootFile) 
+        
+             
         restart_bot(mode)  
 
 
 
+
     @commands.command(name='reload', description="Reload all/one of the bot's cogs.\n"
-                                                 "This is Dev-only, so don't have any funny ideas.", )
+                                                 "This is Dev-only, so don't have any Devny ideas.", )
     @check(check_Mod)
     async def reload(self, ctx, cog=None):
         async with ctx.typing():
@@ -234,10 +280,10 @@ class Dev(commands.Cog):
                 await ctx.send(embed=embed)
                 return
 
-            """ Now the code for reloading One cog comes into play"""
 
             embed = discord.Embed(
                 title="Reloading cogs!", timestamp=ctx.message.created_at)
+            #embed.color=discord.Color.green()
             ext = f"{cog.lower()}.py"
             if not os.path.exists(f"./cogs/{ext}"):
                 embed.add_field(
@@ -253,9 +299,14 @@ class Dev(commands.Cog):
                     embed.color=discord.Color.green()
                 except Exception:
                     desired_trace = traceback.format_exc()
-                    embed.add_field(
-                        name=f"Failed to reload: `{ext}`", value=desired_trace, inline=False)
-                embed.color=discord.Color.red()
+                    if len(desired_trace) > 2000 :
+                      print(desired_trace)
+                      embed.add_field(
+                          name=f"Failed to reload: `{ext}`", value='Too Big error , printed instead', inline=False)
+                    else:
+                      embed.add_field(
+                          name=f"Failed to reload: `{ext}`", value=desired_trace, inline=False)                      
+                    embed.color=discord.Color.red()
             await ctx.send(embed=embed)
 
     @commands.command(name='load', description='Loads a cog. Mention the python file\'s name as `cog_file_name`')
@@ -268,11 +319,11 @@ class Dev(commands.Cog):
                 self.bot.load_extension(f"cogs.{cog_file_name}")
                 embed.add_field(
                     name=f"Loaded: `{cog_file_name}.py`", value='\uFEFF', inline=False)
-                embed.color=discord.Color.green()
+                #embed.color=discord.Color.green()
             except Exception as e:
                 embed.add_field(
                     name=f"Failed to load: `{cog_file_name}.py`", value=str(e), inline=False)
-                embed.color=discord.Color.red()
+               # embed.color=discord.Color.red()
             await ctx.send(embed=embed)
 
     @commands.command(name='unload', description="Unloads a cog. Mention the python file\'s name as `cog_file_name`")
@@ -292,8 +343,9 @@ class Dev(commands.Cog):
                 embed.color=discord.Color.red()
             await ctx.send(embed=embed)
 
-    @commands.command(name="gitpull")
+    @commands.command(name="gitpull",help="Pull stuff from my github repo")
     @commands.guild_only()
+    @check(check_Mod)
     async def update(self, ctx):
         async with ctx.typing():
             print(sys.argv)
@@ -334,33 +386,39 @@ class Dev(commands.Cog):
             except commands.ExtensionNotFound:
                 return await ctx.send("Could not unload!")
             await ctx.send("Unloaded!")
-    @commands.command()
+    @commands.command(help="Blacklist some idiot from using me")
     @check(check_Mod)
-    async def blacklist(self,ctx, user : discord.Member):
-  
+    async def blacklist(self,ctx, user : discord.Member,*,reason:str):
+
 
         with open("storage/black.json") as f:
             users_list = json.load(f)
-
+        if user.id==ctx.author.id:
+          return await ctx.send('You cant blacklisted yourself')
         if user.id not in users_list  :
             users_list.append(user.id)
-
+            e=discord.Embed(title="Blacklisted User!",description=f":white_medium_square: Member {user.mention}\n:white_medium_square:Reason: {reason}\n :white_medium_square: Developer {ctx.author.mention}",color=discord.Color.red())  
+            e.set_author(name=user.name,icon_url=user.avatar_url)            
+            logschannel=self.bot.get_channel(929333373913137224)
+            await logschannel.send(embed=e)
             with open("storage/black.json", "w+") as f:
                 json.dump(users_list, f)
-
+            
             await ctx.send(f"{user.mention} has been added!")  
         else:
-          await ctx.send('See Developer , either you are adding a dev again as dev or a bot (bots arent that much cool)') 
-    @commands.command()
+          await ctx.send('See Developer , either you are adding a blacklisted user again ') 
+    @commands.command(help="Unblacklist some users if they are behaving nice")
     @check(check_Mod)
     async def unblacklist(self,ctx, user : discord.Member):
-     
-
         with open("storage/black.json") as f:
             users_list = json.load(f)
 
         if user.id in users_list:
             users_list.remove(user.id)
+            e=discord.Embed(title="UnBlacklisted User!",description=f":white_medium_square: Member {user.mention}\n :white_medium_square: Developer {ctx.author.mention}",color=discord.Color.gold())  
+            e.set_author(name=ctx.author.name,icon_url=ctx.author.avatar_url)
+            logschannel=self.bot.get_channel(929333373913137224)
+            await logschannel.send(embed=e)            
         else:
             await ctx.send(f"{user.mention} is not in the list, so they cannot be removed!")
             return
@@ -369,7 +427,6 @@ class Dev(commands.Cog):
             json.dump(users_list, f)
 
         await ctx.send(f"{user.mention} has been removed!")  
-
 
 def setup(client):
     client.add_cog(Dev(client))

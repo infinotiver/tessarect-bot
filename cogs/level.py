@@ -72,14 +72,13 @@ class Level(commands.Cog):
 
                         if xp == 0:
 
-                            await message.channel.send(
-                                f"Well done {message.author.mention} You levelled up to **level: {lvl}**"
-                            )
+                            await message.channel.send(embed=discord.Embed(description=f"Well done  {message.author.mention} You levelled up to **level: {lvl}**",color=discord.Color.dark_theme()))
+                                
 
         else:
             pass
 
-    @commands.command(aliases=["xp", "r"], description="Shows your xp and global rank")
+    @commands.command(aliases=["xp", "r","level"], description="Shows your xp and global rank")
     async def rank(self, ctx,user:discord.Member=None,):
         if user ==None:
           user = ctx.author
@@ -127,46 +126,7 @@ class Level(commands.Cog):
                 elif rank ==2:
                   emoji ="<:2rd:939020302426460220>"
                 elif rank ==1:
-                  emoji ="<:1st:939020133702201344>"               '''                    
-                embed = discord.Embed(
-                    timestamp=ctx.message.created_at,
-                    title=f"{user.name}'s Level stats",
-                    color=0x34363A,
-                )
-                embed.add_field(name="Name", value=f"{user.mention}", inline=True)
-                embed.add_field(
-                    name="XP", value=f"{xp}/{int(200* ((1/2)*lvl))}", inline=True
-                )
-                embed.add_field(name="Global Rank", value=f"{emoji}{rank}", inline=True)
-                embed.add_field(name="Level", value=f"{lvl}", inline=True)
-                embed.add_field(
-                    name="Progress Bar ",
-                    value=boxes * "⬜"
-                    + (20 - boxes) * "⬛",
-                    inline=False,
-                )
-                embed.set_thumbnail(url=user.avatar_url)
-
-                
-                args = {
-               
-                  'profile_image' : user.avatar_url, # User profile picture link
-                  'level' : lvl, # User current level 
-                  'current_xp' : 0, # Current level minimum xp 
-                  'user_xp' : xp, # User current xp
-                  'next_xp' : int(200* ((1/2)*lvl)), # xp required for next level
-                  'user_position' : rank, # User position in leaderboard
-                  'user_name' : user.display_name, # user name with descriminator 
-                  #'user_status' : user.status, # User status eg. online, offline, idle, streaming, dnd
-                  'user_status' : 'online',
-                }
-
-                image = Generator().generate_profile(**args)
-
-                # In a discord command
-                file = discord.File(fp=image, filename='image.png')
-                '''
-
+                  emoji ="<:1st:939020133702201344>"            
                 gen_card = await self.vac_api.rank_card(
                             username = str(user),  # wrapper will handle the #
                             avatar = user.avatar_url_as(format = "png"),  # converting avatar to .png, including .gif

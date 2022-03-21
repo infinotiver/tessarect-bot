@@ -107,6 +107,7 @@ class AI(commands.Cog):
       out=d['output_url']
       em=discord.Embed(color=0x34363A)
       em.set_image(url=out)     
-      await ctx.send(embed=em)          
+      await ctx.send(embed=em)    
+         
 def setup(bot):
     bot.add_cog(AI(bot))

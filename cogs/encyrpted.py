@@ -142,7 +142,7 @@ class Encryption(commands.Cog):
         """ Generates a random password string for you """
         if hasattr(ctx, "guild") and ctx.guild is not None:
             await ctx.send(
-                f"Sending you a private message with your random generated password **{ctx.author.name}**"
+                f"Sending you a private message with your random generated password **{ctx.author.mention}**"
             )
         await ctx.author.send(
             f"🎁 **Here is your password:**\n{secrets.token_urlsafe(20)}"
