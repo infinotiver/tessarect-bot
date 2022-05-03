@@ -1,68 +1,83 @@
-from flask import Flask , render_template,request
+#Dashboard under testing , Solve unauthorized for discord api error
+
+from http import server
 from threading import Thread
+from shutil import ExecError
+from django.shortcuts import render
+from flask import *
+import flask
+from oauth import Oauth
+from dotenv import load_dotenv
+import os
+import pymongo
+from pymongo import MongoClient
 
-app = Flask('WEB')
+load_dotenv()
 
+# Creating and Configuring the app
+app = Flask(__name__)
+app.config['SECRET_KEY'] = b"%\xe0'\x01\xdeH\x8e\x85m|\xb3\xffCN\xc9g"
+
+
+# Intilize Database
+db_url = os.environ['tst']
+cluster = MongoClient(db_url)
+database = cluster["Jarvis"]
+welcome_collection = database["welcome"]
+leave_collection = database["leave"]
+basedb = database['flaskapp']
+
+
+
+# Server
 @app.route('/')
 def home():
-    return """<!DOCTYPE html>
-<html>
-   <head>
-      <title>Tessarect</title>
-      <meta http-equiv = "refresh" content = "5; url = http://bit.ly/tessarect-website" />
-      <style>/* GLOBAL STYLES */
-body {
-  background: #3a3635;
-  padding-top: 5em;
-  display: flex;
-  justify-content: center;
-}
-
-/* DEMO-SPECIFIC STYLES */
-.typewriter h1 {
-  color: #fff;
-  font-family: monospace;
-  overflow: hidden; /* Ensures the content is not revealed until the animation */
-  border-right: .15em solid blue; /* The typwriter cursor */
-  white-space: nowrap; /* Keeps the content on a single line */
-  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
-  letter-spacing: .1em; /* Adjust as needed */
-  animation: 
-    typing 3.5s steps(30, end),
-    blink-caret .5s step-end infinite;
-}
-
-/* The typing effect */
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
-
-/* The typewriter cursor effect */
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: blue }
-}
-</style>
-   </head>
-   <body>
-   <div class="typewriter">
-  <h1>Heyo i am redirecting you to main website   <h1>here there is nothing but 💩hahaha</h1>  </h1>
-
-   </body>
-</html>"""
-@app.route('/about')
-def about():
-  return "I am tessarect"
+    return render_template('index.html')
 
 
-@app.route('/upload', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        static_file = request.files['the_file']
-        # here you can send this static_file to a storage service
-        # or save it permanently to the file system
-        static_file.save('/var/www/uploads/profilephoto.png')
+@app.route('/oauth/discord')
+def oauth():
+    # Authorization 
+    code = request.args.get("code")
+    token = Oauth.get_access_token(code)
+    session['token'] = token
+    return redirect('/dashboard')
+
+
+@app.route('/dashboard')
+def dashboard():
+    if 'token' not in session:
+        return redirect("https://discord.com/api/oauth2/authorize?client_id=916630347746250782&redirect_uri=https%3A%2F%2Ftessarect.prakarsh17.senarc.org%2F&response_type=code&scope=identify")
+
+    user_data = Oauth.get_user_json(session.get('token'))
+    user_guilds_data  = Oauth.get_user_guild(session.get('token'))
+    bot_guilds = Oauth.get_bot_guilds()
+    mutual_bot_guilds = Oauth.get_mutual_guilds(user_guilds_data, bot_guilds)
+    return render_template('dashboard.html', guilds=mutual_bot_guilds, userdata=user_data)
+
+@app.route('/guild/guild_id=<guild_id>')
+def guild(guild_id: int):
+    user_data = Oauth.get_user_json(session.get('token'))
+    guild_info = Oauth.get_guild_data(guild_id, session.get('token'))
+    channels = Oauth.get_channel_from_guild(guild_id)
+    if not guild_info:
+        return redirect('/dashboard')
+    return render_template('guilds.html', guild=guild_info, userdata=user_data, channel=channels)
+
+@app.route("/forward/<guild_id>", methods=['POST'])
+def move(guild_id:int):
+    try:
+        user_data = Oauth.get_user_json(session.get('token'))
+        guild_info = Oauth.get_guild_data(guild_id, session.get('token'))
+        channels = Oauth.get_channel_from_guild(guild_id)
+
+        return render_template('update.html', guild=guild_info)
+        
+    except Exception as e:
+        print(e)
+    
+
+
 
 def run():
     app.run(host='0.0.0.0', port=8080)

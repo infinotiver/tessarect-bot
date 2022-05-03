@@ -3,12 +3,9 @@ import discord
 import datetime, time 
 
 from discord.ext import commands
-restart_data = {
-    'str': datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-    'obj': time.time()
-}
-#this is very important for creating a cog
-class UPTIME(commands.Cog):
+from main import restart_data
+
+class Stats(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -103,4 +100,4 @@ class UPTIME(commands.Cog):
         await message.edit(content="Speedtest Error: {}".format(str(e)))   
 def setup(bot):
 
-    bot.add_cog(UPTIME(bot))    
+    bot.add_cog(Stats(bot))    

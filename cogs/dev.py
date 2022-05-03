@@ -282,7 +282,7 @@ class Dev(commands.Cog):
 
 
             embed = discord.Embed(
-                title="Reloading cogs!", timestamp=ctx.message.created_at)
+                title=f"Reloading {cog}!", timestamp=ctx.message.created_at)
             #embed.color=discord.Color.green()
             ext = f"{cog.lower()}.py"
             if not os.path.exists(f"./cogs/{ext}"):
@@ -294,18 +294,15 @@ class Dev(commands.Cog):
                 try:
                     self.bot.unload_extension(f"cogs.{ext[:-3]}")
                     self.bot.load_extension(f"cogs.{ext[:-3]}")
-                    embed.add_field(
-                        name=f"Reloaded: `{ext}`", value='\uFEFF', inline=False)
-                    embed.color=discord.Color.green()
+                    embed.description=f"Reloaded: `{ext}`"
+                    embed.color=discord.Color.dark_theme()
                 except Exception:
                     desired_trace = traceback.format_exc()
-                    if len(desired_trace) > 2000 :
+                    if len(desired_trace) > 2500 :
                       print(desired_trace)
-                      embed.add_field(
-                          name=f"Failed to reload: `{ext}`", value='Too Big error , printed instead', inline=False)
+                      embed.description=f"Failed to reload: `{ext}`Too Big error , printed instead"
                     else:
-                      embed.add_field(
-                          name=f"Failed to reload: `{ext}`", value=desired_trace, inline=False)                      
+                      embed.description=f"Failed to reload: `{ext}`"                     
                     embed.color=discord.Color.red()
             await ctx.send(embed=embed)
 
@@ -389,8 +386,6 @@ class Dev(commands.Cog):
     @commands.command(help="Blacklist some idiot from using me")
     @check(check_Mod)
     async def blacklist(self,ctx, user : discord.Member,*,reason:str):
-
-
         with open("storage/black.json") as f:
             users_list = json.load(f)
         if user.id==ctx.author.id:
@@ -427,6 +422,71 @@ class Dev(commands.Cog):
             json.dump(users_list, f)
 
         await ctx.send(f"{user.mention} has been removed!")  
+
+           
+
+    @check(check_Mod)
+    @commands.command(hidden=True,help="get info on all my guilds , add False to get Compact Info")
+    async def servers(self,ctx,compact=True):       
+        activeservers = self.bot.guilds
+        if not compact:
+          for guild in activeservers:
+              name=str(guild.name)
+              description=str(guild.description)
+              owner=str(guild.owner)
+              _id = str(guild.id)
+              region=str(guild.region)
+              memcount=str(guild.member_count)
+              icon = str(guild.icon_url)
+              ver = str(ctx.guild.verification_level)
+              embed=discord.Embed(
+                      title=name +" Server Information",
+                      description=description,
+                      color=discord.Color.blue()
+                      )
+              embed.set_thumbnail(url=icon)
+              embed.add_field(name="Owner",value=owner,inline=True)
+              embed.add_field(name="Server Id",value=_id,inline=True)
+              embed.add_field(name="Region",value=region,inline=True)
+              embed.add_field(name="Member Count",value=memcount,inline=True)
+              embed.add_field(name="Verification Level",value=ver,inline=True)
+  
+              await ctx.send(embed=embed)
+        else:
+          embed=discord.Embed(title="My Guilds",color=discord.Color.dark_theme())
+          for guild in activeservers:
+            embed.add_field(name=guild,value=f"({str(guild.id)}) {str(guild.member_count)} ({str(guild.owner)})")
+          await ctx.send(embed=embed) 
+    @check(check_Mod)
+    @commands.command()
+    async def reply(self,ctx,member:discord.User,*,content:str):
+      
+      embed = discord.Embed(title=f"**Tessarect Support **",description=f"Hello {member.mention} , here is a message from my developers",timestamp=ctx.message.created_at, color=0xac5ece)
+    
+  
+      embed.add_field(name="<:arrow_right:940608259075764265> Message",value=content,inline=False)
+  
+      embed.set_footer(text=f"Sent by Tessarect Devs | {ctx.author}")
+  
+      try:
+        await member.send(embed=embed)      
+      except:
+        await ctx.send(embed=discord.Embed(title="User has DM's Disabled",color=discord.Color.red()))
+        return
+      await ctx.send(embed= discord.Embed(title="<:user:941986233574367253> Reply", description=f"Your Message was Successfully Sent.", timestamp=ctx.message.created_at, color=0xff0000)        )
+    @check(check_Mod)
+    @commands.command(hidden=True)
+    async def invservers(self,ctx):
+        invites = []
+        em=discord.Embed(color=discord.Color.dark_theme())
+        for guild in self.bot.guilds:
+            for c in guild.text_channels:
+                if c.permissions_for(guild.me).create_instant_invite:  # make sure the bot can actually create an invite
+                    invite = await c.create_invite()
+                    em.add_field(name=guild , value=invite)
+                    break 
+        print(invites) # stop iterating over guild.text_channels, since you only need one invite per guild
+        await ctx.send(embed=em)
 
 def setup(client):
     client.add_cog(Dev(client))

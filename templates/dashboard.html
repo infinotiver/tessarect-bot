@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/static/dash.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <nav>
+        <label class="Logo">Tessarect-bot</label>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="https://Tessarect-bot.netlify.app/cmd.htm">Commands</a></li>
+            <li><a href="https://Tessarect-bot.netlify.app/policy.htm">Policy</a></li>
+            <li><a href="#"><img src="https://cdn.discordapp.com/avatars/{{userdata['id']}}/{{userdata['avatar']}}.png" alt="icon" class="user-img"></a></li>
+        </ul>
+    </nav>
+    <br>
+    <div class="logo">
+        <img src="https://cdn.discordapp.com/avatars/{{userdata['id']}}/{{userdata['avatar']}}.png" alt="usericon">
+        <p>{{userdata['username']}}#{{userdata['discriminator']}}</p>
+    </div>
+    <br>
+    <div class="server-container">
+        <div class="server-name">
+            <p><i class="fa fa-server" aria-hidden="true"></i> Servers</p>
+        </div> 
+    </div>
+
+    <div class="guilds">
+        <ol>
+        {% for guild in guilds %}
+            <li class="temp-box"><a href="/guild/guild_id={{guild['id']}}"><img src="https://cdn.discordapp.com/icons/{{guild['id']}}/{{guild['icon']}}.png" alt="icon"><br><br>{{guild['name']}}</a></li>
+        {% endfor %}
+        </ol>
+
+    </div>
+
+
+</body>
+</html>

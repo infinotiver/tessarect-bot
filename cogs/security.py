@@ -268,7 +268,8 @@ class Security(commands.Cog):
         try:
           await ctx.message.delete()
         except:
-          return
+          error=discord.Embed(title="Cant Delete Message",description="Never mind this error \n Priority: Low \n Severity: Low",color=discord.Color.dark_gold())
+          await ctx.send(embed=error)
 
         # Create captcha
         image = np.zeros(shape=(100, 350, 3), dtype=np.uint8)
@@ -343,11 +344,11 @@ class Security(commands.Cog):
         await xb.delete()
         try:
             captchaFile = discord.File(f"{folderPath}/output/{captchaName}_2.png", filename="captcha.png")
-            captcha_embed = discord.Embed(title=f"{member.guild.name} Captcha Verification",
+            captcha_embed = discord.Embed(title=f"Captcha Verification for {member.guild.name}",
                                           description=f"{member.mention} Please return me the code written on the Captcha.",
                                           colour=discord.Colour.blue())
             captcha_embed.set_image(url="attachment://captcha.png")
-            captcha_embed.set_footer(text=f"Want this bot in your server? → [p]invite")
+            captcha_embed.set_footer(text=f"Want me in your server? → [p]invite")
             captchaEmbed = await channel.send(file=captchaFile, embed=captcha_embed)
         except:
             pass
@@ -374,11 +375,10 @@ class Security(commands.Cog):
                 try:
                     embed = discord.Embed(
                         title="Thank you!",
-                        description="You have been verified in guild **{0}**".format(
-                            member.guild),
+                        description=f"You have been verified in {ctx.guild}",
                         color=discord.Colour.blue())
                     embed.set_footer(
-                        text="Want this bot in your server? → [p]invite")
+                        text="Want me in your server? → [p]invite")
                     await channel.send(embed=embed)
                 except:
                     pass
@@ -388,8 +388,8 @@ class Security(commands.Cog):
                     if member_role_id is not False:
                         await member.add_roles(get(member.guild.roles, id=int(member_role_id)))
                 except Exception as error:
-                    print(f"Give and remove roles failed : {error}")
-
+                        error=discord.Embed(title="Error",description=f"{error}\n Priority: Top \n Severity: High",color=discord.Color.dark_red())
+                        await ctx.send(embed=error)      
                 time.sleep(3)
                 try:
                     await captchaEmbed.delete()
@@ -414,8 +414,9 @@ class Security(commands.Cog):
                 embed.set_thumbnail(url=member.avatar_url)
                 try:
                   await captchaLog.send(embed=embed)
-                except:
-                  await ctx.send('SOME ERROR CAME WHILE SENDING LOGS CHECK YOUR SECURITY LOGS CHANNEL')
+                except Exception as e:
+                  error=discord.Embed(title="Error",description=f"{e}\n Priority: Mild \n Severity: Medium",color=discord.Color.red())
+                  await ctx.send(embed=error)
 
             else:
                 
@@ -447,8 +448,9 @@ class Security(commands.Cog):
                 embed.set_thumbnail(url=member.avatar_url)
                 try:
                   await captchaLog.send(embed=embed)
-                except:
-                  await ctx.send('SOME ERROR CAME WHILE SENDING LOGS CHECK YOUR SECURITY LOGS CHANNEL')
+                except Exception as e:
+                  error=discord.Embed(title="Error",description=f"{e}\n Priority: Mild \n Severity: Medium",color=discord.Color.red())
+                  await ctx.send(embed=error)
 
         except(asyncio.TimeoutError):
             try:
@@ -481,8 +483,9 @@ class Security(commands.Cog):
             embed.set_thumbnail(url=member.avatar_url)
             try:
               await captchaLog.send(embed=embed)
-            except:
-              await ctx.send('SOME ERROR CAME WHILE SENDING LOGS CHECK YOUR SECURITY LOGS CHANNEL')
+            except Exception as e:
+                  error=discord.Embed(title="Error",description=f"{e}\n Priority: Mild \n Severity: Medium",color=discord.Color.red())
+                  await ctx.send(embed=error)
 
 
 

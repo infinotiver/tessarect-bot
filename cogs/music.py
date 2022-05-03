@@ -441,9 +441,9 @@ class Music(commands.Cog):
                 i + 1, song
             )
 
-        embed = discord.Embed(
-            description="<:LibraryMusic:912648429400911883> **{} tracks:**\n\n{}".format(len(ctx.voice_state.songs), queue)
-        ).set_footer(text=" Viewing page {}/{}".format(page, pages))
+        embed = discord.Embed(color=discord.Color.dark_blue(),
+            description="View your queued songs \n To move to next page send `[p]queue [page = int]`\n<:LibraryMusic:912648429400911883> **{} track(s):**\n\n{}".format(len(ctx.voice_state.songs), queue)
+        ).set_footer(text="On page page {}/{}".format(page, pages))
         await ctx.send(embed=embed)
 
     @commands.command(name="shuffle")
@@ -481,7 +481,7 @@ class Music(commands.Cog):
                 song = Song(source)
 
                 await ctx.voice_state.songs.put(song)
-                await ctx.send("Enqueued {}".format(str(source)))
+                await ctx.send(embed=discord.Embed(description="Enqueued {}".format(str(source)),color=discord.Color.blue()))
 
     @_join.before_invoke
     @_play.before_invoke

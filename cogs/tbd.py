@@ -1,9 +1,11 @@
 import discord
 import os
 import sys
+import requests
 import asyncio
 import json
 import psutil
+from discord.ext import tasks
 import datetime
 import logging
 import copy
@@ -16,6 +18,8 @@ class TBD(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description="Commands for my Official support server Tessa Bot developers https://discord.gg/avpet3NjTE "
+        self.dailyjoke.start()
+        self.dailymeme.start()
         inter_client = InteractionClient(self.bot)
     class emoji:
         checkmark, cross, link = '<:sucess:935052640449077248>', '<:DiscordCross:940914829781270568>', '<:command:941986813013274625>'
@@ -153,8 +157,8 @@ class TBD(commands.Cog):
         
         if ctx.guild.id !=912569937116147772:
           return await ctx.send('Heyo this command is only for my support server . Join it and use this command to add your bot  \n https://discord.gg/avpet3NjTE ')
-        if ctx.channel.id !=929334024411951155:
-          return await ctx.send('This command works only in <#929334024411951155>')
+        if ctx.channel.id !=955745362306543616:
+          return await ctx.send('This command works only in <#955745362306543616>')
         if not bot:
             await ctx.send(
                 embed=discord.Embed(title="Add Bot", description="What is the user ID of your bot? (Right click->Copy ID)",color=discord.Color.blurple()))
@@ -194,13 +198,14 @@ class TBD(commands.Cog):
                 return await ctx.send('Timed out!')
         bott=self.bot.get_user(int(bot.id))
         await ctx.message.delete()
-        await ctx.channel.purge(limit=3)
-        d= discord.Embed(description=f"<:sucess:935052640449077248> Sucessfuly Sent entry\n**Botname** > {bot}\n**Bot Id ** > {bot.id} \n **Your reason +prefix** > {reason}",color=discord.Color.green(),timestamp=ctx.message.created_at)
-        d.add_field(name="<:Info:939018353396310036> Info",value="Kindly wait for a bot reviewer to review your bot  and dont send same bot entry again and again | Also you should be the owner of the bot | Keep your dms open")
+        await ctx.channel.purge(limit=None, check=lambda msg: not msg.pinned)
+        d= discord.Embed(description=f" \n**Botname** > `{bot}`\n**Id ** > `{bot.id}` \n **Your reason +prefix** > `{reason}`",color=discord.Color.green(),timestamp=ctx.message.created_at)
+        #d.add_field(name="_ _ ",value="<:Info:939018353396310036> Kindly wait for a bot reviewer to review your bot  and dont send same bot entry again and again | Also you should be the owner of the bot | Keep your dms open")
         try:
             d.set_thumbnail(url=bott.avatar_url)
         except:
-            return await ctx.send('Oh ho , seems like I never met this bot before , kindly add me in a common server with your bot and then apply again :wink:')
+            return await ctx.send(embed=discord.Embed(title=ctx.author,description='Oh ho , seems like I never met this bot before , kindly add me in a common server with your bot and then apply again :wink:',color=discord.Color.dark_theme()))
+        await ctx.channel.purge(limit=None, check=lambda msg: not msg.pinned)
         await ctx.send(embed=d) 
         data = {
             'user': ctx.author.id,
@@ -286,5 +291,35 @@ class TBD(commands.Cog):
         await check.send(content=member.mention,embed=e2)
         await member.send(embed=e)
 
+    
+    @tasks.loop(hours = 24) 
+    async def dailyjoke(self):
+      try:
+        c=self.bot.get_channel(967774377334702132)
+        page = requests.get('https://joke.deno.dev/')
+        jokesource = json.loads(page.content)
+        joke = jokesource['setup']
+        answer = jokesource['punchline']
+        je=discord.Embed(title='Joke for today',color=discord.Color.gold(),description=f"**{joke}**\n{answer}")        .set_footer(text=f"Type: {jokesource['type']} joke")
+        await c.send(embed=je)
+      except Exception as e:
+        print(e)
+    @tasks.loop(hours = 10) 
+    async def dailymeme(self):
+      try:
+        c=self.bot.get_channel(967774377334702132)
+        page = requests.get(f'https://api.popcat.xyz/meme')
+        d = json.loads(page.content)
+        title=d['title']
+        img=d['image']
+        url=d['url']
+        like = d['upvotes']
+        comm=d['comments']
+        embed = discord.Embed(title="10 Hourly Meme Time",description=title,url=url,color=0x34363A)
+        embed.set_image(url=img)
+        embed.set_footer(text=f"👍🏻{like} 💬 {comm} ")
+        await c.send(embed=embed)
+      except Exception as e:
+        print(e)        
 def setup(bot):
     bot.add_cog(TBD(bot))

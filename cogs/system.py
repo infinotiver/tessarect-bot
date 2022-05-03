@@ -61,13 +61,18 @@ class Tessarect(commands.Cog):
             value=f"Yay Another Server! We Are Now At {len(self.bot.guilds)} Guilds!",
         )
         await self.bot.get_channel(self.logs_channel).send(embed=embed)
-
+        owner=guild.owner
+        emx = discord.Embed(title='Hello',description=f"Hey {owner.mention} , thank you for adding me to {guild.name} , It is a informative embed for you to start up , you can join our support server [here](https://dsc.gg/tessarectsupport) for any kind of help ",color=discord.Color.gold())
+          
+        emx.add_field(name="Tessarect",value = f'<:arrow_right:940608259075764265> Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .')
+        emx.add_field(name="**Seting Up**",value="<:arrow_right:940608259075764265> Type `[p]help`to know all commands ,(that's a lot !) , do `[p]stats` for getting stats .`[p]setup` for basic configuration")
+        await owner.send(embed=emx)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         embed = discord.Embed(
             title="I Have Left A Guild!",
-            description=f"{guild.name}",
+            description=f"{guild.name} \nOwner {guild.owner}",
             timestamp=datetime.datetime.now(),
             color=self.theme_color,
         )
@@ -142,8 +147,8 @@ class Tessarect(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        if error =="You are blacklisted":
-          await ctx.send('Blacklisted')   
+        if str(error) =="You are blacklisted":
+          await ctx.send(embed=discord.Embed(description=f'Blacklisted User Attempted to use a command\n Status : Command blocked \n Note {ctx.author.mention}, you cant use me because you were blacklisted by a verified developer for some reason , for appealing go to my support server and ask the devs ',color=discord.Color.dark_red())  ) 
           return     
         if hasattr(ctx.command, "on_error"):
             return
@@ -175,20 +180,20 @@ class Tessarect(commands.Cog):
         elif isinstance(error, commands.DisabledCommand):
             await ctx.send("This command has been disabled.")
             return
-        elif isinstance is discord.errors.HTTPException and "Must be 2000 or fewer in length" in str(error.original):
-            embed = discord.Embed(
-                title="<:messagealert:942777256160428063> I Got Too Wordy",
-                description=f"Looks like I tried to send a response that was greater than 2,000 characters!",
-                color=self.theme_color,
-            )   
-            await ctx.send(embed=embed)       
-            return
+        #elif isinstance(error,discord.errors.HTTPException):
+            #embed = discord.Embed(
+                #title="<:messagealert:942777256160428063> I Got Too Wordy",
+                #description=f"Looks like I tried to send a response that was greater than 2,000 characters!",
+                #color=self.theme_color,
+            #)   
+            #await ctx.send(embed=embed)       
+            #return
         elif isinstance(error, commands.CommandOnCooldown):
            
             embed = discord.Embed(
                 title="Whoa Slow it down!!!!",
                 description=f"Retry that command after {display_time(error.retry_after,4)}.",
-                color=0x1F242A,
+                color=discord.Color.dark_theme(),
             )
             embed.set_author(name=ctx.author,icon_url=ctx.author.avatar_url)
             #embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/922468797108080660.png")
@@ -218,7 +223,7 @@ class Tessarect(commands.Cog):
         elif isinstance(error, commands.UserInputError):
           if isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(
-                title="<:blobno:941713015424839691> No Inputs",
+                title="<:blobno:941713015424839691> Required Argument Missing",
                 description=f"You need to provide me some inputs for that command , check it's help page for more info\n <:rightarrow:941994550124245013> Correct Usage: `{ctx.prefix}{ctx.command.name} {ctx.command.signature}`",
                 color=self.theme_color,
             )
@@ -294,13 +299,7 @@ class Tessarect(commands.Cog):
           log.set_footer(text=f"{ctx.author}/{ctx.guild} • How dumb you guys are , cant even make me error free !")
           
           msgcon=ctx.message.content
-          data[str(err_code)] = {}
-          data[str(err_code)]['error']=str(error)
-          data[str(err_code)]['authorid']=str(ctx.author.id)
-          data[str(err_code)]['author']=str(ctx.author)
-          data[str(err_code)]['guild']=str(ctx.guild.id)
-          data[str(err_code)]['full text']=str(ctx.message.content)
-          data[str(err_code)]['command used']=str(ctx.command)
+
           known_error=False
           print(data)
           if error in data:
@@ -308,9 +307,17 @@ class Tessarect(commands.Cog):
             print('Yes')
           for x in data:
             print(data[x]['error'])
-            if data[x]['error']==str(error):
+            if data[x]['error']==str(error) and data[x]['command used']==str(ctx.command):
               known_error=True
           if not known_error:
+            data[str(err_code)] = {}
+            data[str(err_code)]['error']=str(error)
+            data[str(err_code)]['authorid']=str(ctx.author.id)
+            data[str(err_code)]['author']=str(ctx.author)
+            data[str(err_code)]['guild']=str(ctx.guild.id)
+            data[str(err_code)]['full text']=str(ctx.message.content)
+            data[str(err_code)]['command used']=str(ctx.command)
+            data[str(err_code)]['time']=str(ctx.message.created_at)            
             with open ('storage/errors.json', 'w') as f:
                 json.dump(data, f, indent=4)
           log.add_field(name="<:checkboxsquare:942779132159356959> Total Errors Now",value=len(data))
@@ -346,10 +353,10 @@ class Tessarect(commands.Cog):
               except Exception as e:
                 print(e)
 
-          if not error =="You are blacklisted":
-            print("Ignoring exception in command {}:".format(ctx.command), file=sys.stderr)
 
-            traceback.print_exception(
+          print("Ignoring exception in command {}:".format(ctx.command), file=sys.stderr)
+
+          traceback.print_exception(
                 type(error), error, error.__traceback__, file=sys.stderr
             )
 

@@ -14,7 +14,7 @@ from discord.ext import commands
 
 nest_asyncio.apply()
 
-mongo_url = "mongodb+srv://prakarsh17:Prakarsh_262@enalevel.v4asb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+mongo_url = os.environ['levelmong']
 
 cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
 levelling = cluster["discord"]["levelling"]
@@ -29,7 +29,6 @@ class Level(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print("Levelsys cog loaded successfully")
-
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.guild is not None:
@@ -57,7 +56,7 @@ class Level(commands.Cog):
                         levelling.insert_one(newuser)
 
                     else:
-                        xp = stats["xp"] + random.randrange(1,10)
+                        xp = stats["xp"] + 5
                         levelling.update_one(
                             {"id": message.author.id}, {"$set": {"xp": xp}}
                         )
@@ -69,8 +68,8 @@ class Level(commands.Cog):
                                 break
                             lvl += 1
                         xp -= (50 * ((lvl - 1) ** 2)) + (50 * (lvl - 1))
-
                         if xp == 0:
+                          
 
                             await message.channel.send(embed=discord.Embed(description=f"Well done  {message.author.mention} You levelled up to **level: {lvl}**",color=discord.Color.dark_theme()))
                                 
@@ -112,7 +111,6 @@ class Level(commands.Cog):
                     lvl += 1
                 xp -= (50 * ((lvl - 1) ** 2)) + (50 * (lvl - 1))
                 
-                boxes = int((xp / (200 * ((1 / 2) * lvl))) * 20)
                 rankings = levelling.find().sort("xp", -1)
 
                 async for x in rankings:

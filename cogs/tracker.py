@@ -32,11 +32,10 @@ class invite_tracker(commands.Cog):
         self.modlogsFile[str(ctx.guild.id)] = int(channel_id)
         with open("storage/invite_channels.json", "w") as modlogsFile:
             json.dump(self.modlogsFile, modlogsFile, indent=4)
-        await ctx.send(f"Invited Logs channel set as {channel.mention} succesfully. "
-                       f"Invites , Server Joins will be shown here")
+        await ctx.send(embed=discord.Embed(description=f"Invited Logs channel set as {channel.mention} succesfully. "
+                       f"Invites , Server Joins will be shown here"))
     async def load(self):
         await self.bot.wait_until_ready()
-        # load the invites
         for guild in self.bot.guilds:
             try:
                 self.invites[guild.id] = await guild.invites()
@@ -57,7 +56,7 @@ class invite_tracker(commands.Cog):
         if message_channel is None:
             return
 
-        eme = Embed(description=f"Just joined  {member.guild}", color=0x03d692, title=" ")
+        eme = Embed(description=f"Just joined  {member.guild}", color=0x03d692)
         eme.set_author(name=str(member), icon_url=member.avatar_url)
         eme.set_footer(text="ID: " + str(member.id))
         eme.timestamp = member.joined_at
@@ -68,7 +67,7 @@ class invite_tracker(commands.Cog):
             for invite in invs_before:
                 if invite.uses < self.find_invite_by_code(invs_after, invite.code).uses:
                     eme.add_field(name="Used invite",
-                                  value=f"Inviter: {invite.inviter.mention} (`{invite.inviter}` | `{str(invite.inviter.id)}`)\nCode: `{invite.code}`\nUses: ` {str(invite.uses)} `", inline=False)
+                                  value=f"Inviter: {invite.inviter.mention} (`{invite.inviter}` | `{str(invite.inviter.id)}`)\nCode: `{invite.code}`\nTotal Uses Uses: ` {str(invite.uses)} `", inline=False)
         except:
             pass
         await message_channel.send(embed=eme)
@@ -81,7 +80,7 @@ class invite_tracker(commands.Cog):
         message_channel = self.bot.get_channel(id=int(message_channel_id))
         if message_channel is None:
             return
-        eme = Embed(description="Just left the server", color=0xff0000, title=self.ctx.guild)
+        eme = Embed(description="Just left the server", color=0xff0000, title=member.guild)
         eme.set_author(name=str(member), icon_url=member.avatar_url)
         eme.set_footer(text="ID: " + str(member.id))
         eme.timestamp = member.joined_at

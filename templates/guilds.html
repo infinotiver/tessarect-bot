@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/guilds.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>{{guild['name']}} Dashboard</title>
+
+</head>
+<body>
+    <script>
+        function getOption(option) {
+        if (option.value === "disable-slct") { return document.querySelector(".whenEnabled").hidden = true }
+        else { return document.querySelector(".whenEnabled").hidden = false }
+        }
+    </script>
+    <nav>
+        <label class="Logo">Tessarect-bot</label>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="https://Tessarect-bot.netlify.app/cmd.htm">Commands</a></li>
+            <li><a href="https://Tessarect-bot.netlify.app/policy.htm">Policy</a></li>
+            <li><a href="#"><img src="https://cdn.discordapp.com/avatars/{{userdata['id']}}/{{userdata['avatar']}}.png" alt="icon" class="user-img"></a></li>
+        </ul>
+    </nav>
+
+    <div class="guild-container">
+        <div class="server-name">
+            <p><i class="fa fa-server" aria-hidden="true"></i> {{guild['name']}}</p>
+        </div>
+        <img src="https://cdn.discordapp.com/icons/{{guild['id']}}/{{guild['icon']}}.png" alt="icon">
+    </div>
+
+    <div class="text-area">
+        <div class="text-area-color">
+            <form>
+                <label for="prefix">Server Prefix</label>
+                <input type="text" id="prefix" name="prefix" placeholder="   ?"><br>
+                <label for="Update"></label>
+                <button id="update-btn">Update</button>
+                <br>
+                <br>
+            </form>
+        </div>
+    </div>
+    <div class="text-area-greet">
+        <div class="greet-area">
+            <p id="greet-txt">Welcome & Leave</p>
+            <select name="cars" id="enable-disable" onchange="getOption(this)">
+                <option value="enable-slct">Enable</option>
+                <option value="disable-slct">Disable</option>
+            </select>
+            <br>
+            <div class="whenEnabled">
+                <label for="Channel-name">Channel-Name</label>
+                <select name="channel-select" id="channel-select">
+                    {% for channels in channel %}
+                    <option value="1">{{channels['name']}}</option>
+                    {% endfor %}
+                </select>
+                <label for="bg-mode", id="bg-mode-txt">Background-Mode</label>
+                <select name="channel-select" id="bg-mode">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+            <div class="update-btn-action">
+                <form action="/forward/", method="POST">
+                    <button aciton>Update</button>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="text-area-logs">
+        <div class="logs-area">
+            <p id="log-greet-txt">Logs</p>
+            <select name="cars" id="logs-enable-disable" onchange="getOptionforlogs(this)">
+                <option value="enable-slct">Enable</option>
+                <option value="disable-slct">Disable</option>
+            </select>
+            <br>
+            <div class="when-logs-enabled">
+                <label for="logs-channel-select" id="logs-channel-txt">Log Channel</label>
+                <select name="nothing" id="logs-channel-select">
+                    <option value="1"># Logs</option>
+                    <option value="2"># Mod Logs</option>
+                    <option value="3"># Bot-Logs</option>
+                </select>
+
+            </div>
+            <br>
+            
+        </div>
+        
+
+    </div>
+
+
+
+
+
+
+
+                
+                <br>
+        </div>
+    </div>
+
+    
+
+
+
+</body>
+</html>

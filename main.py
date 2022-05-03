@@ -133,7 +133,10 @@ try:
   print(f"Rate limit {int(r.headers['Retry-After']) / 60} minutes left")
 except:
   print('No ratelimit')
-
+restart_data = {
+    'str': datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+    'obj': time.time()
+}
 
 #menu = DefaultMenu(page_left="<:arrow_left:940845517703889016>", page_right="<:arrow_right:940608259075764265>", remove="❌", active_time=15)
 import nest_asyncio              
@@ -197,9 +200,8 @@ async def on_ready():
                 status=discord.Status.dnd,
                 shard_id=x, 
                 activity=discord.Activity(
-                    state="In Game",
                     type=discord.ActivityType.watching,
-                    name= f"Shard {x}"
+                    name= f"Shard {x} | {len(client.guilds)}"
                 ))
       else:
                   
@@ -209,7 +211,7 @@ async def on_ready():
                 activity=discord.Activity(
   
                     type=discord.ActivityType.watching,
-                    name= f"Shard {x} | {len(client.users)} users on {len(client.guilds)} servers "
+                    name= f"{len(client.users)} users on {len(client.guilds)} servers "
                 ))
 
     if os.path.exists("./storage/reboot.json"):
@@ -223,34 +225,18 @@ async def on_ready():
         os.remove("./storage/reboot.json")  
     #deletelogs.start()              
     #update_s.start()
-@tasks.loop(minutes=10)
-async def update_s():
-  status = [f"{len(client.users)}",f"{len(client.users)} users on {len(client.guilds)} servers","Silly Cats","Security Leaks"]
 
-  await client.change_presence(
-        status=discord.Status.online,
-        activity=discord.Activity(
-            type=discord.ActivityType.watching,
-            name= (random.choice(status))
-        ))
 
 from googletrans import Translator
-@client.command(pass_context=True)
-async def langlist( ctx):
-    """Lists available languages."""
+
+
+@client.command()
+async def translate(ctx, lang, *, thing=None):
     description = ""
     for lang in googletrans.LANGCODES:
         description += "**{}** - {}\n".format(string.capwords(lang), googletrans.LANGCODES[lang])
-    x=discord.Embed(
-        title="Language List for translate",
-        description=description,
-
-
-    )
-    await ctx.reply(embed=x)
-
-@client.command()
-async def translate(ctx, lang, *, thing):
+    if not thing:
+      return await ctx.send(embed=discord.Embed(description=description,color=discord.Color.blue()))
     translator = Translator()
     
     translation = translator.translate(thing, dest=lang)
@@ -260,19 +246,11 @@ Input: {thing}```""",color=discord.Color.blue())
     await ctx.reply(embed=e)
 
 
-status= cycle([" a!help in {n}  servers ",'Tessarect  BOT','Try my New Economy Bots','Try me new leveling sys by using<prefix>level','Wanna advertise your server go to my repo(<prefix>src) and go to the discussions and make a topic in Website category details are there'.format(n=len(client.guilds))])
-er = 0xFF0000
-
+status= [" a!help in {n}  servers ",'Tessarect  BOT','Try my New Economy Bots','Try me new leveling sys by using<prefix>level','Wanna advertise your server go to my repo(<prefix>src) and go to the discussions and make a topic in Website category details are there'.format(n=len(client.guilds))]
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 client.session = aiohttp.ClientSession()
 client.load_extension('jishaku')
-
-
-
-
-
-
 import datetime
 
 @client.event
@@ -306,7 +284,7 @@ import topgg
 
 
 
-update_stats.start()
+#update_stats.start()
 @client.event
 async def on_guild_remove(guild): #when the bot is removed from the guild
     with open('prefixes.json', 'r') as f: #read the file
@@ -337,10 +315,8 @@ async def changeprefix(ctx, prefix): #command: a!changeprefix ...
 
     await ctx.reply(f'Prefix changed to: {prefix}')
     #test #confirms the prefix it's been changed to
-#next step completely optional: changes bot nickname to also have prefix in the nickname
-    name=f'{prefix}Tessarect '
-    await client.change_presence(
 
+    await client.change_presence(
             activity=discord.Activity(
                 type=discord.ActivityType.watching,
                 name= f"{str(len(client.guilds))} Servers"
@@ -393,95 +369,44 @@ async def error(ctx,error):
         await ctx.reply(pain)
 
 
-
-
-
-from discord.http import Route
-import uuid
-
-
-client.poll_data = {}
-
-
-def make_buttons(tag, data):
-    splited_data = [data[i * 5:(i + 1) * 5] for i in range((len(data) + 5 - 1) // 5 )]
-    components = []
-    for i in splited_data:
-        buttons = []
-
-        for j in i:
-            buttons.append({
-                'type': 2,
-                'style': 2,
-                'custom_id': f'{tag}.{j["id"]}',
-                'label': j['name']
-            })
-
-        components.append({
-            'type': 1,
-            'components': buttons
-        })
-    return components
-
-
-
+from assets.get_money import get_converted_currency
 @client.command()
-async def poll(ctx, title, *names):
-    poll_id = uuid.uuid4().hex
-
-    data = []
-    client.poll_data[poll_id] = {
-        'title': title,
-        'items': {}
-    }
-
-    for i in names:
-        item_id = uuid.uuid4().hex
-        client.poll_data[poll_id]['items'][f'{poll_id}.{item_id}'] = {
-            'name': i,
-            'users': []
-        }
-        data.append({ 'name': i, 'id': item_id })
-
-    embed = discord.Embed(
-        title=title,
-        description="\n".join(map(lambda x: f'`{x}` : 0 Votes', names)),
-        color=0x58D68D
-    )
-    
-
-    route = Route('POST', '/channels/{channel_id}/messages', channel_id=ctx.channel.id)
-    await client.http.request(route, json={
-        'embed': embed.to_dict(),
-        'components': make_buttons(poll_id, data)
-    })
-
-@client.event
-async def on_socket_response(msg):
-    if msg['t'] != 'INTERACTION_CREATE': return
-    full_id = msg['d']['data']['custom_id']
-    poll_id = full_id.split('.')[0]
-    if not client.poll_data.get(poll_id): return
-    data = client.poll_data[poll_id]
-    user_id = msg['d']['member']['user']['id']
-
-    if user_id in data['items'][full_id]['users']:
-        client.poll_data[poll_id]['items'][full_id]['users'].remove(user_id)
-    else:
-        client.poll_data[poll_id]['items'][full_id]['users'].append(user_id)
-    
-    embed = msg['d']['message']['embeds'][0]
-    content = "\n".join(map(lambda x: f'`{data["items"][x]["name"]}` : {len(data["items"][x]["users"])} Votes', data['items']))
-    embed['description'] = content
-
-    route = Route('PATCH', '/channels/{channel_id}/messages/{message_id}', channel_id=msg['d']['channel_id'], message_id=msg['d']['message']['id'])
-    await client.http.request(route, json={
-        'embed': embed,
-        'components': msg['d']['message']['components']
-    })
-
-
-
+async def convertmoney(ctx,value,curr1,curr2):
+  res=await get_converted_currency(value,curr1,curr2)
+  await ctx.send(embed=discord.Embed(description=res,color=discord.Color.gold()))
+import urllib
+@client.command(alises=['dict','define'])
+async def dictionary(ctx, *, text):
+  textf=urllib.parse.quote(text)
+  page=requests.get("https://api.dictionaryapi.dev/api/v2/entries/en/"+textf)
+  data = json.loads(page.content)
+  if type(data) == type([]):
+      data = data[0]
+      word = data["word"]
+      description = "**Results : **\n\n"
+      if "phonetics" in data.keys():
+          if "text" in data["phonetics"][0]:
+              phonetics = (
+                  "**Phonetics:**\n" + data["phonetics"][0]["text"] + "\n\n"
+              )
+              description += phonetics
+      if "origin" in list(data.keys()):
+          origin = "**Origin: **" + data["origin"] + "\n\n"
+          description += origin
+      if "meanings" in data.keys() and "definitions" in data["meanings"][0]:
+          meanings = data["meanings"][0]["definitions"][0]
+          if "definition" in list(meanings.keys()):
+              meaning = "**Definition: **" + meanings["definition"] + "\n\n"
+              description += meaning
+          if "example" in list(meanings.keys()):
+              example = "**Example: **" + meanings["example"]
+              description += example
+  else:
+      word = data["title"]
+      description = data["message"]
+  embed=discord.Embed(title=word,
+    description=description,color=discord.Color.dark_theme())
+  await ctx.send(embed=embed)
 @client.command(name="eval",hidden=True)
 @commands.is_owner()
 async def _eval(ctx, *, code):
@@ -548,7 +473,7 @@ async def hello(ctx):
 #no errors ok to move on checked 2nd error nothing useful 
   await ctx.channel.send(embed = em)
 
-@client.command(aliases=['support server','githubrepo','src','invite','website','vote'])
+@client.command(aliases=['supportserver','githubrepo','src','invite','website','vote'])
 async def links(ctx):
     row = ActionRow(
         Button(
@@ -589,13 +514,13 @@ async def links(ctx):
                "website":"https://bit.ly/tessarect-website",
                "vote":"https://top.gg/bot/916630347746250782/vote",
                "support server":"https://discord.gg/avpet3NjTE"}
-
-    embed=discord.Embed(title="Links",description="Important Links ",color=discord.Color.green())
+    embed=discord.Embed(title=ctx.message.content[len("a!"):].split()[0].upper(),description="Important Links ",color=0xFFC0CB,timestamp=ctx.message.created_at)
+    embed.set_footer(text="Stay Safe and be happy and keep using Me !")
     for x in links_dict:
-      if str(ctx.command).lower() == x:
-        embed.description=f"{x} - {links_dict[x]}"
+      if str(ctx.message.content[len("a!"):].split()[0])== x:
+        embed.add_field(name="Link",value=f"{x.upper()} - {links_dict[x]}")
     embed.set_thumbnail(url=client.user.avatar_url)
-    msg =await ctx.reply(embed=embed,components=[row])
+    await ctx.reply(embed=embed,components=[row])
 
 
     
@@ -630,7 +555,7 @@ async def on_member_join(member):
     embed = discord.Embed(colour=discord.Colour.blue())
     name=member.display_name.split()
     finalname='+'.join(name)
-    link=f"https://api.popcat.xyz/welcomecard?background=https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png&text1={finalname}&text2=Welcome&text3=Have+A+Nice+Experience&avatar={str(member.avatar_url_as(format='png'))}"
+    link=f"https://api.popcat.xyz/welcomecard?background=https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png&text1={finalname}&text2=Welcome&text3=#+{str(len(ctx.guild.members))}+Member&avatar={str(member.avatar_url_as(format='png'))}"
     embed.set_image(url=link)
     await channel.send(embed=embed)    
 
@@ -681,11 +606,7 @@ async def yt(ctx, *, url):
     await ctx.reply(searchyt(url))
 
 import platform
-@client.command()
-async def pyjoke(ctx):
-    jk=pyjokes.get_joke(language='en', category= 'neutral')
-    em = discord.Embed(title="Joke", description=jk,color=discord.Color.dark_theme())
-    await ctx.reply(embed = em)
+
 
 
 
@@ -1597,8 +1518,8 @@ async def globallb(ctx,x = 10):
 async def ss(ctx, site):
     embed=discord.Embed(description="Here is the website'ss you requested",colour = discord.Colour.orange(), timestamp=ctx.message.created_at)
     embed.set_footer(text="WE got some reports that images dont load in embed so they will be sent seperately so please wait for few seconds so image can load")
-    #embed.set_image(url=(f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}"))
-    await ctx.reply(content=f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}",embed=embed)
+    embed.set_image(url=(f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}"))
+    await ctx.reply(embed=embed)
     
 
 
@@ -1638,33 +1559,30 @@ def prefix_check(guild):
     # feel free to remove this try-except block
 
     return p
-mongo_url = os.environ['warn']
-cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
-import discord_pass
-
-warndb = cluster["discord"]["warn"]
-warns=1
-reason="Used a bad word"
+'''
 # on_message event
 @client.event
 async def on_message(message):
-    if f"<@!{client.user.id}>" in message.content:
-      if message.author.bot:
-        return
-      pr=", ".join(prefix_check(message.guild))
-      emx = discord.Embed(title='Heyo',color=0xffffff)
-        # This is how you call the prefix_check function. It takes a guild object
-      emx.description = f'Tessarect\n<:arrow_right:940608259075764265> Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .\n<:blurple_slashcommands:930349698999537746> Prefix: {pr}'
-      emx.add_field(name="**Seting Up**",value="<:arrow_right:940608259075764265> Type `[p]help` or mention bot to know prefix , do `[p]stats` for getting stats .`[p]setup` for basic configuration")
-      #emx.add_field(name="Website",value="<:arrow_right:940608259075764265> [<:planet:930351400532201532> View](https://bit.ly/tessarect-website) Visit website and see our privacy policy and terms of service et ceter")
-      #em.add_field()
-      #em.add_field(name="Servers", value=len(client.guilds))
-      emx.set_thumbnail(url=client.user.avatar_url)
-      emx.set_author(name=client.user.display_name,icon_url=client.user.avatar_url,url="https://bit.ly/tessarect-website")
-     
-      await message.channel.send(embed=emx)
-    await client.process_commands(message)
+  
 
+  if f"<@!{client.user.id}>" or "<@&944855412979666984>" in message.content:
+    
+    if message.author.bot:
+      return
+    pr=", ".join(prefix_check(message.guild))
+    emx = discord.Embed(title='Heyo',color=0xffffff)
+      # This is how you call the prefix_check function. It takes a guild object
+    emx.description = f'Tessarect\n<:arrow_right:940608259075764265> Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .\n<:blurple_slashcommands:930349698999537746> Prefix: {pr}'
+    emx.add_field(name="**Seting Up**",value="<:arrow_right:940608259075764265> Type `[p]help` or mention bot to know prefix , do `[p]stats` for getting stats .`[p]setup` for basic configuration")
+    #emx.add_field(name="Website",value="<:arrow_right:940608259075764265> [<:planet:930351400532201532> View](https://bit.ly/tessarect-website) Visit website and see our privacy policy and terms of service et ceter")
+    #em.add_field()
+    #em.add_field(name="Servers", value=len(client.guilds))
+    emx.set_thumbnail(url=client.user.avatar_url)
+    emx.set_author(name=client.user.display_name,icon_url=client.user.avatar_url,url="https://bit.ly/tessarect-website")
+   
+    await message.channel.send(embed=emx)
+  await client.process_commands(message)
+'''
 
 @client.group()
 async def tictactoe(ctx, p1: discord.Member, p2: discord.Member):
@@ -1823,7 +1741,9 @@ async def joke(ctx):
   joke = jokesource['setup']
   print(joke)
   answer = jokesource['punchline']
-  await ctx.channel.send(embed=discord.Embed(description=f"{joke} \n{answer}"))
+  jembed=discord.Embed(description=f"**{joke}**\n{answer}",color=discord.Color.random()).set_footer(text=jokesource['type'])
+  
+  await ctx.channel.send(embed=jembed)
 
 @client.command()
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
@@ -1969,7 +1889,7 @@ async def bot( ctx):
             style=ButtonStyle.link,
             label="Invite Me!",
             url='https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands',
-            emoji='<:heart:939018192498593832>'
+            emoji='<:invite:658538493949116428>'
         ),
         Button(
             style=ButtonStyle.link,
@@ -1979,10 +1899,16 @@ async def bot( ctx):
         ),
         Button(
             style=ButtonStyle.link,
-            label="Status Page!",
-            url='https://stats.uptimerobot.com/GA8lYTBq86',
-            emoji="<:Info:939018353396310036>"
+            label="Support !",
+            url='https://discord.gg/avpet3NjTE',
+            emoji="<:Servers:946289809289281566>"
         ),
+        Button(
+            style=ButtonStyle.link,
+            label="Website!",
+            url='https://tessarect-website.prakarsh17-coder.repl.co/',
+            emoji="<:planet:930351400532201532>"
+        ),      
         Button(
             style=ButtonStyle.primary,
             label="Developers!",
@@ -1996,33 +1922,18 @@ async def bot( ctx):
 
     pre = ", ".join(prefix_check(ctx.message.guild))
     embed = discord.Embed(
-        timestamp=ctx.message.created_at, title=":robot:  Bot Info", color=0x06c8f9
+        timestamp=ctx.message.created_at, description="<:tessarect:956440587177975878> Making experience better",title="Tessarect", color=0x050A30
     )
     embed.set_thumbnail(url=client.user.avatar_url)
     embed.add_field(
-        name="<:online_status:930347639172657164> Helping", value=f"{ser} servers"
-    )
-    #last=client.get_user(int(stats['last_author']))
-    embed.add_field(name="Total Commands used",value=stats['tot'])
-  
-    embed.add_field(
-        name="<a:panda:930348733844033576> Serving", value=f"{mem} members"
-    )
-    embed.add_field(name="<:blurple_slashcommands:930349698999537746> Prefix", value=f"`{pre}`")
-    embed.add_field(
-        name="<a:devserver:930350030072729620> Support Server",
-        value="[Join My Server](https://discord.gg/avpet3NjTE)",
+        name="<:Servers:946289809289281566> With", value=f"{ser} servers"
     )
     embed.add_field(
-        name="<a:Diamond:930350459020017694> Invite Me",
-        value="[Click Here to Invite Me](https://bit.ly/terrasectbot)",
+        name="<a:panda:930348733844033576> Enjoying With", value=f"{mem} members"
     )
+    embed.add_field(name="<:blurple_slashcommands:930349698999537746> Prefix", value=f"{pre}")
     embed.add_field(
-        name="<:planet:930351400532201532>  Website",
-        value="https://tessarect-website.prakarsh17-coder.repl.co/",
-    )
-    embed.add_field(
-        name="🚀 Made By", value="SniperXi199#2209"
+        name="<:crownx:920620263584960533> Owner", value="SniperXi199#2209"
     )
     embed.set_footer(
         text=f"Requested By: {ctx.author.name}", icon_url=f"{ctx.author.avatar_url}"
@@ -2030,13 +1941,15 @@ async def bot( ctx):
     em = discord.Embed(title="Updates",description="Fetched from my server",color=discord.Color.gold())
     #em.set_author(name=client.user,icon_url=client.user.avatar_url)
     channel=client.get_channel(937559150936879144)
-    async for message in channel.history(limit=5):
-        # do something with all messages
+    async for message in channel.history(limit=9):
         content = message.content # get content
         try:
           if message.content is not None:
-
-            em.add_field(name=f"By {message.author} on {message.created_at}",value=content,inline=False)
+            try:
+              
+              em.add_field(name=f"By {message.author} on {message.created_at}",value=content ,inline=False)
+            except:
+              pass
           else:
             em.add_field(name="_ _",value='Couldnt Fetch Message',inline=False)
         except Exception as e:
@@ -2046,10 +1959,15 @@ async def bot( ctx):
     on_click = msg.create_click_listener(timeout=60)
     @on_click.matching_id("cred")
     async def on_test_button(inter):
-        em = discord.Embed(title="Contributors",description=f"{client.get_user(900992402356043806).mention} \n Owner and Lead Developer \n\n {client.get_user(432801163126243328).mention}\n Co Developer and a great supporter",color=discord.Color.blue())
+      try:
+        
+        em = discord.Embed(title="Contributors",description=f"{client.get_user(900992402356043806).mention} \n Owner and Lead Developer \n\n {client.get_user(432801163126243328).mention}\n Co Developer and a great supporter\n",color=discord.Color.blue())
+        
+        #em.set_image(url="https://contrib.rocks/image?repo=prakarsh17/tessarect-bot")
         em.set_footer(text="See our Github for details")
         await inter.reply(embed=em)
-        await msg.edit(components=[])  
+      except  Exception as e:
+        await inter.reply(e)
 
     @on_click.timeout
     async def on_timeout():
@@ -2206,7 +2124,7 @@ async def quote(ctx):
     await ctx.reply(embed=em)
 @client.command()
 @commands.cooldown(1,100,commands.BucketType.guild)
-async def report( ctx, user : discord.Member,*, reason):
+async def report( ctx, user : discord.Member,*reason):
     em = discord.Embed(title=f'Report {user}?',description="Are you sure you want to report that user , if yes choose report categories else wait for 10 seconds it will automatically go",color=discord.Color.red())
     msg = await ctx.reply(
         embed=em,
@@ -2220,10 +2138,11 @@ async def report( ctx, user : discord.Member,*, reason):
                     SelectOption("Used Tessarect currency for buying /trading any other real existence item", "value 2"),
                     SelectOption("Made Tessarect  say foul/swearing words by any means ", "value 3"),
                     SelectOption("Breaking other rules","value 4"),
-                    SelectOption("Something Else to be there in the reason","value 5"),
+                    
                     SelectOption("Reporting a staff","value 6"),
                     SelectOption("Appealing reconsideration in previously done ban or some other action","value 7"),
-                    SelectOption("*Thuged* (Any kind of CHeating)","value 8")
+                    SelectOption("*Thuged* (Any kind of CHeating)","value 8"),
+                    SelectOption("Something Else to be there in the reason","value 5")               
                 ]
             )
         ]
@@ -2242,11 +2161,11 @@ async def report( ctx, user : discord.Member,*, reason):
     rearray = ' '.join(reason[:]) #converts reason argument array to string
 
     if not rearray: #what to do if there is no reason specified
-        await channel.send(f"{author} has reported {user}, reason: Not provided , Parameters {', '.join(labelsx)}")
+        await channel.send(f"{author.mention}({author.id}) has reported {user.mention} ({user.id}), reason: Not provided , Parameters {', '.join(labelsx)}")
      
         await ctx.message.delete() #I would get rid of the command input
     else:
-        await channel.send(f"{author} has reported {user}, reason: {rearray}, Parameters {', '.join(labelsx)}")
+        await channel.send(f"{author} has reported {user.mention} ({user.id}), reason: {rearray}, Parameters {', '.join(labelsx)}")
  
         await ctx.message.delete() 
 

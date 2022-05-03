@@ -11,7 +11,7 @@ from discord.utils import get
 from assets import time_calc, misc_checks, otp_assets,button_check
 
 
-class Moderation(commands.Cog, description="Moderation commands. Use with caution."):
+class Moderation(commands.Cog, description="Moderation commands.A number of commands to moderate your server"):
     def __init__(self, bot):
         self.bot = bot
     '''

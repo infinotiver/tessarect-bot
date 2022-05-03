@@ -283,7 +283,7 @@ class Info(commands.Cog):
             await ctx.send(content="I need the `Embed links` permission to send this")
 
     @commands.command(aliases=["ui", "userinfo"])
-    async def user(self, ctx, member: discord.Member = None):
+    async def InfoUser(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
         else:
@@ -293,7 +293,7 @@ class Info(commands.Cog):
         j = str(member.joined_at)[0:11]
         embed = discord.Embed(
             timestamp=ctx.message.created_at,
-            title="<:bluetrusted:920625284770852874> User Info",
+            title="User Info",
             color=discord.Color.gold(),
         )
         embed.set_thumbnail(url=member.avatar_url)

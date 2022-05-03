@@ -2,7 +2,7 @@ import base64
 import binascii
 import codecs
 import secrets
-
+import discord
 from discord.ext import commands
 
 
@@ -14,15 +14,15 @@ class Encryption(commands.Cog):
     async def encode(self, ctx):
         """ All encode methods """
         if ctx.invoked_subcommand is None:
-            help_cmd = self.bot.get_command("help")
-            await ctx.invoke(help_cmd, "encode")
+            await ctx.send(embed=discord.Embed(description="Need a subcommand , sending help for more information",color=discord.Color.dark_gold()))
+            await ctx.send_help("encode")
 
     @commands.group()
     async def decode(self, ctx):
         """ All decode methods """
         if ctx.invoked_subcommand is None:
-            help_cmd = self.bot.get_command("help")
-            await ctx.invoke(help_cmd, "decode")
+            await ctx.send(embed=discord.Embed(description="Need a subcommand , sending help for more information",color=discord.Color.dark_gold()))
+            await ctx.send_help("decode")
 
     async def encryptout(self, ctx, convert, txtinput):
         if len(txtinput) > 1900:
