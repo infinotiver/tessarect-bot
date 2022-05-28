@@ -5,8 +5,8 @@ async def reactor(ctx, client, message, color=0x34363A,usr=None):
             title="Confirm Action", description=message, color=discord.Color(color)
         )
     )
-    await mess.add_reaction('<:sucess:935052640449077248>')
-    await mess.add_reaction(emoji.emojize(":cross_mark_button:"))
+    await mess.add_reaction('☑️')
+    await mess.add_reaction('❌')
 
     person=usr
 
@@ -15,20 +15,20 @@ async def reactor(ctx, client, message, color=0x34363A,usr=None):
         return (
             reaction.message.id == mess.id
             and reaction.emoji
-            in ['<:sucess:935052640449077248>', emoji.emojize(":cross_mark_button:")]
+            in ['☑️', '❌']
             and a
         )
 
     reaction, user = await client.wait_for("reaction_add", check=check)
-    if reaction.emoji == '<:sucess:935052640449077248>':
+    if reaction.emoji == '☑️':
         await mess.edit(
             embed=discord.Embed(
-                title="Yey", description=f"Action ({message}) Confirmed ", color=color
+                title="Yey", description=f"Action  Confirmed ", color=color
             )
         )
       
         return True
-    if reaction.emoji == emoji.emojize(":cross_mark_button:"):
+    if reaction.emoji == '❌':
         await mess.delete()
         await ctx.channel.send(
             embed=discord.Embed(

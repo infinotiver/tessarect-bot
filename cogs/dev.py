@@ -27,7 +27,7 @@ from contextlib import redirect_stdout
 import asyncio
 import sys
 import assets.otp_assets
-import assets.button_check
+import assets.reactor
 import subprocess
 from subprocess import Popen, PIPE
 import shlex
@@ -51,7 +51,7 @@ class Dev(commands.Cog):
     def __init__(self, client):
         self.bot = client
         self._last_result = None
-
+ 
     @staticmethod
     def cleanup_code(content):
         """Automatically removes code blocks from the code."""
@@ -61,7 +61,7 @@ class Dev(commands.Cog):
 
         # remove `foo`
         return content.strip("` \n") 
-    @commands.command(help="The main command check that you are a lost dev")    
+    @commands.command(help="The main command check that you are a dev soul")    
     async def devtest(self,ctx,user:discord.Member=None):
       if not user:
         user=ctx.author
@@ -72,25 +72,25 @@ class Dev(commands.Cog):
 
           await ctx.send(
               embed=discord.Embed(
-                  title="Permission Denied",
-                  description="Dude! that's  not a dev,go away",
+                  title="<:Warn:922468797108080660> Permission Denied",
+                  description="Dude! that's not a dev",
                   color=discord.Color.red(),
               )
           )          
       else:
-        owner=True if user.id==900992402356043806 else False
+        owner='True <:owner:946288312220536863>' if user.id==900992402356043806 else False
         await ctx.send(
             embed=discord.Embed(
-                title="Verified",
-                description=f"Found entry in Database \n Owner? {owner}",
+                title="<a:Tick:922450348730355712> Verified",
+                description=f"Found entry in Database. {user} is a developer \n The lord? {owner}",
                 color=discord.Color.green(),
             )
         )        
 
-    @commands.command(help="Lists Some poor souls having dev access for me")
+    @commands.command(help="Lists Some poor souls having dev access for me" ,aliases=['devlist'])
     @check(check_Mod)
     async def listdev(self,ctx):
-        x = discord.Embed(description="Users having Dev access for me",color=0x34363A)
+        x = discord.Embed(title="<:online_status:930347639172657164> ",description="Users having Dev access for me",color=0x34363A)
         with open("storage/dev.json") as f:
             dev_users_list = json.load(f)
         pa =1
@@ -102,10 +102,10 @@ class Dev(commands.Cog):
         x.set_footer(text=f"Total users : {pa-1}")
         await ctx.send(embed=x)
 
-    @commands.command(help="Lists Some idiots who cant even use me")
+    @commands.command(help="Lists Some idiots who cant even use me",aliases=['blist','blacklisted'])
     @check(check_Mod)
     async def listblack(self,ctx):
-        x = discord.Embed(description="Blacklisted User",color=0x34363A)
+        x = discord.Embed(description="<:dnd_status:946652840053600256> Blacklisted User",color=0x34363A)
         with open("storage/black.json") as f:
             dev_users_list = json.load(f)
         pa =1
@@ -152,15 +152,7 @@ class Dev(commands.Cog):
     @commands.command(aliases=["m","evaldev","deveval"],help="Execuete some stuff")
     @check(check_Mod)  
     async def python_shell(self, ctx, *, text):
-        env = {
-            "ctx": ctx,
-            "discord": discord,
-            "commands": commands,
-            "client":self.bot,
-            "__import__": __import__,
-            "guild":ctx.guild,
-            "_":self._last_result
-        }         
+       
         if  "client.http.token" in text:
           return await ctx.send('not my token') 
         print(f"{Fore.GREEN}Python Shell Invoked: {Style.RESET_ALL}")
@@ -208,51 +200,51 @@ class Dev(commands.Cog):
         dd = discord.Embed(title='Invalid Input',description=f' Invalid Mode = {mode} \n Accepted mode {listd}',color=discord.Color.red())          
         await ctx.send(embed=dd)     
         return
-      otp_success = await assets.otp_assets.send_waitfor_otp(ctx, self.bot)
+      otp_success = await assets.reactor.reactor(ctx, self.bot, 'Do you want to continue the restart project', color=0x607d8b,usr=ctx.author)
       # random otp generator. if user enters correct otp, returns true. else, returns false
       if not otp_success:
-          return await ctx.send('Restart Command Aborted')
+          return 
       if len(self.bot.voice_clients)>0:
         await ctx.send(embed=discord.Embed(description=f"There are {len(self.bot.voice_clients)} servers listening to music through Tessarect, Do you wanna restart?"))
-        otp_success = await assets.otp_assets.send_waitfor_otp(ctx, self.bot)
+        otp_success = await assets.reactor.reactor(ctx, self.bot, 'Do you want to continue the restart process while people are listening to me ', color=0x607d8b,usr=ctx.author)
         if not otp_success:
-            return await ctx.send('Restart Command Aborted')
-      async with ctx.typing():  
-        e = discord.Embed(title='Restart  Invoked',description=f'**Mode = {mode}** \n 1 = Simple restart 2 = Full restart',color=discord.Color.dark_gold())
-        e.add_field(name="Progress",value=progress_bar(10))
-        x = await ctx.send(embed=e)
-        await asyncio.sleep(1)  
-        e.set_field_at(0,name="Progress",value=progress_bar(30))
-        await x.edit(embed=e)
-        await asyncio.sleep(2)
-        e.set_field_at(0,name="Progress",value=progress_bar(50))
-        e.add_field(name="Status",value='Unloading Cogs')
-        await x.edit(embed=e)        
+            return 
+      modedict={1:'Simple restart',2:'Advanced RESTART'}
+      e = discord.Embed(title='Restarting Started',description=f'**Mode = {mode}**\n{modedict[mode]}',color=discord.Color.dark_gold())
+      e.add_field(name="Progress",value=progress_bar(10))
+      x = await ctx.send(embed=e)
+      await asyncio.sleep(1)  
+      e.set_field_at(0,name="Progress",value=progress_bar(30))
+      await x.edit(embed=e)
+      await asyncio.sleep(2)
+      e.set_field_at(0,name="Progress",value=progress_bar(50))
+      e.add_field(name="Status",value='Unloading Cogs')
+      await x.edit(embed=e)        
 
-        for filename in os.listdir("./cogs"):
-          if filename.endswith(".py"):
-              try:
 
-                self.bot.unload_extension(f"cogs.{filename[:-3]}")
-              except Exception as e:
-                print(f'{filename} - {e}')           
+      for filename in os.listdir("./cogs"):   
+        try:
+          
+          self.bot.unload_extension(f"cogs.{filename[:-3]}")
+        except Exception as ex:
+          print(f'{filename} - {ex}')         
 
-        e.set_field_at(0,name="Progress",value=progress_bar(100))
-        
-        e.set_field_at(1,name="Status",value='Changing Status')
-        await x.edit(embed=e)
-        await self.bot.change_presence(
-                status=discord.Status.idle,
-                activity=discord.Activity(
-                    
-                    type=discord.ActivityType.watching,
-                    name= f"🌠 System Reboot [DONT USE]"
-                ))
-        with open("./storage/reboot.json", "w") as rebootFile:
-            json.dump(ctx.message.channel.id, rebootFile) 
-        
-             
-        restart_bot(mode)  
+      e.set_field_at(0,name="Progress",value=progress_bar(100))
+      
+      e.set_field_at(1,name="Status",value='Changing Status')
+      e.color=discord.Color.dark_blue()
+      await x.edit(embed=e)
+      await self.bot.change_presence(
+              status=discord.Status.idle,
+              activity=discord.Activity(                 
+                  type=discord.ActivityType.watching,
+                  name= f"🌠 System Reboot "
+              ))
+      with open("./storage/reboot.json", "w") as rebootFile:
+          json.dump(ctx.message.channel.id, rebootFile) 
+      
+           
+      restart_bot(mode)  
 
 
 
@@ -394,7 +386,7 @@ class Dev(commands.Cog):
             users_list.append(user.id)
             e=discord.Embed(title="Blacklisted User!",description=f":white_medium_square: Member {user.mention}\n:white_medium_square:Reason: {reason}\n :white_medium_square: Developer {ctx.author.mention}",color=discord.Color.red())  
             e.set_author(name=user.name,icon_url=user.avatar_url)            
-            logschannel=self.bot.get_channel(929333373913137224)
+            logschannel=self.bot.get_channel(979345665081610271)
             await logschannel.send(embed=e)
             with open("storage/black.json", "w+") as f:
                 json.dump(users_list, f)
@@ -412,7 +404,7 @@ class Dev(commands.Cog):
             users_list.remove(user.id)
             e=discord.Embed(title="UnBlacklisted User!",description=f":white_medium_square: Member {user.mention}\n :white_medium_square: Developer {ctx.author.mention}",color=discord.Color.gold())  
             e.set_author(name=ctx.author.name,icon_url=ctx.author.avatar_url)
-            logschannel=self.bot.get_channel(929333373913137224)
+            logschannel=self.bot.get_channel(979345665081610271)
             await logschannel.send(embed=e)            
         else:
             await ctx.send(f"{user.mention} is not in the list, so they cannot be removed!")
@@ -461,19 +453,16 @@ class Dev(commands.Cog):
     @commands.command()
     async def reply(self,ctx,member:discord.User,*,content:str):
       
-      embed = discord.Embed(title=f"**Tessarect Support **",description=f"Hello {member.mention} , here is a message from my developers",timestamp=ctx.message.created_at, color=0xac5ece)
-    
-  
-      embed.add_field(name="<:arrow_right:940608259075764265> Message",value=content,inline=False)
-  
-      embed.set_footer(text=f"Sent by Tessarect Devs | {ctx.author}")
+      embed = discord.Embed(title=f"Hello {member}",timestamp=ctx.message.created_at,description=content, color=0x8df2db)
+     
+      embed.set_footer(text=f"Sent by  {ctx.author}")
   
       try:
         await member.send(embed=embed)      
       except:
         await ctx.send(embed=discord.Embed(title="User has DM's Disabled",color=discord.Color.red()))
         return
-      await ctx.send(embed= discord.Embed(title="<:user:941986233574367253> Reply", description=f"Your Message was Successfully Sent.", timestamp=ctx.message.created_at, color=0xff0000)        )
+      await ctx.send(embed= discord.Embed(title=f"<:user:941986233574367253> DM SENT <:sucess:935052640449077248> ", description=f"Your Message was Successfully Sent.", timestamp=ctx.message.created_at, color=0x02e7e7))
     @check(check_Mod)
     @commands.command(hidden=True)
     async def invservers(self,ctx):

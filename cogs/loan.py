@@ -24,7 +24,8 @@ class Loan(commands.Cog):
                    "**loan update**\n")    
                              
         #e.add_field(name="CURRENT BALANCE OF BANK",value=f"")
-        await ctx.send(embed=e)
+        #await ctx.send(embed=e)
+        await ctx.send(embed=discord.Embed(title="Cog under maintainence", description="\n Sorry for it but you can't use this cog for now . Kindly do not use any of the commands .",color=discord.Color.dark_red(),timestamp=ctx.message.created_at))
 
     @commands.has_any_role(perms.captain_role, perms.owner_role)
     @loan.command()
@@ -33,9 +34,9 @@ class Loan(commands.Cog):
         if (loaned) >= ((bank["totals"]["balance"]-bank["totals"]["deposits"])// 25):
             await ctx.send(f"The loan of {loaned:,} ֍ is too big and will take us under our 25% reserve. Please decline this loan")
         else:
-            todo_channel = self.bot.get_channel(929333807893598238)
+            todo_channel = self.bot.get_channel(929332268688887908)
             bank_channel = self.bot.get_channel(929332268688887908)
-            await todo_channel.send(f"{ctx.author.mention} **, collect {payback:,} ֍ from {user.mention}.** They borrowed {loaned:,} ֍ from the Amteor International Bank.")
+            await todo_channel.send(f"{ctx.author.mention} **, collect {payback:,} ֍ from {user.mention}.** They borrowed {loaned:,} ֍ from the Tessarect Official Bank.")
             await bank_channel.send(f"**-{loaned:,} ֍** Loaned to {user.mention}. Will pay back {payback:,} ֍.")
             bank["totals"]["balance"] -= loaned
             bank["totals"]["loans"] += payback

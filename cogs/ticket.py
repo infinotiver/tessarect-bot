@@ -13,15 +13,15 @@ class Tickets(commands.Cog):
     async def on_ready(self):
         print("Tickets are ready!")
 
-    @commands.command(aliases = ['createticket', 'ticketnew'])
+    @commands.command(aliases = ['createticket', 'ticketnew','ticket'])
     @cooldown(1, 10, BucketType.user)
     async def new(self, ctx, *, reason = None):
 
         em = discord.Embed(title = "Confirm New Ticket", color =  ctx.author.color)
         em.add_field(name = "Reason:", value = "We don't want people to spam!")
-        em.add_field(name = "NEXT:", value = "Type `confirm` in the chat to confirm this ticket!")
+        em.add_field(name = "Next Step:", value = "Type `confirm` in the chat to confirm this ticket!")
         em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
-        em.set_footer(text = "Bot Made By SniperXi199#2209")
+        em.set_footer(text = "Be nice with the support Team")
         msg = await ctx.send(embed = em)
 
         def msg_check(m):
@@ -174,7 +174,34 @@ class Tickets(commands.Cog):
         # Updating the database
         with open("data.json", "w") as f:
             json.dump(tickets, f)
-        
+
+    @commands.command(aliases = ['remticketrole', 'ticketroleremove'])
+    @commands.has_permissions(manage_guild = True)
+    async def removeticketrole(self, ctx, role : discord.Role = None, *,reason = None):
+        if role == None:
+            await ctx.send("You need to provide a valid role!")
+            return
+
+        tickets = await self.get_tickets()
+        em = discord.Embed(title= "<:sucess:935052640449077248> Removed ticketrole", color = ctx.author.color)
+        em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+        guild = ctx.guild
+        author = ctx.author
+        if str(ctx.guild.id) not in tickets:
+            return await ctx.send(embed=discord.Embed(title="Failed",description="No record for this guild , setup tickets"))
+          
+        else:
+            if role in tickets[str(guild.id)]["ticketrole"]:
+              tickets[str(guild.id)]["ticketrole"].pop(role)
+              em.add_field(name = "Role:", value = f"{role.mention}")
+              em.add_field(name = "New:", value = f"People having {role} as their topmost role can't see tickets any more")
+              em.add_field(name = "Reason:", value = f"`{reason}`")
+              em.set_footer(text="Bot Made By SniperXi199#2209")
+              await ctx.send(embed = em)
+
+        # Updating the database
+        with open("data.json", "w") as f:
+            json.dump(tickets, f)        
 
     @addticketrole.error
     async def addticketrole_error(self, ctx, error):

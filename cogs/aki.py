@@ -24,7 +24,7 @@ class Akinator(commands.Cog):
         bye.set_thumbnail(url="https://i.pinimg.com/originals/28/fc/0b/28fc0b88d8ded3bb8f89cb23b3e9aa7b.png")
         await ctx.send(embed=intro)
         def check(msg):
-            return msg.author == ctx.author and msg.channel == ctx.channel and msg.content.lower() in ["y", "n","p","b","yes","no","probably","idk","back"]
+            return msg.author == ctx.author and msg.channel == ctx.channel and msg.content.lower() in ["y", "n","p","b","yes","no","probably","idk","back","q"]
         try:
             aki = akinator.Akinator()
             q = aki.start_game()
@@ -43,6 +43,7 @@ class Akinator(commands.Cog):
                     await ctx.send(embed=bye)
                     return
                 await question_sent.delete()
+
                 if msg.content.lower() in ["b","back"]:
                     try:
                         q=aki.back()

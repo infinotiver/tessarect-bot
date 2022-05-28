@@ -71,15 +71,16 @@ class Tessarect(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         embed = discord.Embed(
-            title="I Have Left A Guild!",
-            description=f"{guild.name} \nOwner {guild.owner}",
+            title="<:downarrow:941994549822226452> ",
+            description=f"Guild Elevator Down",
             timestamp=datetime.datetime.now(),
-            color=self.theme_color,
+            color=discord.Color.red(),
         )
-        embed.add_field(name="Server ID",value=guild.id)                        
-        embed.add_field(
-            name=f"We Are Now At {len(self.bot.guilds)} Guilds!", value="_ _"
-        )
+        embed.add_field(name="Guild",value=f"{guild.name} \n<:owner:946288312220536863> Owner: {guild.owner}")
+        embed.set_image(url=guild.icon_url)
+        embed.set_thumbnail(url="https://image.shutterstock.com/image-vector/down-arrow-vector-line-icon-260nw-1162804441.jpg")
+        embed.add_field(name="Server ID",value=guild.id,inline=False)                        
+        embed.add_field(name="Current Guild count",value=len(self.bot.guilds),inline=False)  
         await self.bot.get_channel(self.logs_channel).send(embed=embed)
 
       
@@ -260,7 +261,7 @@ class Tessarect(commands.Cog):
             try:
                 embed = discord.Embed(
                     title="Forbidden",
-                    description=f"Error <:checkboxsquare:942779132159356959>403 <:checkboxsquare:942779132159356959>Forbidden | Missing perms\n Bot is missing permissions | Recommended giving Permission `8` (admin)",
+                    description=f"Error <:checkboxsquare:942779132159356959>403 <:checkboxsquare:942779132159356959>Forbidden | Missing perms\n Bot is missing permissions \n Recommended giving Permission `8` (admin)",
                     color=self.theme_color,
                 )
                 embed.set_author(name=ctx.author,icon_url=ctx.author.avatar_url)
@@ -280,8 +281,8 @@ class Tessarect(commands.Cog):
             await ctx.send(embed=embed)
             return
         else:
-          devlogs=self.bot.get_channel(929333373913137224)
-          log=discord.Embed(title="<:messagealert:942777256160428063> Error",description=f"<:checkbox:942779132591370310>{error}",color=self.theme_color,timestamp=ctx.message.created_at)
+          devlogs=self.bot.get_channel(979345665081610271)
+          log=discord.Embed(title="<:messagealert:942777256160428063> Error",description=f"{error}",color=self._theme_color,timestamp=ctx.message.created_at)
           row2 = ActionRow(
               Button(
                   style=ButtonStyle.grey,
@@ -296,17 +297,12 @@ class Tessarect(commands.Cog):
           err_code=discord_pass.secure_password_gen(10)
           log.add_field(name="<:checkboxsquare:942779132159356959> Error code",value=err_code)
           
-          log.set_footer(text=f"{ctx.author}/{ctx.guild} • How dumb you guys are , cant even make me error free !")
+          log.set_footer(text=f"Command:{str(ctx.command)} |{ctx.author}/{ctx.guild} ")
           
           msgcon=ctx.message.content
-
           known_error=False
           print(data)
-          if error in data:
-            print(data)
-            print('Yes')
           for x in data:
-            print(data[x]['error'])
             if data[x]['error']==str(error) and data[x]['command used']==str(ctx.command):
               known_error=True
           if not known_error:
@@ -320,7 +316,7 @@ class Tessarect(commands.Cog):
             data[str(err_code)]['time']=str(ctx.message.created_at)            
             with open ('storage/errors.json', 'w') as f:
                 json.dump(data, f, indent=4)
-          log.add_field(name="<:checkboxsquare:942779132159356959> Total Errors Now",value=len(data))
+          log.add_field(name="<:checkbox:942779132591370310> Total Errors Now",value=len(data))
           if not known_error:
             await devlogs.send(embed=log)  
           uem=discord.Embed(title="Oops!",description=f'It seems like an unexpected error happened\n{error}',color=self._theme_color).add_field(name="Known Error",value=known_error)

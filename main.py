@@ -4,6 +4,7 @@ with open("requirements.txt") as file:
 import time
 from discord.ext import tasks
 import  discord
+import assets.reactor
 import traceback
 from dislash import SelectMenu,SelectOption
 import web        
@@ -146,7 +147,7 @@ cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
 db = cluster["tst"]["data"]
 intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
-    command_prefix= (get_prefix),intents=intents,description="A POWERFUL DISCORD BOT YOU WILL EVER NEED \n Support server https://discord.gg/avpet3NjTE \n Invite https://dsc.gg/tessarect",case_insensitive=True, help_command=PrettyHelp(index_title="Help <:book:939017828852449310>",color=0x34363A,no_category="Base Commands",sort_commands=False,show_index=True))
+    command_prefix= (get_prefix),intents=intents,description="Support server https://discord.gg/avpet3NjTE \n Invite https://dsc.gg/tessarect",case_insensitive=True, help_command=PrettyHelp(index_title="Help <:book:939017828852449310>",no_category="Basic Commands",sort_commands=False,show_index=True))
 #slash = SlashCommand(client)
 m = '֍'
 
@@ -246,7 +247,7 @@ Input: {thing}```""",color=discord.Color.blue())
     await ctx.reply(embed=e)
 
 
-status= [" a!help in {n}  servers ",'Tessarect  BOT','Try my New Economy Bots','Try me new leveling sys by using<prefix>level','Wanna advertise your server go to my repo(<prefix>src) and go to the discussions and make a topic in Website category details are there'.format(n=len(client.guilds))]
+status= [" a!help in {n}  servers ",'Tessarect  BOT','Try my New Economy Bots'.format(n=len(client.guilds))]
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 client.session = aiohttp.ClientSession()
@@ -341,7 +342,7 @@ async def on_guild_join(guild): #when the bot joins the guild
 
 
 names =['Spencer M. McKnight','Saul D. Burgess','Ghiyath Haddad Shadid','Ramzi Muta Hakimi','Callum Peel','Joao Barbosa Pinto','Bertram Hoving','Cian Reith','Mat Twofoot''Alexander Achen''Rohan ','Manish Nadela']   
-tips=['Have you used our leveling system? Try <prefix>level<user(optional)> to check out','We have added daily command which gives you some money per day once ','Have you ever robbed someone?','Try new Ticket System']     
+   
     
 @client.command(hidden=True)
 @commands.is_owner()
@@ -369,7 +370,7 @@ async def error(ctx,error):
         await ctx.reply(pain)
 
 
-from assets.get_money import get_converted_currency
+
 @client.command()
 async def convertmoney(ctx,value,curr1,curr2):
   res=await get_converted_currency(value,curr1,curr2)
@@ -530,11 +531,13 @@ ser = []
 from requests import PreparedRequest
 @client.command(pass_context=True)
 @commands.has_permissions(administrator=True) #ensure that only administrators can use this command
-async def setwelcomechannel(ctx,channel:discord.TextChannel): 
+async def setwelcomechannel(ctx,channel:discord.TextChannel,*,txt=None): 
     with open('storage/welcome.json', 'r') as f:
         wel = json.load(f)
+    wel[str(ctx.guild.id)] = [int(channel.id),txt]
 
-    wel[str(ctx.guild.id)] = int(channel.id)
+      
+   
 
     with open('storage/welcome.json', 'w') as f: #writes the new prefix into the .json
         json.dump(wel, f, indent=4)
@@ -549,10 +552,10 @@ async def on_member_join(member):
         wel = json.load(f)  
     if str(member.guild.id) not in wel:
         return
-    channel = client.get_channel(wel[str(member.guild.id)])
+    channel = client.get_channel(wel[str(member.guild.id)][0])
     if channel==None:
       return print('not set')
-    embed = discord.Embed(colour=discord.Colour.blue())
+    embed = discord.Embed(colour=discord.Colour.blue(),description=wel[str(member.guild.id)][1])
     name=member.display_name.split()
     finalname='+'.join(name)
     link=f"https://api.popcat.xyz/welcomecard?background=https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png&text1={finalname}&text2=Welcome&text3=#+{str(len(ctx.guild.members))}+Member&avatar={str(member.avatar_url_as(format='png'))}"
@@ -565,10 +568,10 @@ async def on_member_remove(member):
         wel = json.load(f)  
     if str(member.guild.id) not in wel:
         return
-    channel = client.get_channel(wel[str(member.guild.id)])
+    channel = client.get_channel(wel[str(member.guild.id)][0])
     if channel==None:
       return print('not set')
-    embed = discord.Embed(colour=discord.Colour.red())
+    embed = discord.Embed(colour=discord.Colour.blue(),description=f"{member} left")
     name=member.display_name.split()
     finalname='+'.join(name)
     link=f"https://api.popcat.xyz/welcomecard?background=https://media.discordapp.net/attachments/929332390432735243/945522028985872424/9k.png&text1={finalname}&text2=Left&text3=Hope+They+had+a+Good+time+and+maybe+join+back&avatar={str(member.avatar_url_as(format='png'))}"
@@ -2022,7 +2025,7 @@ async def feedback(ctx,*,message):
 
 
       em = discord.Embed(title="Done",description="Thank you for your feedback kindly keep your dms open they may contact anyway enjoy",color=discord.Color.green())   
-      await msg.edit(content=None,embed=em)
+      await inter.reply(content=None,embed=em)
       await msg.edit(components=[])
 
     @on_click.timeout
@@ -2085,10 +2088,16 @@ Available_Ram : {round(val4, 2)} GB```''',inline=False)
         cur = pkg_resources.get_distribution(dep[0]).version
         if cur == dep[1]: dependencies += '\✔  %s: %s\n'%(dep[0], cur)
         else: dependencies += '\❌ %s: %s / %s\n'%(dep[0], cur, dep[1])
-    em.add_field(name='Dependencies', value='%s' % dependencies)
+    
 
    
     await ctx.reply(embed=em)
+  
+    want_depends=await assets.reactor.reactor(ctx, client, 'Do you want to check current dependencies', 0x34363A,ctx.author)
+    if want_depends:
+      emx=discord.Embed(title="Dependencies",color=discord.Color.dark_gray())
+      emx.add_field(name='Dependencies', value='%s' % dependencies)
+      await ctx.send(embed=emx)
 @client.command()
 async def goal(ctx):
 
@@ -2312,11 +2321,13 @@ async def data(ctx):
     tot=stats['tot']+1
     last=str(ctx.command)
     lasta=ctx.author.id
-    db.update_one({"id": client.user.id},{"$set": {"tot": tot}})
-    db.update_one({"id": client.user.id},{"$set": {"last_command": last}})
-    db.update_one({"id": client.user.id},{"$set": {"last_author": lasta}})
+    db.update_one({"id": client.user.id},{"$set": {"tot": tot,"last_command": last,"last_author": lasta}})
+
+    
     #dumbest technique , ik
-  
+    tips = ['Enjoy ','Check out other features','I have tickets too','Check out Security Cog','Any problem , join our support server','Join my support server-https://discord.gg/avpet3NjTE','Vote for me on top.gg','Check out my AI features by sending [p]help AI','Snipe out people hiding by using [p]snipe command','Are you student ? Join a new server by SniperXi199 - https://discord.gg/3gCFrPXwbz','Do you know , I have two developers','Get info on covid by using Covid cog yeh !','Try me new leveling sys by using<prefix>level','Wanna advertise your server go to my repo(<prefix>src) and go to the discussions and make a topic in Website category details are there','Have you used our leveling system? Try <prefix>level<user(optional)> to check out','We have added daily command which gives you some money per day once ','Have you ever robbed someone?','Try new Ticket System'] 
+    em=discord.Embed(description=f"**Tip**-{random.choice(tips)}",color=discord.Color.random())
+    await ctx.send(embed=em)
 @client.before_invoke
 async def checkblack(message):
   with open("storage/black.json") as f:

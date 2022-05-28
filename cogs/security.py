@@ -35,6 +35,9 @@ class Security(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.warns={}
+        self.time_window_milliseconds = 5000
+        self.max_msg_per_window = 5
+        self.author_msg_times = {}     
         self.links=requests.get("https://raw.githubusercontent.com/Dogino/Discord-Phishing-URLs/main/scam-urls.txt").content.decode().split("\n")
         
 
@@ -58,7 +61,12 @@ class Security(commands.Cog):
           antiscam =data['antiscam']
         else:
           data['antiscam'] ='disable'
-        with open("./configs/{message.guild.id}.json", "w") as file:
+        if data['antispam']:
+
+          antispam =data['antispam']   
+        else:
+          data['antispam']='disable'          
+        with open(f"./configs/{message.guild.id}.json", "w") as file:
             json.dump(data, file)          
       except:
         return
@@ -88,7 +96,7 @@ class Security(commands.Cog):
         
         detections=d['output']['detections']
         nsfwscorer=round(nsfwscore)
-        if nsfwscore >0.45 or 'Exposed' in name.split():
+        if 'Exposed' in name :
           if message.channel.is_nsfw():
             return # if it is nsfw then ok
           else:
@@ -168,7 +176,37 @@ class Security(commands.Cog):
                       await warndb.delete_one({"id": member.id})
                     except Exception as e:
                       return await message.channel.send(f'WARN LIMIT EXCEEDED | UNSUCCESSFUL kick\n{e}')
-        
+      if antispam =="enable": 
+        global author_msg_counts
+    
+        author_id = ctx.author.id 
+        # Get current epoch time in milliseconds
+        curr_time = datetime.datetime.now().timestamp() * 1000
+    
+        # Make empty list for author id, if it does not exist
+        if not self.author_msg_times.get(author_id, False):
+            self.author_msg_times[author_id] = []
+    
+        # Append the time of this message to the users list of message times
+        self.author_msg_times[author_id].append(curr_time)
+    
+        # Find the beginning of our time window.
+        expr_time = curr_time - self.time_window_milliseconds
+    
+        # Find message times which occurred before the start of our window
+        expired_msgs = [
+            msg_time for msg_time in self.author_msg_times[author_id]
+            if msg_time < expr_time
+        ]
+    
+        # Remove all the expired messages times from our list
+        for msg_time in expired_msgs:
+            self.author_msg_times[author_id].remove(msg_time)
+        # ^ note: we probably need to use a mutex here. Multiple threads
+        # might be trying to update this at the same time. Not sure though.
+    
+        if len(self.author_msg_times[author_id]) > self.max_msg_per_window:
+            await ctx.send("Stop Spamming")        
       if antiswear =="enable":
 
   
@@ -275,7 +313,7 @@ class Security(commands.Cog):
         image = np.zeros(shape=(100, 350, 3), dtype=np.uint8)
 
         # Create image
-        image = Image.fromarray(image + 209)  # +255 : black to white
+        image = Image.fromarray(image + 255)  # +255 : black to white
 
         # Add text
         draw = ImageDraw.Draw(image)
@@ -287,7 +325,7 @@ class Security(commands.Cog):
         # Center the text
         W, H = (350, 100)
         w, h = draw.textsize(text, font=font)
-        draw.text(((W - w) / 2, (H - h) / 2), text, font=font, fill=(90, 90, 90))
+        draw.text(((W - w) / 2, (H - h) / 2), text, font=font, fill=(0, 139, 139))
 
         # Save
         ID = member.id
@@ -318,9 +356,9 @@ class Security(commands.Cog):
         # Add line
         width = random.randrange(2, 6)
         co1 = random.randrange(0, 75)
-        co3 = random.randrange(275, 350)
+        co3 = random.randrange(275, 650)
         co2 = random.randrange(40, 65)
-        co4 = random.randrange(40, 65)
+        co4 = random.randrange(40, 80)
         draw = ImageDraw.Draw(image)
         draw.line([(co1, co2), (co3, co4)], width=width, fill=(90, 90, 90))
 
@@ -332,7 +370,7 @@ class Security(commands.Cog):
             for j in range(image.size[1]):
                 rdn = random.random()  # Give a random %
                 if rdn < noisePercentage:
-                    pixels[i, j] = (90, 90, 90)
+                    pixels[i, j] = 	(139, 0, 0)
 
         # Save
         image.save(f"{folderPath}/output/{captchaName}_2.png")
@@ -341,7 +379,7 @@ class Security(commands.Cog):
         #captchaLog = self.client.get_channel(data["captchaLog"])
         #gettemprole = get(member.guild.roles, id=data["temporaryRole"])
         channel =ctx.channel #await member.guild.create_text_channel('captcha-verify-here')
-        await xb.delete()
+        #await xb.delete()
         try:
             captchaFile = discord.File(f"{folderPath}/output/{captchaName}_2.png", filename="captcha.png")
             captcha_embed = discord.Embed(title=f"Captcha Verification for {member.guild.name}",
@@ -466,7 +504,7 @@ class Security(commands.Cog):
             except discord.errors.Forbidden:
                 pass
             try:
-                await channel.delete()
+                print('hi')
             except UnboundLocalError:
                 pass
 

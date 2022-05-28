@@ -23,23 +23,27 @@ class Calc(commands.Cog):
                     f"https://api.mathjs.org/v4/?expr={st}"
                 ) as response:
                     ex = await response.text()
-                    if len(ex) > 200:
+                    if len(ex) > 2000:
                         await ctx.send("Too big result")
                     else:
 
                         embed = discord.Embed(
                             timestamp=ctx.message.created_at,
-                            title="Expression",
-                            description=f"```{expression}```",
-                            color=0xFF0000,
+                            description="Here is the result ",
+                            color=discord.Color.gold()
                         )
                         embed.add_field(
-                            name=f"Result", value=f"```{ex}```", inline=False
+                            name=f"Expression", value=f"```css\n{expression}```", inline=False
+                        )                      
+                        embed.add_field(
+                            name=f"Result", value=f"```css\n{ex}```", inline=False
                         )
+                        
                         embed.set_author(
-                            name="Calculator",
-                            icon_url="https://www.webretailer.com/wp-content/uploads/2018/10/Flat-calculator-representing-Amazon-FBA-calculators.png",
+                            name="Calculator"
+                            
                         )
+                        embed.set_thumbnail(url="https://www.involve.me/assets/images/blog/how-to-create-a-simple-price-calculator-and-capture-more-leads/calculator-L.png",)
                         await ctx.send(embed=embed)
 
 

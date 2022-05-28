@@ -10,17 +10,17 @@ mongo_url = os.environ.get("tst")
 cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
 db = cluster["tst"]["data"]
 
-class ServerHelper(commands.Cog):
+class ServerConnect(commands.Cog):
     def __init__(self, client):
         self.client = client
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("ServerHelper cog loaded successfully")
+        print("ServerConnect cog loaded successfully")
 
-    @commands.command(aliases=["serverhelper",'sh'])
+    @commands.command(aliases=["ServerConnect",'sh'])
     async def ServerHelp(self, ctx):
-      em=discord.Embed(title="<:book:939017828852449310> Server Helper Help",description="This module helps in organising your server and creating your server channels and more from any of the other server tessarect is present*",color=discord.Color.dark_blue(),timestamp=ctx.message.created_at)
+      em=discord.Embed(title="<:book:939017828852449310> Server Connection Help",description="This module helps in organising your server and creating your server channels and more from any of the other server tessarect is present . There are many more features coming . This help will be updated on their arrival*",color=discord.Color.dark_blue(),timestamp=ctx.message.created_at)
       em.add_field(name="<:dnd_status:946652840053600256> Important",value="Not all servers available , only servers which has used `allowservertemplate` command ( command available )")
       em.add_field(name="View Templates",value="Check which all server templates you can use using `viewtemplates` command")
       stats = await db.find_one({"n":"stemplates"})   
@@ -99,4 +99,4 @@ class ServerHelper(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(ServerHelper(client))
+    client.add_cog(ServerConnect(client))

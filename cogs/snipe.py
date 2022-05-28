@@ -56,7 +56,7 @@ class Snipe(commands.Cog):
         if limit > self.snipe_limit:
             await ctx.send(f"Maximum snipe limit is {self.snipe_limit}")
             return
-
+     
         try:
             msgs: list[discord.Message] = self.deleted_msgs[ctx.channel.id][
                 ::-1
@@ -77,24 +77,15 @@ class Snipe(commands.Cog):
                 b = datetime.datetime.strptime(a, '%Y-%m-%d %H:%M:%S.%f')
                 c = b.timestamp()
                 snipe_embed.add_field(
-                    name=f"{sc}. {msg.author}", value=f"Content <:arrow_right:940608259075764265>{msg.content} \nSent at<:arrow_right:940608259075764265><t:{round(c)}>", inline=False
+                    name=f"({sc}) {msg.author.display_name} @<t:{round(c)}>", value=f"{msg.content}", inline=False
                 )
                 sc+=1
 
             await ctx.send(embed=snipe_embed)
 
         except KeyError:
-            await ctx.send("There's nothing to snipe here...")
-     
-    @commands.command(name ="clear_snipe",hidden=True)
-    
-    async def clearm(self,ctx):
-      if ctx.author.id == 900992402356043806 or 855327915301404674:
-        self.deleted_msgs.clear()
-        self.edited_msgs.clear()
-        await ctx.reply('Done')
-      else:
-        await ctx.reply('Hey you silly you cant use that command')
+            await ctx.send(embed=discord.Embed(description="**There's nothing to snipe here...**\n Wait for a deleted message",color=discord.Color.dark_red()))
+
     @commands.command(
         name="editsnipe",
         aliases=["esn"],
@@ -132,7 +123,7 @@ class Snipe(commands.Cog):
             await ctx.send(embed=editsnipe_embed)
 
         except KeyError:
-            await ctx.send("There's nothing to snipe here...")
+            await ctx.send(embed=discord.Embed(description="**There's nothing to snipe here...**\n Wait for a edited message",color=discord.Color.dark_red()))
 
 
 def setup(bot):

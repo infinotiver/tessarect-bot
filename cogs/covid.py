@@ -105,6 +105,7 @@ class Covid(commands.Cog, description="Get Covid-19 stats worldwide, or for a sp
         total_cases = response_dict.get("cases")
         today_cases = response_dict.get("todayCases")
         total_deaths = response_dict.get("deaths")
+        affectedCountries = response_dict.get("affectedCountries")
         today_deaths = response_dict.get("todayDeaths")
         total_recovered = response_dict.get("recovered")
         today_recovered = response_dict.get("todayRecovered")
@@ -118,7 +119,7 @@ class Covid(commands.Cog, description="Get Covid-19 stats worldwide, or for a sp
         recovered_per_million = response_dict.get("recoveredPerOneMillion")
         critical_per_million = response_dict.get("criticalPerOneMillion")
 
-        virus_image_url = "https://upload.wikimedia.org/wikipedia/commons/8/82/SARS-CoV-2_without_background.png"
+        virus_image_url = "https://cdn.who.int/media/images/default-source/mca/mca-covid-19/coronavirus-2.tmb-1920v.jpg?sfvrsn=4dba955c_6%201920w"
         country_name = response_dict.get(
             "country")  # not used in worldwide stats
         try:
@@ -129,7 +130,7 @@ class Covid(commands.Cog, description="Get Covid-19 stats worldwide, or for a sp
 
         if country is None:
             embed = discord.Embed(title="Covid-19 Stats Worldwide",
-                                  description=f"Updated **{updated_date}** at **{updated_time} UTC+0**",
+                                  description=f"Lasted Updated **{updated_date}** at **{updated_time} UTC+0**",
                                   color=discord.Color.blue())
             embed.set_thumbnail(url=virus_image_url)
         else:
@@ -137,13 +138,13 @@ class Covid(commands.Cog, description="Get Covid-19 stats worldwide, or for a sp
                                   description=f"Updated **{updated_date}** at **{updated_time} UTC+0**",
                                   color=discord.Color.dark_red())
             embed.set_thumbnail(url=country_flag_url)
-        embed.add_field(name="Total cases", value=total_cases, inline=True)
-        embed.add_field(name="New Cases Today", value=today_cases, inline=True)
+        embed.add_field(name="Total cases", value='{:,}'.format(total_cases), inline=True)
+        embed.add_field(name="New Cases Today", value='{:,}'.format(today_cases), inline=True)
         embed.add_field(name="Cases per Million",
-                        value=cases_per_million, inline=True)
+                        value='{:,}'.format(cases_per_million), inline=True)
 
-        embed.add_field(name="Total Deaths", value=total_deaths, inline=True)
-        embed.add_field(name="Deaths Today", value=today_deaths, inline=True)
+        embed.add_field(name="Total Deaths", value='{:,}'.format(total_deaths), inline=True)
+        embed.add_field(name="Deaths Today", value='{:,}'.format(today_deaths), inline=True)
         embed.add_field(name="Deaths per Million",
                         value=deaths_per_million, inline=True)
 
@@ -167,6 +168,7 @@ class Covid(commands.Cog, description="Get Covid-19 stats worldwide, or for a sp
         if country is None:
             embed.add_field(name="World Population",
                             value=population, inline=True)
+            embed.add_field(name="Affected countries",value=affectedCountries,inline=True)
         else:
             embed.add_field(
                 name=f"Population of {country_name}", value=population, inline=True)

@@ -201,6 +201,28 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
 
           await ctx.send(f'**Changes Saved | Choice : {choice}**')
         else:
+          await ctx.send('Invalid Choice')   
+            
+    @commands.command(name='antispam', description='Toggle Antispam filter (enable or disable only)')
+    @commands.has_permissions(manage_guild=True)
+    @commands.guild_only()
+    async def antispamr(self, ctx, *, choice):
+        lst = ["enable", "disable"]
+        if choice in lst:      
+
+          if os.path.exists(f'./configs/{ctx.guild.id}.json'):
+              with open(f'./configs/{ctx.guild.id}.json', 'r') as jsonFile:
+                  data = json.load(jsonFile)
+          else:
+              data = {}
+
+          data['antispam'] = str(choice)
+
+          with open(f'./configs/{ctx.guild.id}.json', 'w') as jsonFile:
+              json.dump(data, jsonFile, indent=4)
+
+          await ctx.send(f'**Changes Saved | Choice : {choice}**')
+        else:
           await ctx.send('Invalid Choice')          
     @commands.command(aliases=["levelling"], description="Enable or disable levelling")
     @commands.has_permissions(administrator=True)
