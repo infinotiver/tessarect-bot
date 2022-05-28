@@ -1,18 +1,18 @@
 
 <a href="https://discord.com/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands">
-    <img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/Tessarect.png" alt="Tessarect logo" title="Tessarect" align="right" height="60" />
+    <img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/Tessarect.png" alt="Tessarect logo" title="Tessarect" align="right" height="200" />
 </a>
 
 # Tessarect Discord Bot
-
-
-___
-##### Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/prakarsh17/tessarect-bot.svg)](https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE)
 [![Issues](https://img.shields.io/github/issues/prakarsh17/tessarect-bot.svg?colorB=3333ff)](https://github.com/Gorialis/jishaku/issues)
 [![Commit activity](https://img.shields.io/github/commit-activity/w/prakarsh17/tessarect-bot.svg)](https://github.com/Gorialis/jishaku/commits)
+___
+##### Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .
+
+⭐ Star us on GitHub — it motivates us a lot!
 
 
 </a>
