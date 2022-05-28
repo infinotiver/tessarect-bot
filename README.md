@@ -1,7 +1,7 @@
 
-<p align="center">
-<h1 align="center">TESSARECT </h1>
-</p>
+<a href="https://discord.com/api/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands">
+    <img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/Tessarect.png" alt="Tessarect Logo" title="Tessarect Discord Bot" align="right" height="60" />
+</a>
 
 
 
@@ -160,7 +160,7 @@ ___
 
 ## Contributors
 
-<h6 align=center>People who made Tessarect Possible  (bots too !)</h6>
+<h6 align=center>People who made Tessarect Possible</h6>
   <a href="https://github.com/prakarsh17/tessarect-bot" align=center>
     <img src="https://contrib.rocks/image?repo=prakarsh17/tessarect-bot" align=center>
   </a>
