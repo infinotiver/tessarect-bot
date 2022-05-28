@@ -1,6 +1,6 @@
 
 <a href="https://discord.com/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands">
-    <img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/Tessarect.png" alt="Tessarect logo" title="Tessarect" align="right" height="200" />
+    <img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/tessarectnewround.png" alt="Tessarect logo" title="Tessarect" align="right" height="200" />
 </a>
 
 # Tessarect Discord Bot
@@ -93,9 +93,8 @@ ___
 - [ ] Lighter Bot (reduced load on bot)
 
 ***
-# Screenshots and Demos
-<img src="image.png" alt="help command" title="Tessarect" align="left" height="200" />
-<img src="image_2.png" alt="Antispam Filter" title="Tessarect" align="right" height="200" />
+
+
 # Cogs (Plugins)
 **35+ Cogs (plugins) for better experience and more features** 
 
@@ -125,6 +124,9 @@ ___
 | [`Sniper`](./cogs/snipe.py) | 🔫 Sniper for sniping people who try to hide |
 | [`Much MORE`](./cogs) | 10 + Cogs in the cogs Folder |
 ###### And Much more cogs hidden for making your experience Better Note : All cogs arent Listed here go to the cogs folder to see all the cogs
+#### Dashboard Website ( Under Development )
+
+<iframe src="https://tessarect.prakarsh17.senarc.org/" title="Website under Development , Not working"></iframe>
 
 ### Do you have an idea for Tessarect ?
 ###### Contribute now to tessarect , check out  👇🏻
