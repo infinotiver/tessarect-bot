@@ -92,6 +92,10 @@ ___
 - [ ] Advanced Economy Features (in todo list)
 - [ ] Lighter Bot (reduced load on bot)
 
+***
+# Screenshots and Demos
+<img src="image.png" alt="help command" title="Tessarect" align="left" height="200" />
+<img src="image_2.png" alt="Antispam Filter" title="Tessarect" align="right" height="200" />
 # Cogs (Plugins)
 **35+ Cogs (plugins) for better experience and more features** 
 
@@ -121,6 +125,7 @@ ___
 | [`Sniper`](./cogs/snipe.py) | 🔫 Sniper for sniping people who try to hide |
 | [`Much MORE`](./cogs) | 10 + Cogs in the cogs Folder |
 ###### And Much more cogs hidden for making your experience Better Note : All cogs arent Listed here go to the cogs folder to see all the cogs
+
 ### Do you have an idea for Tessarect ?
 ###### Contribute now to tessarect , check out  👇🏻
 [Contributing Guide](CONTRIBUTING.md)
