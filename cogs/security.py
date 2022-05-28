@@ -179,7 +179,7 @@ class Security(commands.Cog):
       if antispam =="enable": 
         global author_msg_counts
     
-        author_id = ctx.author.id 
+        author_id = message.author.id 
         # Get current epoch time in milliseconds
         curr_time = datetime.datetime.now().timestamp() * 1000
     
@@ -206,7 +206,7 @@ class Security(commands.Cog):
         # might be trying to update this at the same time. Not sure though.
     
         if len(self.author_msg_times[author_id]) > self.max_msg_per_window:
-            await ctx.send("Stop Spamming")        
+            await message.channel.send(embed=discord.Embed(title="Stop Spamming",description="Stop spamming and post your messages in one message !",color=discord.Color.dark_red()))        
       if antiswear =="enable":
 
   

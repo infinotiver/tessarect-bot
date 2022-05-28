@@ -4,16 +4,11 @@
 </p>
 
 
-<p align="center">
 
-  <a href="https://discord.gg/avpet3NjTE">
-    <img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/Tessarect.png" height=200 width=200 alt="Tessarect Logo">
-  </a>
-</p>
 
 ___
 ##### Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .
-###### It is my First bot but very advanced and designed for all your needs , from Moderation to cool Economy Features .
+
 
 
 </a>
@@ -166,6 +161,6 @@ ___
 ## Contributors
 
 <h6 align=center>People who made Tessarect Possible  (bots too !)</h6>
-  <a href="https://github.com/prakarsh17/tessarect-bot">
+  <a href="https://github.com/prakarsh17/tessarect-bot" align=center>
     <img src="https://contrib.rocks/image?repo=prakarsh17/tessarect-bot" align=center>
   </a>

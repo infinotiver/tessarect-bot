@@ -71,7 +71,7 @@ class Level(commands.Cog):
                         if xp == 0:
                           
                             emx=discord.Embed(title="Level Up ! <:uparrow:941994550027759616>",description=f"🎊 Well done  {message.author.mention} ! You levelled up to **level: {lvl}**  🎉",color=discord.Color.dark_theme())                          
-                            emx.set_footer(text="Use **rank** or **db** command for more info")
+                            emx.set_footer(text="Use rank or db command for more info")
                             await message.channel.send(embed=emx)
                                 
 
