@@ -232,11 +232,11 @@ from googletrans import Translator
 
 
 @client.command()
-async def translate(ctx, lang, *, thing=None):
+async def translate(ctx, lang=None, *, thing=None):
     description = ""
     for lang in googletrans.LANGCODES:
         description += "**{}** - {}\n".format(string.capwords(lang), googletrans.LANGCODES[lang])
-    if not thing:
+    if not thing or lang:
       return await ctx.send(embed=discord.Embed(description=description,color=discord.Color.blue()))
     translator = Translator()
     
@@ -474,7 +474,7 @@ async def hello(ctx):
 #no errors ok to move on checked 2nd error nothing useful 
   await ctx.channel.send(embed = em)
 
-@client.command(aliases=['supportserver','githubrepo','src','invite','website','vote'])
+@client.command(aliases=['supportserver','githubrepo','src','invite','website'])
 async def links(ctx):
     row = ActionRow(
         Button(
@@ -513,8 +513,7 @@ async def links(ctx):
                "githubrepo":"https://github.com/prakarsh17/tessarect-bot",
                "src":"https://github.com/prakarsh17/tessarect-bot",
                "website":"https://bit.ly/tessarect-website",
-               "vote":"https://top.gg/bot/916630347746250782/vote",
-               "support server":"https://discord.gg/avpet3NjTE"}
+               "supportserver":"https://discord.gg/avpet3NjTE"}
     embed=discord.Embed(title=ctx.message.content[len("a!"):].split()[0].upper(),description="Important Links ",color=0xFFC0CB,timestamp=ctx.message.created_at)
     embed.set_footer(text="Stay Safe and be happy and keep using Me !")
     for x in links_dict:
@@ -522,7 +521,17 @@ async def links(ctx):
         embed.add_field(name="Link",value=f"{x.upper()} - {links_dict[x]}")
     embed.set_thumbnail(url=client.user.avatar_url)
     await ctx.reply(embed=embed,components=[row])
-
+@client.command(aliases=["vote",'v'])
+async def vote_tessarect( ctx):
+    upvote =   '<a:panda:930348733844033576>'
+    await ctx.send(
+        embed=ef.cembed(
+            title="Vote for Tessarect",
+            description=f"Top.gg > https://top.gg/bot/916630347746250782/vote \n VoidBots > https://voidbots.net/bot/916630347746250782/vote \n DiscordBots.gg > https://discordbots.gg/bot/916630347746250782/vote \n",        color=discord.Color.gold(),
+            image = "https://previews.123rf.com/images/aquir/aquir1311/aquir131100570/24053063-voz-del-sello-del-grunge-rojo.jpg",
+            footer="Stay Safe and be happy | Tessa Developers"
+        )
+    )
 
     
   #e = discord.Embed()
@@ -580,6 +589,7 @@ async def on_member_remove(member):
 
 
 @client.command()
+@commands.is_nsfw()
 async def meme(ctx):
     page = requests.get(f'https://api.popcat.xyz/meme')
     d = json.loads(page.content)
@@ -605,6 +615,7 @@ def searchyt(song):
     return clip2
 
 @client.command()
+@commands.is_nsfw()
 async def yt(ctx, *, url):
     await ctx.reply(searchyt(url))
 
@@ -616,6 +627,7 @@ import platform
 
 os.system('pip install google bs4')
 @client.command()
+@commands.is_nsfw()
 async def google(ctx, *, query):
     import google , bs4
     e=discord.Embed(description="Here are some results",color=discord.Color.random())
@@ -2325,9 +2337,11 @@ async def data(ctx):
 
     
     #dumbest technique , ik
-    tips = ['Enjoy ','Check out other features','I have tickets too','Check out Security Cog','Any problem , join our support server','Join my support server-https://discord.gg/avpet3NjTE','Vote for me on top.gg','Check out my AI features by sending [p]help AI','Snipe out people hiding by using [p]snipe command','Are you student ? Join a new server by SniperXi199 - https://discord.gg/3gCFrPXwbz','Do you know , I have two developers','Get info on covid by using Covid cog yeh !','Try me new leveling sys by using<prefix>level','Wanna advertise your server go to my repo(<prefix>src) and go to the discussions and make a topic in Website category details are there','Have you used our leveling system? Try <prefix>level<user(optional)> to check out','We have added daily command which gives you some money per day once ','Have you ever robbed someone?','Try new Ticket System'] 
+    tips = ['Enjoy ','Check out other features','I have tickets too','Check out Security Cog','Any problem , join our support server','Join my support server-https://discord.gg/avpet3NjTE','Vote for me on top.gg','Check out my AI features by sending [p]help AI','Snipe out people hiding by using [p]snipe command','Do you know , I have two developers','Get info on covid by using Covid cog yeh !','Try me new leveling sys by using<prefix>level','Wanna advertise your server go to my repo(<prefix>src) and go to the discussions and make a topic in Website category details are there','Have you used our leveling system? Try <prefix>level<user(optional)> to check out','We have added daily command which gives you some money per day once ','Have you ever robbed someone?','Try new Ticket System'] 
     em=discord.Embed(description=f"**Tip**-{random.choice(tips)}",color=discord.Color.random())
-    await ctx.send(embed=em)
+    cho=random.randint(0,1)
+    if cho==1:
+      await ctx.send(embed=em)
 @client.before_invoke
 async def checkblack(message):
   with open("storage/black.json") as f:

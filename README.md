@@ -124,7 +124,8 @@ ___
 | [`Sniper`](./cogs/snipe.py) | 🔫 Sniper for sniping people who try to hide |
 | [`Much MORE`](./cogs) | 10 + Cogs in the cogs Folder |
 ###### And Much more cogs hidden for making your experience Better Note : All cogs arent Listed here go to the cogs folder to see all the cogs
-<h4></h4> Dashboard Website ( Under Development ) </h4>
+
+<h4> Dashboard Website ( Under Development ) </h4>
 
 <iframe src="https://tessarect.prakarsh17.senarc.org/" title="Website under Development , Not working"></iframe>
 

@@ -10,7 +10,7 @@ load_dotenv()
 
 class Oauth:
     client_id = 916630347746250782
-    client_secret = 'bot-client-secret'
+    client_secret = 'client-secret'
     redirect_uri = 'https://tessarect.prakarsh17.senarc.org'
     scope = 'bot'
     discord_login_url = "https://discord.com/oauth2/authorize?client_id=916630347746250782&redirect_uri=https%3A%2F%2Ftessarect.prakarsh17.senarc.org%2F&response_type=code&scope=identify%20guilds"
