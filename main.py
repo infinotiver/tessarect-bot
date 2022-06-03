@@ -20,14 +20,10 @@ from dislash import  ContextMenuInteraction
 import asyncio 
 import jishaku
 import googletrans
+import string    
 import sys
 #from discord_slash import SlashCommand, SlashContext
-try:
-
-  import DiscordUtils
-except:
-  os.system( 'pip install DiscordUtils')
-
+import DiscordUtils
 import pkg_resources
 import contextlib
 import sys
@@ -69,31 +65,7 @@ import datetime
 #from datetime import datetime, timedelta
 # Create a translator object
 #from discord_slash import SlashCommand, SlashContext
-import logging
 
-# create logger
-logger = logging.getLogger('logger')
-logger.setLevel(logging.DEBUG)
-
-# create console handler and set level to debug
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-
-# create formatter
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-# add formatter to ch
-ch.setFormatter(formatter)
-
-# add ch to logger
-logger.addHandler(ch)
-
-# 'application' code
-logger.debug('debug message')
-logger.info('info message')
-logger.warning('warn message')
-logger.error('error message')
-logger.critical('critical message')
 import urllib.request
 from dislash import  Option, OptionType
 import typing
@@ -169,6 +141,23 @@ for filename in os.listdir("./cogs"):
         except Exception as e:
           print(f"{filename} - {traceback.print_exc()}") 
 
+import topgg
+
+# This example uses tasks provided by discord.ext to create a task that posts guild count to Top.gg every 30 minutes.
+
+dbl_token = os.environ['topggt']  # set this to your bot's Top.gg token
+client.topggpy = topgg.DBLClient(client, dbl_token)
+@tasks.loop(minutes=30)
+async def update_stats():
+    """This function runs every 30 minutes to automatically update your server count."""
+    try:
+        await client.topggpy.post_guild_count()
+        print(f"Posted server count ({client.topggpy.guild_count})")
+    except Exception as e:
+        print(f"Failed to post server count\n{e.__class__.__name__}: {e}")
+
+
+update_stats.start()
 
 import glob
 @client.event
@@ -198,12 +187,13 @@ async def on_ready():
       if not x==3:#3 is the shard id of tbd
           
         await client.change_presence(
-                status=discord.Status.dnd,
-                shard_id=x, 
-                activity=discord.Activity(
-                    type=discord.ActivityType.watching,
-                    name= f"Shard {x} | {len(client.guilds)}"
-                ))
+            status=discord.Status.dnd,
+            shard_id=x, 
+            activity=discord.Activity(
+                type=discord.ActivityType.watching,
+                name= f"Shard {x} | {len(client.guilds)}"
+            )
+        )
       else:
                   
         await client.change_presence(
@@ -212,7 +202,7 @@ async def on_ready():
                 activity=discord.Activity(
   
                     type=discord.ActivityType.watching,
-                    name= f"{len(client.users)} users on {len(client.guilds)} servers "
+                    name= f"{len(client.users):,} users on {len(client.guilds)} servers "
                 ))
 
     if os.path.exists("./storage/reboot.json"):
@@ -521,18 +511,14 @@ async def links(ctx):
         embed.add_field(name="Link",value=f"{x.upper()} - {links_dict[x]}")
     embed.set_thumbnail(url=client.user.avatar_url)
     await ctx.reply(embed=embed,components=[row])
-@client.command(aliases=["vote",'v'])
+@client.command(aliases=["vote",'v','support'])
 async def vote_tessarect( ctx):
-    upvote =   '<a:panda:930348733844033576>'
-    await ctx.send(
-        embed=ef.cembed(
+    ef=discord.Embed(
             title="Vote for Tessarect",
-            description=f"Top.gg > https://top.gg/bot/916630347746250782/vote \n VoidBots > https://voidbots.net/bot/916630347746250782/vote \n DiscordBots.gg > https://discordbots.gg/bot/916630347746250782/vote \n",        color=discord.Color.gold(),
-            image = "https://previews.123rf.com/images/aquir/aquir1311/aquir131100570/24053063-voz-del-sello-del-grunge-rojo.jpg",
-            footer="Stay Safe and be happy | Tessa Developers"
-        )
-    )
-
+            description=f"Top.gg > https://top.gg/bot/916630347746250782/vote \n VoidBots > https://voidbots.net/bot/916630347746250782/vote \n DiscordBots.gg > https://discordbots.gg/bot/916630347746250782/vote \n" ,     color=discord.Color.gold())
+    ef.set_image(url='https://image.shutterstock.com/image-vector/funny-vote-characters-stand-near-600w-1562866837.jpg')
+    ef.set_footer(text="Tessarect Developers !")
+    await ctx.send(embed=ef)
     
   #e = discord.Embed()
 ser = []
@@ -567,7 +553,7 @@ async def on_member_join(member):
     embed = discord.Embed(colour=discord.Colour.blue(),description=wel[str(member.guild.id)][1])
     name=member.display_name.split()
     finalname='+'.join(name)
-    link=f"https://api.popcat.xyz/welcomecard?background=https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png&text1={finalname}&text2=Welcome&text3=#+{str(len(ctx.guild.members))}+Member&avatar={str(member.avatar_url_as(format='png'))}"
+    link=f"https://api.popcat.xyz/welcomecard?background=https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png&text1={finalname}&text2=Welcome&text3=#+{str(len(member.guild.members))}+Member&avatar={str(member.avatar_url_as(format='png'))}"
     embed.set_image(url=link)
     await channel.send(embed=embed)    
 
@@ -656,39 +642,7 @@ async def lyrics(ctx, *, song):
     )
     em = discord.Embed(title=js["title"], description=js["lyrics"], color=discord.Color.dark_grey())
     await ctx.reply(embed=em)
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
 
@@ -745,8 +699,6 @@ async def balance(ctx ,user: discord.Member = None):
   em.set_footer(text=f"🤨 {tot}")        
   msg=await ctx.reply(embed= em)
 
-
-import string    
 hacking_status = ['breaching mainframe', 'accessing CPU pins', 'a couple gigabytes of RAM','Accessing Ip adress ','Getting Os info']
 osd = ['unkown windows','windows 11','unknown linux','mac','arch','calinix','windows xp','andriod 2','andriod 12','A poor os ']
  
@@ -1561,7 +1513,7 @@ def prefix_check(guild):
     # Check if this is a dm instead of a server
     # Will give an error if this is not added (if guild is None)
     if guild == None:
-        return "!"
+        return "a!"
     try:
         # Check if the guild id is in your 'prefixes.json'
         with open('prefixes.json', 'r') as f:
@@ -1570,34 +1522,8 @@ def prefix_check(guild):
     except:
         # Otherwise, default to a set prefix
         p = "a!"
-    # If you're confident that the guild id will always be in your json,
-    # feel free to remove this try-except block
-
     return p
-'''
-# on_message event
-@client.event
-async def on_message(message):
-  
 
-  if f"<@!{client.user.id}>" or "<@&944855412979666984>" in message.content:
-    
-    if message.author.bot:
-      return
-    pr=", ".join(prefix_check(message.guild))
-    emx = discord.Embed(title='Heyo',color=0xffffff)
-      # This is how you call the prefix_check function. It takes a guild object
-    emx.description = f'Tessarect\n<:arrow_right:940608259075764265> Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .\n<:blurple_slashcommands:930349698999537746> Prefix: {pr}'
-    emx.add_field(name="**Seting Up**",value="<:arrow_right:940608259075764265> Type `[p]help` or mention bot to know prefix , do `[p]stats` for getting stats .`[p]setup` for basic configuration")
-    #emx.add_field(name="Website",value="<:arrow_right:940608259075764265> [<:planet:930351400532201532> View](https://bit.ly/tessarect-website) Visit website and see our privacy policy and terms of service et ceter")
-    #em.add_field()
-    #em.add_field(name="Servers", value=len(client.guilds))
-    emx.set_thumbnail(url=client.user.avatar_url)
-    emx.set_author(name=client.user.display_name,icon_url=client.user.avatar_url,url="https://bit.ly/tessarect-website")
-   
-    await message.channel.send(embed=emx)
-  await client.process_commands(message)
-'''
 
 @client.group()
 async def tictactoe(ctx, p1: discord.Member, p2: discord.Member):
@@ -1624,7 +1550,7 @@ async def tictactoe(ctx, p1: discord.Member, p2: discord.Member):
         for x in range(len(board)):
             if x == 2 or x == 5 or x == 8:
                 line += " " + board[x]
-                await ctx.reply(line)
+                await ctx.send(line)
                 line = ""
             else:
                 line += " " + board[x]
@@ -1964,7 +1890,7 @@ async def bot( ctx):
               
               em.add_field(name=f"By {message.author} on {message.created_at}",value=content ,inline=False)
             except:
-              pass
+              print(format_exc())
           else:
             em.add_field(name="_ _",value='Couldnt Fetch Message',inline=False)
         except Exception as e:
@@ -2021,7 +1947,7 @@ async def feedback(ctx,*,message):
       await msg.edit(components=[])
     @on_click.matching_id("gr")
     async def on_test_button(inter):
-      bugs_channel = client.get_channel(929333373913137224)
+      bugs_channel = client.get_channel(979345665081610271)
 
 
 
@@ -2138,6 +2064,8 @@ def get_quote():
     quote = jsond[0]['q']
     auth = (jsond[0]['a'])
     return quote, auth
+
+    
 @client.command()
 async def quote(ctx):
     q, a = get_quote()
@@ -2150,7 +2078,6 @@ async def report( ctx, user : discord.Member,*reason):
     msg = await ctx.reply(
         embed=em,
         components=[
-
             SelectMenu(
                 custom_id="choice",
                 placeholder="Choose the needed choices",
@@ -2177,7 +2104,7 @@ async def report( ctx, user : discord.Member,*reason):
       labelsx = [option.label for option in inter.select_menu.selected_options]
       await inter.reply(embed=discord.Embed(description='Your report request is being sent to my developers , Kindly keep your dms open for further inquiry if necessary.'))
      
-    channel = client.get_channel(929333373913137224) 
+    channel = client.get_channel(979345665081610271) 
     author = ctx.message.author
     rearray = ' '.join(reason[:]) #converts reason argument array to string
 
@@ -2193,7 +2120,6 @@ async def report( ctx, user : discord.Member,*reason):
 
 @client.command(name="features") 
 async def features(ctx):
-
     contents = ["TESSARECT FEATURES",""""**Economy Bot**\n
 Supports various economy commands like balance , send , rob to make the server more interactive""",
 """**Moderator Commands\n**
@@ -2323,7 +2249,6 @@ def replace_chars(stri):
 
 @client.after_invoke 
 async def data(ctx):
-  print(ctx.command)
   stats = await db.find_one({"id": client.user.id})
   #print(stats)
   if stats is None:
@@ -2337,11 +2262,11 @@ async def data(ctx):
 
     
     #dumbest technique , ik
-    tips = ['Enjoy ','Check out other features','I have tickets too','Check out Security Cog','Any problem , join our support server','Join my support server-https://discord.gg/avpet3NjTE','Vote for me on top.gg','Check out my AI features by sending [p]help AI','Snipe out people hiding by using [p]snipe command','Do you know , I have two developers','Get info on covid by using Covid cog yeh !','Try me new leveling sys by using<prefix>level','Wanna advertise your server go to my repo(<prefix>src) and go to the discussions and make a topic in Website category details are there','Have you used our leveling system? Try <prefix>level<user(optional)> to check out','We have added daily command which gives you some money per day once ','Have you ever robbed someone?','Try new Ticket System'] 
+    tips = ['Enjoy ','Check out other features','I have tickets too','Check out Security Cog','Any problem , join our support server','Join my support server-https://discord.gg/avpet3NjTE','Vote for me on top.gg','Check out my AI features by sending [p]help AI','Snipe out people hiding by using [p]snipe command','Do you know , I have two developers','Get info on covid by using Covid cog yeh !','Try me new leveling sys by using<prefix>level','Have you used our leveling system? Try <prefix>level<user(optional)> to check out','We have added daily command which gives you some money per day once ','Have you ever robbed someone? || in economy cog dont get bad ideas ||','Try the new Ticket System'] 
     em=discord.Embed(description=f"**Tip**-{random.choice(tips)}",color=discord.Color.random())
-    cho=random.randint(0,1)
-    if cho==1:
+    if random.random()>0.9:
       await ctx.send(embed=em)
+        
 @client.before_invoke
 async def checkblack(message):
   with open("storage/black.json") as f:

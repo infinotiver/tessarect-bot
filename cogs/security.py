@@ -379,7 +379,7 @@ class Security(commands.Cog):
         #captchaLog = self.client.get_channel(data["captchaLog"])
         #gettemprole = get(member.guild.roles, id=data["temporaryRole"])
         channel =ctx.channel #await member.guild.create_text_channel('captcha-verify-here')
-        #await xb.delete()
+        await xb.delete()
         try:
             captchaFile = discord.File(f"{folderPath}/output/{captchaName}_2.png", filename="captcha.png")
             captcha_embed = discord.Embed(title=f"Captcha Verification for {member.guild.name}",

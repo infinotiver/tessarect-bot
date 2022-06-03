@@ -20,7 +20,7 @@ class Moderation(commands.Cog, description="Moderation commands.A number of comm
     async def timeout_func(self, ctx, user: discord.Member, time_period:int,*,reason:str=None):
       time_period=int(time_period)
       await user.edit(timeout = datetime.timedelta(minutes = time_period))
-      muteem=discord.Embed(description=f"<:command:941986813013274625> Action: Timeout\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}\n<:timer:941993935507689492> Time:  {time_period} minute",color=0x34363A)
+      muteem=discord.Embed(description=f"<:command:941986813013274625> Action: Timeout\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}\n<:timer:941993935507689492> Time:  {time_period} minute",color=0x99aab5)
       muteem.add_field(name="<:rightarrow:941994550124245013> Reason", value=reason, inline=False)
       await ctx.send(embed=muteem)
       '''
@@ -32,7 +32,7 @@ class Moderation(commands.Cog, description="Moderation commands.A number of comm
     async def clear(self,ctx, limit: int):
             messages = await ctx.channel.history(limit=limit).flatten()
             await ctx.channel.purge(limit=limit)
-            em=discord.Embed(description=f"<:Channel:946288872583725076> Channel:  {ctx.channel.mention}\n<:command:941986813013274625> Action: Clear\n📄 Request:  {limit}\n<:Hacker:922468796852224061> Fetched: {str(len(messages))}\n<:user:941986233574367253> Moderator:  {ctx.author.mention}",color=0x34363A)
+            em=discord.Embed(description=f"<:Channel:946288872583725076> Channel:  {ctx.channel.mention}\n<:command:941986813013274625> Action: Clear\n<:chat:979769986484678656> Request:  {limit}\n<:Hacker:922468796852224061> Fetched: {str(len(messages))}\n<:user:941986233574367253> Moderator:  {ctx.author.mention}",color=0x99aab5)
             await ctx.send(embed=em)
 
     @commands.command(name='mute', description='Mutes the person mentioned. Time period is optional.')
@@ -70,17 +70,18 @@ class Moderation(commands.Cog, description="Moderation commands.A number of comm
 
         if time_period is not None:
             final_time_text = time_calc.time_suffix(time_period)
-            muteem=discord.Embed(description=f"<:command:941986813013274625> Action: Mute\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}\n<:timer:941993935507689492> Time:  {time_period}",color=0x34363A)
+            muteem=discord.Embed(description=f"<:command:941986813013274625> Action: Mute\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}\n<:timer:941993935507689492> Time:  {time_period}",color=0x99aab5)
             muteem.add_field(name="<:rightarrow:941994550124245013> Reason", value=reason, inline=False)
 
             await ctx.send(embed=muteem)
+            await user.send(embed=muteem)
             # sleep for specified time, then remove the muted role
             await asyncio.sleep(time_calc.get_time(time_period))
             if mute_role in user.roles:
                 await user.remove_roles(mute_role)
                 await ctx.send(f'{user.display_name} has been unmuted.')
         else:
-            muteem=discord.Embed(description=f"<:command:941986813013274625> Action: Mute\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}",color=0x34363A)
+            muteem=discord.Embed(description=f"<:command:941986813013274625> Action: Mute\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}",color=0x99aab5)
             muteem.add_field(name="<:rightarrow:941994550124245013> Reason", value=reason, inline=False)
 
             await ctx.send(embed=muteem)
@@ -123,8 +124,9 @@ class Moderation(commands.Cog, description="Moderation commands.A number of comm
         try:
             await user.add_roles(mute_role)
         except:
-            return await ctx.send(
-                f"Could not add role {str(mute_role.name).replace('@', '')} to {user.display_name}. Aborting...")
+            return await ctx.send(embed=discord.Embed(description=
+                        f'Could not add role **{str(actual_role.name).replace("@", "")}** to '
+                        f'**{user.display_name}**. Aborting...',color=0x99aab5))
 
         roles_embed = discord.Embed(
             title=f"{user.display_name} has these roles", color=discord.Color.random())
@@ -157,7 +159,7 @@ class Moderation(commands.Cog, description="Moderation commands.A number of comm
                 await ctx.send(f"Could not remove role **{str(role.name).replace('@', '')}**. Continuing... ")
         if time_period is not None:
             final_time_text = time_calc.time_suffix(time_period)
-            muteem=discord.Embed(description=f"<:command:941986813013274625> Action: HardMute\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}\n<:timer:941993935507689492> Time:  {final_time_text}",color=0x34363A)
+            muteem=discord.Embed(description=f"<:command:941986813013274625> Action: HardMute\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}\n<:timer:941993935507689492> Time:  {final_time_text}",color=0x99aab5)
             muteem.add_field(name="<:rightarrow:941994550124245013> Reason", value=reason, inline=False)            
             await ctx.send(embed=muteem)
             await asyncio.sleep(time_calc.get_time(time_period))
@@ -165,7 +167,7 @@ class Moderation(commands.Cog, description="Moderation commands.A number of comm
                 # if they are unmuted, we dont want to unmute again
                 await Moderation.unhardmute_func(self, ctx, user)
         else:
-            muteem=discord.Embed(description=f"<:command:941986813013274625> Action: HardMute\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}\n",color=0x34363A)
+            muteem=discord.Embed(description=f"<:command:941986813013274625> Action: HardMute\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}\n",color=0x99aab5)
             muteem.add_field(name="<:rightarrow:941994550124245013> Reason", value=reason, inline=False)            
             await ctx.send(embed=muteem)
 
@@ -188,7 +190,7 @@ class Moderation(commands.Cog, description="Moderation commands.A number of comm
         mute_role = get(ctx.guild.roles, id=mute_role_id)
         if mute_role in user.roles:
             await user.remove_roles(mute_role)
-        muteem=discord.Embed(description=f"<:command:941986813013274625> Action: Un-HardMute\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}",color=0x34363A)
+        muteem=discord.Embed(description=f"<:command:941986813013274625> Action: Un-HardMute\n<:user:941986233574367253> Moderator:  {ctx.author.mention}\n<:target:941990853625389126> Target: {user.mention}",color=0x99aab5)
         muteem.add_field(name="<:rightarrow:941994550124245013> Reason", value=reason, inline=False)            
         await ctx.send(embed=muteem)
         await ctx.send(f'{user.display_name} has been unmuted.')
@@ -229,14 +231,14 @@ class Moderation(commands.Cog, description="Moderation commands.A number of comm
                 try:
                     await user.add_roles(actual_role)
                 except:
-                    await ctx.send(
+                    await ctx.send(embed=discord.Embed(description=
                         f'Could not add role **{str(actual_role.name).replace("@", "")}** to '
-                        f'**{user.display_name}**. Continuing...')
+                        f'**{user.display_name}**. Continuing...',color=0x99aab5))
                     continue
         await user.remove_roles(mute_role)
         mod=self.bot.user or ctx.author
   
-        muteem=discord.Embed(description=f"<:command:941986813013274625> Action: Un  Mute\n<:user:941986233574367253> Moderator:  {ctx.author}\n<:target:941990853625389126> Target: {user.mention}",color=0x34363A)
+        muteem=discord.Embed(description=f"<:command:941986813013274625> Action: Unhard  Mute\n<:user:941986233574367253> Moderator:  {ctx.author}\n<:target:941990853625389126> Target: {user.mention}",color=0x99aab5)
         await ctx.send(embed=muteem)
 
         # since they're unmuted, we don't need the role list
@@ -365,26 +367,7 @@ class Moderation(commands.Cog, description="Moderation commands.A number of comm
             return await ctx.send("Wrong format. use `User#1234` or the user's ID (17/18 digits long).")
 
 
-    @commands.command(name="leave_guild", aliases=["leaveguild", "leaveserver"],
-                      description="The command to remove me from  server using id",hidden=True)
-    @commands.is_owner()
-    async def leave_guild(self, ctx,*,guildx:int):
-        guild=self.bot.get_guild(guildx)
-
-          
-        try:
-            await guild.owner.send(f"Hello it seems I have been removed from {guild.name}.\n"
-                                       f"Your server's config files will be deleted, "
-                                       f"along with the mute files, and the custom prefix.\n"
-                                       f"Thank you for having me in your server for this long.\n"
-                                       f"Until next time!\n Command Execueted by My owner you can reinvite me anytime using https://bit.ly/terrasectbot")
-        except:
-            pass
-        try:
-            await guild.leave()
-        except discord.Forbidden:
-            await ctx.send("I could not leave the server due to an unknown error. "
-                           "Please try again later or kick me manually.")
+ 
 
 
 def setup(bot):
