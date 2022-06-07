@@ -47,7 +47,7 @@ class Warn(commands.Cog):
                 await ctx.send("**You cannot warn yourself**")
             elif member != ctx.author:
 
-                if len(reason) > 60:
+                if len(reason) > 5000:
                     await ctx.send("**Very big reason**")
                 else:
 

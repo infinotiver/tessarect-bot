@@ -18,17 +18,7 @@ def check_blacklist(ctx):
           return False
 
   return True
-def display_time(seconds, granularity=2):
-    result = []
 
-    for name, count in intervals:
-        value = seconds // count
-        if value:
-            seconds -= value * count
-            if value == 1:
-                name = name.rstrip('s')
-            result.append("{} {}".format(value, name))
-    return ', '.join(result[:granularity]) 
 import os
 import sys
 import traceback
@@ -43,7 +33,7 @@ class Tessarect(commands.Cog):
         self.bot = bot
         self.inter_client = InteractionClient(bot)
         self.theme_color = 0xFF0800
-        self._theme_color = discord.Color.dark_blue()
+        self._theme_color = 0x315399
         self.logs_channel = 929333502577606656
         self.description="Important cog for Tessarect Tessarect Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more \n[p]help for more info"
 
@@ -155,7 +145,6 @@ class Tessarect(commands.Cog):
             return
         with open ('storage/errors.json', 'r') as f:
             data = json.load(f)
-        # get the original exception
         error = getattr(error, "original", error)
 
         if isinstance(error, commands.BotMissingPermissions):
@@ -173,28 +162,33 @@ class Tessarect(commands.Cog):
                 description=f"I am missing **{fmt}** permissions to run this command :(",
                 color=self.theme_color,
             )
-            #embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/922468797108080660.png")
+            
             embed.set_author(name=ctx.author,icon_url=ctx.author.avatar_url)
             return
         elif isinstance(error, commands.CommandNotFound):
           return
         elif isinstance(error, commands.DisabledCommand):
-            await ctx.send("This command has been disabled.")
+            embed = discord.Embed(
+                title="Command disabled",
+                description=f"Looks like This command is disabled for use !",
+                color=self.theme_color,
+            )   
+            await ctx.send(embed=embed)       
             return
-        #elif isinstance(error,discord.errors.HTTPException):
-            #embed = discord.Embed(
-                #title="<:messagealert:942777256160428063> I Got Too Wordy",
-                #description=f"Looks like I tried to send a response that was greater than 2,000 characters!",
-                #color=self.theme_color,
-            #)   
-            #await ctx.send(embed=embed)       
-            #return
+        elif isinstance(error,discord.errors.HTTPException):
+            embed = discord.Embed(
+                title="<:messagealert:942777256160428063> I Got Too Wordy",
+                description=f"Looks like I tried to send a response for {ctx.command} that was not fit for discord!",
+                color=self.theme_color,
+            )   
+            await ctx.send(embed=embed)       
+            return
         elif isinstance(error, commands.CommandOnCooldown):
            
             embed = discord.Embed(
                 title="Whoa Slow it down!!!!",
-                description=f"Retry that command after {display_time(error.retry_after,4)}.",
-                color=discord.Color.dark_theme(),
+                description=f"Retry that command after {datetime.timedelta(seconds=error.retry_after)}.",
+                color=self.theme_color,
             )
             embed.set_author(name=ctx.author,icon_url=ctx.author.avatar_url)
             #embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/922468797108080660.png")
@@ -282,7 +276,9 @@ class Tessarect(commands.Cog):
             return
         else:
           devlogs=self.bot.get_channel(979345665081610271)
-          log=discord.Embed(title="<:messagealert:942777256160428063> Error",description=f"{error}",color=self._theme_color,timestamp=ctx.message.created_at)
+          err_code=discord_pass.secure_password_gen(10)             
+          log=discord.Embed(title=f"<:messagealert:942777256160428063> Error ( {err_code} )",description=f"```\n{error}\n```",color=self._theme_color,timestamp=ctx.message.created_at)
+
           row2 = ActionRow(
               Button(
                   style=ButtonStyle.grey,
@@ -294,16 +290,12 @@ class Tessarect(commands.Cog):
                   custom_id="tr")
               
           )
-          err_code=discord_pass.secure_password_gen(10)
-          log.add_field(name="<:checkboxsquare:942779132159356959> Error code",value=err_code)
-          
-          log.set_footer(text=f"Command:{str(ctx.command)} |{ctx.author}/{ctx.guild} ")
-          
+    
           msgcon=ctx.message.content
           known_error=False
           print(data)
           for x in data:
-            if data[x]['error']==str(error) and data[x]['command used']==str(ctx.command):
+            if data[x]['error']==str(error) and data[x]['command used']==str(ctx.command) and data[x]['full text']==str(ctx.message.content):
               known_error=True
           if not known_error:
             data[str(err_code)] = {}
@@ -316,10 +308,10 @@ class Tessarect(commands.Cog):
             data[str(err_code)]['time']=str(ctx.message.created_at)            
             with open ('storage/errors.json', 'w') as f:
                 json.dump(data, f, indent=4)
-          log.add_field(name="<:checkbox:942779132591370310> Total Errors Now",value=len(data))
           if not known_error:
+            log.add_field(name="Desc",value=f"```json\n{str(data[str(err_code)])}\n```",inline=False)
             await devlogs.send(embed=log)  
-          uem=discord.Embed(title="Oops!",description=f'It seems like an unexpected error happened\n{error}',color=self._theme_color).add_field(name="Known Error",value=known_error)
+          uem=discord.Embed(title="Oops!",description=f'It seems like an unexpected error happened\n|| ** {error} ** ||',color=0xe74c3c).add_field(name="Known Error?",value=known_error)
           uem.set_author(name=ctx.author,icon_url=ctx.author.avatar_url)
           msg2=await ctx.send(embed=uem,components=[row2])
           on_click = msg2.create_click_listener(timeout=20)
@@ -329,10 +321,10 @@ class Tessarect(commands.Cog):
               await inter.reply("You're not the author dude , dont come in between enjoy your milk", ephemeral=True)         
           @on_click.matching_id("test_button")
           async def on_test_button(inter):
-              await inter.reply(embed=discord.Embed(description='Known Error,Kindly wait and watch ' if known_error else f"Your error code is **{err_code} **",color=discord.Color.dark_theme()),ephemeral=True)
+              await inter.reply(embed=discord.Embed(description='This error is known , kindly be patient , devs are working ' if known_error else f"Your error code is **{err_code} **",color=discord.Color.dark_theme()),ephemeral=True)
           @on_click.matching_id("tr")
           async def on_test(inter):
-            await inter.reply(embed=discord.Embed(title="Troubleshooting",description="""
+            await inter.reply("""**Basic Troubleshooting**
 <:checkboxsquare:942779132159356959>Retry again
 <:checkboxsquare:942779132159356959>Check bot's/your permissions 
 <:checkboxsquare:942779132159356959>check command help 
@@ -340,14 +332,9 @@ class Tessarect(commands.Cog):
 <:checkboxsquare:942779132159356959>Try after sometime 
 <:checkboxsquare:942779132159356959>Blacklisted cant use anything 
 <:checkboxsquare:942779132159356959>Drink milk and enjoy other commands
-""",color=discord.Color.green()))
-          @on_click.timeout
-          async def on_timeout():
-              #await ActionRow.disable_buttons(row2)
-              try:
-                await msg2.edit(components=[])
-              except Exception as e:
-                print(e)
+**Cant solve it?**
+<:checkboxcheck:942779132117409863> Join our support server
+<:checkboxcheck:942779132117409863> Open issue on github""",ephemeral=True)
 
 
           print("Ignoring exception in command {}:".format(ctx.command), file=sys.stderr)

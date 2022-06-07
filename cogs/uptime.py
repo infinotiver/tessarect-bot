@@ -3,7 +3,10 @@ import discord
 import datetime, time 
 import asyncio
 from discord.ext import commands
-from main import restart_data
+time_data = {
+    'str': datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+    'obj': time.time()
+}
 
 class Stats(commands.Cog):
     def __init__(self, bot):
@@ -11,23 +14,18 @@ class Stats(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f'{self} has been loaded') 
+        print(f'Uptime cog Loaded  has been loaded') 
         global startTime 
         startTime = time.time()
 
-    #create a command in the cog
-    @commands.command(name='uptime',help="Know for how long I am online")
+    @commands.command(name='uptime',aliases=['upt'],help="Know for how long I am online")
     async def _uptime(self,ctx):
-
-        # what this is doing is creating a variable called 'uptime' and assigning it
-        # a string value based off calling a time.time() snapshot now, and subtracting
-        # the global from earlier
         uptime = str(datetime.timedelta(seconds=int(
-            round(time.time() - restart_data['obj']))))
+            round(time.time() - time_data['obj']))))
 
-        embed=discord.Embed(title=f'<:dnd_status:946652840053600256> UPTIME',description='Here is time I am online for you',color=discord.Color.blue())
-        embed.add_field(value='_ _',name=f"**{uptime}** ....")
-        embed.set_footer(text='Have fun, bot has many features, check out /help')
+        embed=discord.Embed(color=discord.Color.green())
+        #embed.set_thumbnail(url="https://cdn.vectorstock.com/i/1000x1000/90/58/monitoring-bot-color-icon-monitor-websites-uptime-vector-29169058.webp")
+        embed.set_footer(text='Hiya ! Have fun , checkout help')
         embed.set_image(url=f"https://falsiskremlin.sirv.com/resim_2020-11-28_113400.png?text.0.text={uptime}&text.0.position.x=-20%25&text.0.position.y=-30%25&text.0.size=50&text.0.color=ffffff&watermark.0.image=%2FImages%2Fresim_2020-11-29_103837.png&watermark.0.position.x=-35%25&watermark.0.scale.width=170&watermark.0.scale.height=170")
         await ctx.send(embed=embed)
     @commands.command(
@@ -49,44 +47,46 @@ class Stats(commands.Cog):
         else:
           xc = discord.Color.red()       
         start_time = time.time()
-        message = await ctx.reply('Testing overall speed...')
+        message = await ctx.reply('<a:Loading:941646457562365962> Please wait...')
         end_time = time.time()
         api_latency = round((end_time - start_time) * 1000)
 
         uptime = str(datetime.timedelta(seconds=int(
-            round(time.time() - restart_data['obj']))))
+            round(time.time() - time_data['obj']))))
         embed = (
-            discord.Embed(description='Shows my current response time.',
+            discord.Embed(
                 color=xc
             ).add_field(
-                name='System Latency', 
-                value=f'{system_latency}ms [{self.bot.shard_count} shard(s)]', 
+                name='<:CPU:937722162897375282> System Latency', 
+                value=f'{system_latency}ms ({self.bot.shard_count} shards)', 
                 inline=False
             ).add_field(
-              name="SHARD STATS",value=f"Shard Id: {shard_id} \n Shard Ping: {shard_ping}").add_field(
-                name='API Latency',
-                value=f'{api_latency}ms'
+              name="<:Discord_Region:946289542330196028>  Shard Stats",value=f"Shard Id: {shard_id} "
             ).add_field(
-                name='Startup Time', 
-                value=restart_data['str'], 
+                name='<:planet:930351400532201532> API Latency',
+                value=f'{api_latency}ms', 
+                inline=False
+              
+            ).add_field(
+                name='<:Servers:946289809289281566> Startup Time', 
+                value=time_data['str'], 
                 inline=False
             ).add_field(
-                name='Uptime', 
+                name='<:online_status:930347639172657164> Uptime', 
                 value=uptime, 
                 inline=False
-            ).set_footer(
-                text='Ping Pong'
-               
             )
+        ).set_thumbnail(
+          url=self.bot.user.avatar_url
         )
-        em2=discord.Embed(color=discord.Color.random(),description="All set")
+      
+        em2=discord.Embed(color=discord.Color.random(),description="<a:Loading:941646457562365962> Sorting and Setting up things")
         await message.edit(content=None, embed=em2)
-        await ctx.send(content=None, embed=embed)
+        await asyncio.sleep(0.2)
+        await message.edit(content=None, embed=embed)
     @commands.command(pass_context=True)
     async def speedtest(self, ctx):
-      """Run a network speed test """
-
-      message = await ctx.send(embed=discord.Embed(description='Running speed test...',color=discord.Color.blue()))
+      message = await ctx.send(embed=discord.Embed(description='Speed Test Started...',color=discord.Color.blue()))
       try:
         st = speedtest.Speedtest()
         st.get_best_server()

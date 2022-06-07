@@ -22,7 +22,6 @@ import jishaku
 import googletrans
 import string    
 import sys
-#from discord_slash import SlashCommand, SlashContext
 import DiscordUtils
 import pkg_resources
 import contextlib
@@ -36,10 +35,7 @@ import textwrap
 from discord.ext import commands
 from io import StringIO
 from traceback import format_exc
-
 from contextlib import redirect_stdout
-
-# Common imports that can be used by the debugger.
 import requests
 import json
 import gc
@@ -55,8 +51,6 @@ import subprocess
 from bs4 import BeautifulSoup
 import urllib
 import psutil
-
-#from replit import db
 import motor.motor_asyncio
 #import nest_asyncio
 #import datetime
@@ -65,15 +59,12 @@ import datetime
 #from datetime import datetime, timedelta
 # Create a translator object
 #from discord_slash import SlashCommand, SlashContext
-
 import urllib.request
 from dislash import  Option, OptionType
 import typing
 import random
 from PIL import Image
 import io
-
-#subprocess.check_call([sys.executable, '-m', 'pip', 'install','dislash.py', 'discord-pretty-help','randfacts','TenGiphPy','pymongo[srv]'])
 def get_prefix(client, message):
     try:
         with open('prefixes.json', 'r') as f:
@@ -83,7 +74,7 @@ def get_prefix(client, message):
     except KeyError: 
         with open('prefixes.json', 'r') as k:
             prefixes = json.load(k)
-        prefixes[str(message.guild.id)] = ['amt','a! ']
+        prefixes[str(message.guild.id)] = ['a! ']
 
         with open('prefixes.json', 'w') as j:
             json.dump(prefixes, j, indent = 4)
@@ -94,7 +85,7 @@ def get_prefix(client, message):
         
     except: # I added this when I started getting dm error messages
         print("Not ok")
-        return ['a!','amt ']
+        return ['a!']
 #-----------------------------------------------------------------------------------------------------------------------
 import aiohttp
 import warnings
@@ -106,12 +97,7 @@ try:
   print(f"Rate limit {int(r.headers['Retry-After']) / 60} minutes left")
 except:
   print('No ratelimit')
-restart_data = {
-    'str': datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-    'obj': time.time()
-}
 
-#menu = DefaultMenu(page_left="<:arrow_left:940845517703889016>", page_right="<:arrow_right:940608259075764265>", remove="❌", active_time=15)
 import nest_asyncio              
 nest_asyncio.apply()
 mongo_url = os.environ.get("tst")
@@ -163,35 +149,25 @@ import glob
 @client.event
 async def on_ready():  
     print(f'{client.user} - Tessarect  has connected to Discord! Enjoy ')  
-    em = discord.Embed(title ="<:online_status:930347639172657164> Tessarect Up again !",color =discord.Color.dark_theme())
-    em.set_author(name=client.user.name,icon_url=client.user.avatar_url)
+    em = discord.Embed(title ="Tessarect Online!",color =discord.Color.dark_theme())
     em.set_thumbnail(url=client.user.avatar_url)
     em.add_field(name="Server Count",value=len(client.guilds),inline=False)
-    em.add_field(name="User Count",value=len(client.users),inline=False)
-    
+    em.add_field(name="User Count",value=len(client.users),inline=False)    
     channel=client.get_channel(953571969780023366)
     await channel.purge(limit=None, check=lambda msg: not msg.pinned)
     cog_list = ["cogs." + os.path.splitext(f)[0] for f in [os.path.basename(f) for f in glob.glob("cogs/*.py")]]
     loaded_cogs = [x.__module__.split(".")[1] for x in client.cogs.values()]
     unloaded_cogs = [c.split(".")[1] for c in cog_list if c.split(".")[1] not in loaded_cogs]
     await channel.send(embed=em)
-    em2 = discord.Embed(title ="Successfuly `on_ready`",color =discord.Color.dark_blue())
-    em2.add_field(name="Cogs Count",value=len(client.cogs),inline=False)
-    em2.add_field(name='Loaded Cogs ({})'.format(len(loaded_cogs)), value='\n'.join(sorted(loaded_cogs)))
-    value='All Loaded' if len(unloaded_cogs)<0 else '\n'.join(sorted(unloaded_cogs))
-    if not len(unloaded_cogs)==0:
-      em2.add_field(name='UnLoaded Cogs ({})'.format(len(unloaded_cogs)), value='value')
-
-    await channel.send(embed=em2)
     for x in client.shards:
       if not x==3:#3 is the shard id of tbd
           
         await client.change_presence(
-            status=discord.Status.dnd,
+            status=discord.Status.online,
             shard_id=x, 
             activity=discord.Activity(
                 type=discord.ActivityType.watching,
-                name= f"Shard {x} | {len(client.guilds)}"
+                name= f"🦈 Shard {x} | {len(client.guilds)}"
             )
         )
       else:
@@ -200,9 +176,8 @@ async def on_ready():
                 status=discord.Status.dnd,
                 shard_id=x, 
                 activity=discord.Activity(
-  
                     type=discord.ActivityType.watching,
-                    name= f"{len(client.users):,} users on {len(client.guilds)} servers "
+                    name= f"{len(client.users):,}:people_hugging: / {len(client.guilds)}🛸"
                 ))
 
     if os.path.exists("./storage/reboot.json"):
@@ -210,7 +185,7 @@ async def on_ready():
             channel_id = json.load(readFile)
 
         channel = client.get_channel(channel_id)
-        ex=discord.Embed(title="Successfully Restarted",description="Heyo I am back after reboot ",color=discord.Color.dark_blue())
+        ex=discord.Embed(title="Successfully Restarted",description="Heyo, I am back after reboot ",color=discord.Color.dark_blue())
         await channel.send(embed=ex)
 
         os.remove("./storage/reboot.json")  
@@ -226,7 +201,7 @@ async def translate(ctx, lang=None, *, thing=None):
     description = ""
     for lang in googletrans.LANGCODES:
         description += "**{}** - {}\n".format(string.capwords(lang), googletrans.LANGCODES[lang])
-    if not thing or lang:
+    if not lang:
       return await ctx.send(embed=discord.Embed(description=description,color=discord.Color.blue()))
     translator = Translator()
     
@@ -237,7 +212,7 @@ Input: {thing}```""",color=discord.Color.blue())
     await ctx.reply(embed=e)
 
 
-status= [" a!help in {n}  servers ",'Tessarect  BOT','Try my New Economy Bots'.format(n=len(client.guilds))]
+
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 client.session = aiohttp.ClientSession()
@@ -248,7 +223,7 @@ import datetime
 async def on_resumed():
     print("Bot user: {0.user} RESUMED".format(client))
 
-    print("==========RESUMED==========")
+    print("----------------- Services Back")
     em = discord.Embed(title ="Tessarect Up Again",description=f"Tessarect  Service Resumed ",color =discord.Color.dark_theme())
     em.add_field(name="Server Count",value=len(client.guilds),inline=False)
     em.add_field(name="User Count",value=len(client.users),inline=False)
@@ -2118,75 +2093,6 @@ async def report( ctx, user : discord.Member,*reason):
         await ctx.message.delete() 
 
 
-@client.command(name="features") 
-async def features(ctx):
-    contents = ["TESSARECT FEATURES",""""**Economy Bot**\n
-Supports various economy commands like balance , send , rob to make the server more interactive""",
-"""**Moderator Commands\n**
-Moderation using bot , use Mute , kick ban etc""",
-"""**Fully Open Source**
-The code of the bot is open source so you dont have to worry about your privacy .""",
-"""**Utility Commands**
-Commands to make your work easier and faster like avatar{user} gets the avatar of the mentioned user""",
-"""**Leveling System**
-Enjoy and use Tessarect 's leveling system for your server . Make a rank system""",
-"""**Fun Commands**
-Enjoy various fun commands such as ascii font , emojify , avatar lookup , info or play tictactoe with someone""",
-"""**Secured**
-This bot is fully secured by 3 reasons .
-Open sourced| It is open sourced so you can know what all things are collected or how the commands work
-Permission Checks| There are permision checks for commands like mute , kick or ban. But still if any commands do not have , please report the error to us using the feedback command.""",
-"""**Ticket System**
-Is your Server messed up with feedback? Or do you not know where is a particular Suggestion? Or you are bored with one channel for suggestion which is filled with messages? If you answered any of these questions in yes , We are here to help you . Tessarect  Provides a ticketing system so people can use the command [prefix]new to make a ticket and support team roles can close them . You can even add valid i.e support team roles or pinging roles that get pinged everytime anyone makes a ticket.""","""**Watching Suggestions**
-Your feedback is our priorty . We watch for your queries too . Do you have one ? Join our server -Click Here or use command query or suggest to send feedback from your server only""","""**Translation**
-Have you ever faced problem in understanding some foriegn language in a server? No need to go out of discord to use a translater , use amteor translation command (syntax - {prefix}translate {language} {text})""","""**And Much More**"""]
-    pages = len(contents)
-    cur_page = 1
-    message = await ctx.reply(embed=discord.Embed(description=f"{contents[cur_page-1]}", color=discord.Color.blue()))
-
-
-    # getting the message object for editing and reacting
-
-    await message.add_reaction("◀️")
-    await message.add_reaction("▶️")
-
-    def check(reaction, user):
-        return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
-        # This makes sure nobody except the command sender can interact with the "menu"
-
-    while True:
-        try:
-            reaction, user = await client.wait_for("reaction_add", timeout=10000, check=check)
-
-            if str(reaction.emoji) == "▶️" and cur_page != pages:
-                cur_page += 1
-
-                em=discord.Embed(description=f"{contents[cur_page-1]}",color=discord.Color.dark_blue(),timestamp=ctx.message.created_at)
-
-
-
-                
-                await message.edit(embed=em)
-                await message.remove_reaction(reaction, user)
-
-            elif str(reaction.emoji) == "◀️" and cur_page > 1:
-                cur_page -= 1
-                if cur_page==8:
-                    em=discord.Embed(description=f"{contents[cur_page-1]}", color=discord.Color.blue())
-                    em.set_image(url="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.redd.it%2F9aj95rwqdex41.jpg&f=1&nofb=1")
-                else:
-                    em=discord.Embed(description=f"{contents[cur_page-1]}", color=discord.Color.blue())
-                
-                await message.edit(embed=em)
-                await message.remove_reaction(reaction, user)
-
-            else:
-                await message.remove_reaction(reaction, user)
-                # removes reactions if the user tries to go forward on the last page or
-                # backwards on the first page
-        except asyncio.TimeoutError:
-            await message.delete()
-            break
            
 @client.command()
 @commands.cooldown(1, 90, commands.BucketType.user)
