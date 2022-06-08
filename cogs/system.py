@@ -335,7 +335,13 @@ class Tessarect(commands.Cog):
 **Cant solve it?**
 <:checkboxcheck:942779132117409863> Join our support server
 <:checkboxcheck:942779132117409863> Open issue on github""",ephemeral=True)
-
+          @on_click.timeout
+          async def on_timeout():
+              #await ActionRow.disable_buttons(row2)
+              try:
+                await msg2.edit(components=[])
+              except Exception as e:
+                print(e)
 
           print("Ignoring exception in command {}:".format(ctx.command), file=sys.stderr)
 

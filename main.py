@@ -127,24 +127,6 @@ for filename in os.listdir("./cogs"):
         except Exception as e:
           print(f"{filename} - {traceback.print_exc()}") 
 
-import topgg
-
-# This example uses tasks provided by discord.ext to create a task that posts guild count to Top.gg every 30 minutes.
-
-dbl_token = os.environ['topggt']  # set this to your bot's Top.gg token
-client.topggpy = topgg.DBLClient(client, dbl_token)
-@tasks.loop(minutes=30)
-async def update_stats():
-    """This function runs every 30 minutes to automatically update your server count."""
-    try:
-        await client.topggpy.post_guild_count()
-        print(f"Posted server count ({client.topggpy.guild_count})")
-    except Exception as e:
-        print(f"Failed to post server count\n{e.__class__.__name__}: {e}")
-
-
-update_stats.start()
-
 import glob
 @client.event
 async def on_ready():  
@@ -177,7 +159,7 @@ async def on_ready():
                 shard_id=x, 
                 activity=discord.Activity(
                     type=discord.ActivityType.watching,
-                    name= f"{len(client.users):,}:people_hugging: / {len(client.guilds)}🛸"
+                    name= f"{len(client.users):,} 👤 / {len(client.guilds)}🛸"
                 ))
 
     if os.path.exists("./storage/reboot.json"):
@@ -191,6 +173,24 @@ async def on_ready():
         os.remove("./storage/reboot.json")  
     #deletelogs.start()              
     #update_s.start()
+
+import topgg
+
+# This example uses tasks provided by discord.ext to create a task that posts guild count to Top.gg every 30 minutes.
+
+dbl_token = os.environ['topggt']  # set this to your bot's Top.gg token
+client.topggpy = topgg.DBLClient(client, dbl_token)
+@tasks.loop(minutes=30)
+async def update_stats():
+    """This function runs every 30 minutes to automatically update your server count."""
+    try:
+        await client.topggpy.post_guild_count()
+        print(f"Posted server count ({client.topggpy.guild_count})")
+    except Exception as e:
+        print(f"Failed to post server count\n{e.__class__.__name__}: {e}")
+
+
+update_stats.start()
 
 
 from googletrans import Translator

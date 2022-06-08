@@ -127,15 +127,15 @@ class Level(commands.Cog):
                 elif rank ==1:
                   emoji ="<:1st:939020133702201344>"            
                 gen_card = await self.vac_api.rank_card(
-                            username = str(user),  # wrapper will handle the #
-                            avatar = user.avatar_url_as(format = "png"),  # converting avatar to .png, including .gif
+                            username = str(user),  
+                            avatar = user.avatar_url_as(format = "png"),  
                             level = lvl, # optional level int on the xp bar.
                             rank = rank, # optional #int on the card.
                             current_xp = xp,
                             next_level_xp = int(200* ((1/2)*lvl)),  # you will need calculate this according the current_xp.
                             previous_level_xp = 0,  # you will need calculate this according the current_xp.
-                            custom_background = 'https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png',  # optional custom background.
-                            xp_color = '7FFFD4',  # optional progress bar color. Defaults to #fcba41. 
+                            custom_background = 'https://media.discordapp.net/attachments/929334504236122123/983977178465202176/unknown.png',  # optional custom background.
+                            xp_color = '04d9ff',  # optional progress bar color. Defaults to #fcba41. 
                             #is_boosting = ,  # optional server boost icon next to username.
                             circle_avatar = True  # optional circle avatar instead of a square.
                             )
