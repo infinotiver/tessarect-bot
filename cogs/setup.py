@@ -92,7 +92,7 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
         with open(f'./configs/{ctx.guild.id}.json', 'w') as jsonFile:
             json.dump(data, jsonFile, indent=4)
 
-        await ctx.send(f'Default kick/ban reason set to **{reason}** successfully.')
+        await ctx.send(embed=createem(f'Default kick/ban reason set to **{reason}** successfully.'))
     @commands.command(name='securitylogschannel', description='Set logs channel for security related messages')
     @commands.has_permissions(manage_guild=True)
     @commands.guild_only()
@@ -108,7 +108,7 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
         with open(f'./configs/{ctx.guild.id}.json', 'w') as jsonFile:
             json.dump(data, jsonFile, indent=3)
 
-        await ctx.send(f'Security Logs Channel set to **{role.mention}** successfully.')
+        await ctx.send(embed=createem(f'Security Logs Channel set to **{role.mention}** successfully.'))
 
     @commands.command(name='setmemberrole', description='Set role which user gets on using verify command')
     @commands.has_permissions(manage_guild=True)
@@ -125,7 +125,7 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
         with open(f'./configs/{ctx.guild.id}.json', 'w') as jsonFile:
             json.dump(data, jsonFile, indent=3)
 
-        await ctx.send(f'Member role set to **{role.name}** successfully.')
+        await ctx.send(embed=createem(f'Member role set to **{role.name}** successfully.'))
 
     @commands.command(name='setmuterole', description='Sets the role assigned to muted people. '
                                                       'Use `createmuterole` for creating a muted role and '
@@ -143,7 +143,7 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
         with open(f'./configs/{ctx.guild.id}.json', 'w') as jsonFile:
             json.dump(data, jsonFile, indent=4)
 
-        await ctx.send(f'Mute role set to **{role.name}** successfully.')
+        await ctx.send(embed=createem(f'Mute role set to **{role.name}** successfully.'))
 
     @commands.command(name='createmuterole', description='Creates a mute role, and sets messaging permissions to '
                                                          'every channel.\n '
@@ -158,7 +158,7 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
         for channel in guild.channels:
             await channel.set_permissions(mutedRole, speak=False, send_messages=False, use_slash_commands=False)
             # setting permissions for each channel
-        await ctx.send(f'Created role **{mutedRole}** and set permissions accordingly.')
+        await ctx.send(embed=createem(f'Created role **{mutedRole}** and set permissions accordingly.'))
         await Setup.set_mute_role(self, ctx, mutedRole)
 
 
@@ -180,9 +180,9 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
           with open(f'./configs/{ctx.guild.id}.json', 'w') as jsonFile:
               json.dump(data, jsonFile, indent=4)
 
-          await ctx.send(f'**Changes Saved | Choice : {choice}**')
+          await ctx.send(embed=createem(f'**Changes Saved | Choice : {choice}**'))
         else:
-          await ctx.send('Invalid Choice')
+          await ctx.send(embed=createem('Invalid Choice'))
     @commands.command(name='antiscam', description='Toggle Antiscam filter (enable or disable only)')
     @commands.has_permissions(manage_guild=True)
     @commands.guild_only()
@@ -201,9 +201,9 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
           with open(f'./configs/{ctx.guild.id}.json', 'w') as jsonFile:
               json.dump(data, jsonFile, indent=4)
 
-          await ctx.send(f'**Changes Saved | Choice : {choice}**')
+          await ctx.send(embed=createem(f'**Changes Saved | Choice : {choice}**'))
         else:
-          await ctx.send('Invalid Choice')   
+          await ctx.send(embed=createem('Invalid Choice')   )
             
     @commands.command(name='antispam', description='Toggle Antispam filter (enable or disable only)')
     @commands.has_permissions(manage_guild=True)
@@ -223,9 +223,9 @@ class Setup(commands.Cog, description='Used to set up the bot for mute/unmute et
           with open(f'./configs/{ctx.guild.id}.json', 'w') as jsonFile:
               json.dump(data, jsonFile, indent=4)
 
-          await ctx.send(f'**Changes Saved | Choice : {choice}**')
+          await ctx.send(embed=createem(f'**Changes Saved | Choice : {choice}**'))
         else:
-          await ctx.send('Invalid Choice')          
+          await ctx.send(embed=createem('Invalid Choice')  )        
     @commands.command(aliases=["levelling"], description="Enable or disable levelling")
     @commands.has_permissions(administrator=True)
     async def levelconfig(self, ctx, choice):

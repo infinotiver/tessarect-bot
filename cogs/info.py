@@ -22,6 +22,7 @@ class Info(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.description='information based commands '
         self.invites = ['discord.gg/', 'discordapp.com/invite/']
         self.invite_domains = ['discord.gg', 'discordapp.com']
 
@@ -45,27 +46,10 @@ class Info(commands.Cog):
 
     # Stats about server
     @commands.group(aliases=['server', 'sinfo', 'si'], pass_context=True, invoke_without_command=True)
-    async def serverinfo(self, ctx, *, msg=""):
+    async def serverinfo(self, ctx ):
         """Various info about the server. [p]help server for more info."""
         if ctx.invoked_subcommand is None:
-            if msg:
-                server = None
-                try:
-                    float(msg)
-                    server = self.bot.get_guild(int(msg))
-                    if not server:
-                        return await ctx.send(
-                                               'Server not found.')
-                except:
-                    for i in self.bot.guilds:
-                        if i.name.lower() == msg.lower():
-                            server = i
-                            break
-                    if not server:
-                        return await ctx.send( 'Could not find server. Note: You must be a member of the server you are trying to search.')
-            else:
-                server = ctx.message.guild
-
+            server=ctx.guild
             online = 0
             for i in server.members:
                 if str(i.status) == 'online' or str(i.status) == 'idle' or str(i.status) == 'dnd':
@@ -81,7 +65,7 @@ class Info(commands.Cog):
             role_count = len(server.roles)
             emoji_count = len(server.emojis)
 
-            em = discord.Embed(color=0xea7938,timestamp=ctx.message.created_at)
+            em = discord.Embed(color=ctx.author.color,timestamp=ctx.message.created_at)
             em.add_field(name='<:Servers:946289809289281566> Name', value=server.name)
             em.add_field(name='<:owner:946288312220536863> Owner', value=server.owner, inline=False)
             em.add_field(name='<:Members:946289063810441248> Members', value=server.member_count)
@@ -113,7 +97,7 @@ class Info(commands.Cog):
         else:
             server = ctx.message.guild
         emojis = [str(x) for x in server.emojis]
-        await ctx.send("".join(emojis))
+        await ctx.send(embed=discord.Embed(title=f"{len(ctx.guild.emojis)} Emojis | {len([i for i in ctx.guild.emojis if not i.animated])} Static | {len([i for i in ctx.guild.emojis if  i.animated])} Animated",description=" ".join(emojis),color=ctx.author.color))
         await ctx.message.delete()
 
 
