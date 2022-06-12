@@ -20,12 +20,12 @@ async def send_waitfor_otp(ctx, bot):
         message_otp = await bot.wait_for("message", check=lambda message: message.author == ctx.author,
                                          timeout=25)
         if str(message_otp.content) == final_otp:
-            su=discord.Embed(description="Correct Code , Execueting Action" ,color=0x34363A)
+            su=discord.Embed(description="Correct Code , Executing Action" ,color=0x34363A)
             await msg.edit(content=None,embed=su)
             await message_otp.add_reaction("<:sucess:935052640449077248>")
             return True
         else:
-            er=discord.Embed(description="Incorrect Code - Aborting..." ,color=0x34363A)
+            er=discord.Embed(description="Incorrect Code - Aborting... Are you even a human?" ,color=0x34363A)
             await msg.edit(embed=er)
     except asyncio.TimeoutError:
         er=discord.Embed(description="Incorrect Code - Aborting..." ,color=0x34363A)

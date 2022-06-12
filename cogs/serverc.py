@@ -9,7 +9,7 @@ nest_asyncio.apply()
 mongo_url = os.environ.get("tst")
 cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
 db = cluster["tst"]["data"]
-
+telecluster=cluster["tst"]["tele"]
 class ServerConnect(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -30,21 +30,27 @@ class ServerConnect(commands.Cog):
       await ctx.send(embed=em
                     )
 
-    @commands.command(aliases=['ast'])
+    @commands.command(aliases=['ast','allowservertemplate'])
     @commands.has_permissions(administrator=True)
     async def Allowtemplate(self, ctx):   
+      
       await ctx.send(embed=discord.Embed(description='''Allowing this will give access to all users of Tessarect to import the channels of your guild in their own server however you will still be notified about any activity , Allowing this will enter a entry in our database containing your guild id and if any one wants to copy your guild's channel , we will fetch the channels then and copy them however , we will not disclose the members of your server or your any of the messages''',color=discord.Color.red()))
       import assets.otp_assets
       success=await assets.otp_assets.send_waitfor_otp(ctx,self.client)
       if not success:
         return await ctx.send('Okay , no problem ')
       else:
-        stats = await db.find_one({"n":"stemplates"})        
+        stats = await db.find_one({"n":"stemplates"})  
+        if stats is None:
+          new = {"n":"stemplates", "id": []}
+          db.insert_one(new)      
+          return await ctx.send('Initialized Database , Please try that command again ')        
         list=stats['id']
         list.append(ctx.guild.id)
         db.update_one({"n":'stemplates'},{"$set": {"id": list}})
         await ctx.send(embed=discord.Embed(title='Done',description="Added to database",color=discord.Color.dark_theme()))
-    @commands.command(aliases=['rst'])
+        
+    @commands.command(aliases=['rst','removeservertemplate'])
     @commands.has_permissions(administrator=True)
     async def Remtemplate(self, ctx):   
       await ctx.send(embed=discord.Embed(description='''Entrying the code will remove your server from our server and people will no longer be able to use your server template
@@ -57,21 +63,22 @@ class ServerConnect(commands.Cog):
         stats = await db.find_one({"n":"stemplates"})        
         list=stats['id']
         if ctx.guild.id in list:
-          print(list)
           list.remove(ctx.guild.id)
           db.update_one({"n":'stemplates'},{"$set": {"id": list}})
           await ctx.send(embed=discord.Embed(title='Removed',description="Removed from database",color=discord.Color.red()))
         else:
           await ctx.send('You are not really in our database , you can do `[p]ast` to add your server')      
+
+      
     @commands.command(aliases=['vt'])
     async def ViewTemplates(self, ctx):      
       stats = await db.find_one({"n":"stemplates"})
       if stats is None:
         new = {"n":"stemplates", "id": []}
         db.insert_one(new)      
-        await ctx.send('Initialized Database')
+        return await ctx.send('Initialized Database')
       list=stats['id']
-      print(stats)
+
 
       if list ==[]:    
         return await ctx.send(embed=discord.Embed(description='Oops ! No templates yet',color=discord.Color.dark_red()))
@@ -93,10 +100,8 @@ class ServerConnect(commands.Cog):
           else:
            for x in g.channels:
                 e.add_field(name=f"`{x.name}`",value=x.category,inline=False)            
-          await ctx.send(embed=e)
-      
-                                
+          await ctx.send(embed=e) 
 
-
+                                  
 def setup(client):
     client.add_cog(ServerConnect(client))
