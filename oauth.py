@@ -40,7 +40,7 @@ class Oauth:
     
     @staticmethod
     def get_user_guild(access_token):
-        response = requests.get(url=f'{Oauth.discord_api_url}/v6/users/@me/guilds', headers={"Authorization":f"{access_token}"})
+        response = requests.get(url=f'{Oauth.discord_api_url}/v6/users/@me/guilds', headers={"Authorization":f"Bot {access_token}"})
         response.raise_for_status()
         return response.json()
 

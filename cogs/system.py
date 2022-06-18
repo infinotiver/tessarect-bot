@@ -175,14 +175,7 @@ class Tessarect(commands.Cog):
             )   
             await ctx.send(embed=embed)       
             return
-        elif isinstance(error,discord.errors.HTTPException):
-            embed = discord.Embed(
-                title="<:messagealert:942777256160428063> I Got Too Wordy",
-                description=f"Looks like I tried to send a response for {ctx.command} that was not fit for discord!",
-                color=self.theme_color,
-            )   
-            await ctx.send(embed=embed)       
-            return
+
         elif isinstance(error, commands.CommandOnCooldown):
            
             embed = discord.Embed(

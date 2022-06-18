@@ -8,6 +8,7 @@ from discord.ext import commands
 class Pypi(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.description="<:sucess:935052640449077248> Checkout about info on an library on pypi"
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -18,7 +19,7 @@ class Pypi(commands.Cog):
         if package_name is None:
             await ctx.send("**Missing package name**")
         else:
-            if len(package_name) >= 15:
+            if len(package_name) >= 100:
                 await ctx.send("**<:sus:802765928961671208> Big package name **")
             else:
                 url = f"https://pypi.org/pypi/{package_name}/json"
@@ -48,8 +49,11 @@ class Pypi(commands.Cog):
                             project = r["info"]["project_url"]
                             v = r["info"]["version"]
 
-                            embed = discord.Embed(color=0xFF0000)
+                            embed = discord.Embed(color=0x006dad)
                             embed.add_field(name="Name", value=f"{name}", inline=True)
+                            embed.add_field(
+                                name="\n**Description**", value=f"{desc}", inline=False
+                            )                          
                             embed.add_field(name="Version", value=f"{v}", inline=True)
                             embed.add_field(
                                 name="Author", value=f"{author}", inline=True
@@ -57,9 +61,7 @@ class Pypi(commands.Cog):
                             embed.add_field(
                                 name="Summary", value=f"{summary}", inline=False
                             )
-                            embed.add_field(
-                                name="\n**Description**", value=f"{desc}", inline=False
-                            )
+
                             embed.add_field(
                                 name="**Links**",
                                 value=f"[Home Page]({home}) \n [Page]({project})",
@@ -67,7 +69,7 @@ class Pypi(commands.Cog):
                             )
 
                             embed.set_thumbnail(
-                                url="https://miro.medium.com/max/1080/1*ciPCmwyO6C79SLVU5Rj50w.jpeg"
+                                url="https://pbs.twimg.com/profile_images/909757546063323137/-RIWgodF_400x400.jpg"
                             )
 
                             await ctx.send(embed=embed)

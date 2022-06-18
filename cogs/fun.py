@@ -71,8 +71,15 @@ class FunUtility(commands.Cog):
     )
     async def coin_flip(self, ctx):
         result = random.choice(["heads", "tails"])
-        await ctx.send(
-            f"The coin has been flipped and resulted in **{result}**"
+        heads='https://cdn.vectorstock.com/i/1000x1000/20/42/man-head-profile-gold-coin-vector-19272042.webp'
+        tails='https://previews.123rf.com/images/spideyspike/spideyspike2007/spideyspike200700006/151874716-the-tail-side-of-the-coin-isolated-vector-illustration.jpg'
+        e=discord.Embed(color=discord.Color.gold(),description=f"The coin has been flipped and resulted in **{result}**")
+        if  result=='heads':
+          e.set_thumbnail(url=heads)
+        else:
+          e.set_thumbnail(url=tails)
+        await ctx.send(embed=e
+            
         )
 
     @commands.command(name="tinyurl", aliases=["tiny"], description="URL shortening command.")
@@ -140,7 +147,7 @@ class FunUtility(commands.Cog):
         else:
             m = ctx.author
 
-        av_embed = discord.Embed(title=f"{m}'s Avatar", color=self.theme_color)
+        av_embed = discord.Embed(title=f"{m}'s Avatar", color=m.color)
         av_embed.set_image(url=m.avatar_url)
         await ctx.send(embed=av_embed)
 
@@ -156,7 +163,6 @@ class FunUtility(commands.Cog):
         choice = random.choice(items)
         await ctx.send(
             f"I choose **{choice}**",
-            allowed_mentions=discord.AllowedMentions.none(),
         )
 
     @commands.command(
@@ -225,7 +231,7 @@ class FunUtility(commands.Cog):
         rules=discord.Embed(title="Trivia Rules",description="The rules are simple. I will ask you a question, you choose the answer.\n"
                                          "If there are 4 options in the answer, "
                                          "you can enter \"1\", \"2\", \"3\", or \"4\".\n"
-                                         "The game starts in 5 seconds.")
+                                         "The game starts in 5 seconds.",color=discord.Color.dark_theme())
         message_to_edit = await ctx.send(embed=rules)
         await asyncio.sleep(5)
         await message_to_edit.edit(content=f"{ctx.author.name}, go!")
@@ -264,7 +270,7 @@ class FunUtility(commands.Cog):
             await message_from_user.reply(f"_{ctx.author.display_name}_, good try, "
                                           f"but that was not the correct answer.\n"
                                           f"The correct answer is **{correctans}**.")
-        await ctx.send(f"Thanks for playing **Trivia**, _{ctx.author.display_name}_!")
+        await ctx.send(embed=discord.Embed(description=f"Thanks for playing **Trivia**, _{ctx.author.display_name}_!",color=discord.Color.blue()))
 
     @commands.command()
     @commands.cooldown(rate=1, per=2.0, type=commands.BucketType.user)
@@ -364,7 +370,6 @@ class FunUtility(commands.Cog):
     async def embed(self, ctx, *, msg: str = None):
         """
         ```
-        ```
         ```md
         Embed given text. Ex: Do [p]embed for more help
         Example: [p]embed title=test this | description=some words | color=3AB35E | field=name=test value=test
@@ -384,7 +389,7 @@ class FunUtility(commands.Cog):
         PS: Hyperlink text like so:
         \[text](https://www.whateverlink.com)
         PPS: Force a field to go to the next line with the added parameter inline=False
-        ```"""
+        """
         
         if msg:
             if 1==1:
@@ -493,15 +498,15 @@ class FunUtility(commands.Cog):
           return
            
     @commands.has_permissions(add_reactions=True)
-    @commands.command(pass_context=True,aliases=['poll'])
-    async def rpoll(self, ctx, *, msg):
+    @commands.command(pass_context=True,aliases=['rpoll'])
+    async def poll(self, ctx, *, msg):
         """Create a poll using reactions. [p]help rpoll for more information.
         [p]rpoll <question> | <answer> | <answer> - Create a poll. You may use as many answers as you want, placing a pipe | symbol in between them.
         Example:
         [p]rpoll What feature is your favourite? | Economy | Ticket | Fun | AI | Other
         You can also add `time=<some integer (in seconds)>` to end the poll , default is Forever
         """
-        await ctx.message.delete()
+        
         options = msg.split(" | ")
         time = [x for x in options if x.startswith("time=")]
         if time:
@@ -523,7 +528,7 @@ class FunUtility(commands.Cog):
             confirmation_msg += "{} - {}\n".format(emoji[idx], option)
             to_react.append(emoji[idx])
         confirmation_msg += "\n\nYou have {} seconds to vote!".format(time)
-        poll_msg = await ctx.send(embed=discord.Embed(description=confirmation_msg,color=discord.Color.dark_blue()))
+        poll_msg = await ctx.send(embed=discord.Embed(description=confirmation_msg,color=discord.Color.dark_theme()))
         for emote in to_react:
             await poll_msg.add_reaction(emote)
         print(time)
@@ -549,6 +554,7 @@ class FunUtility(commands.Cog):
           else:
               top_result = options[emoji.index(top_result)+1]
               end_msg += "\n**{}** is the winner!".format(top_result)
-          await ctx.send(embed=discord.Embed(description=end_msg,color=discord.Color.dark_blue()))          
+          await ctx.send(embed=discord.Embed(description=end_msg,color=discord.Color.dark_theme()))          
+          await ctx.message.delete()
 def setup(bot):
     bot.add_cog(FunUtility(bot))

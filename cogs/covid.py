@@ -80,7 +80,7 @@ async def aiohttp_post_binary(url: str, data: dict = None, params: dict = None):
             return response
 
 
-class Covid(commands.Cog, description="Get Covid-19 stats worldwide, or for a specific country"):
+class Covid(commands.Cog, description="<:sucess:935052640449077248> Get Covid-19 stats worldwide, or for a specific country"):
 
     def __init__(self, bot):
         self.bot = bot

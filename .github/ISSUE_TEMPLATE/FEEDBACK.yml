@@ -1,7 +1,7 @@
 name: Feedback Report
 description: Send your feedback
-title: "[⭐]: "
-labels: []
+title: "[⭐] "
+labels: [feedback]
 
 body:
   - type: markdown

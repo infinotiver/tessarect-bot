@@ -56,9 +56,7 @@ import motor.motor_asyncio
 #import datetime
 import socket  
 import datetime
-#from datetime import datetime, timedelta
-# Create a translator object
-#from discord_slash import SlashCommand, SlashContext
+
 import urllib.request
 from dislash import  Option, OptionType
 import typing
@@ -167,7 +165,7 @@ async def on_ready():
             channel_id = json.load(readFile)
 
         channel = client.get_channel(channel_id)
-        ex=discord.Embed(title="Successfully Restarted",description="Heyo, I am back after reboot ",color=discord.Color.dark_blue())
+        ex=discord.Embed(title="Successfully Restarted",description="100% \nBeep Beep Boop Beep !, I am back after reboot ",color=discord.Color.dark_blue())
         await channel.send(embed=ex)
 
         os.remove("./storage/reboot.json")  
@@ -336,10 +334,7 @@ async def error(ctx,error):
 
 
 
-@client.command()
-async def convertmoney(ctx,value,curr1,curr2):
-  res=await get_converted_currency(value,curr1,curr2)
-  await ctx.send(embed=discord.Embed(description=res,color=discord.Color.gold()))
+
 import urllib
 @client.command(alises=['dict','define'])
 async def dictionary(ctx, *, text):
@@ -550,7 +545,7 @@ async def on_member_remove(member):
 
 
 @client.command()
-@commands.is_nsfw()
+
 async def meme(ctx):
     page = requests.get(f'https://api.popcat.xyz/meme')
     d = json.loads(page.content)
@@ -609,14 +604,12 @@ async def google(ctx, *, query):
 
 @client.command()
 async def lyrics(ctx, *, song):
-    from lyrics_extractor import SongLyrics
-
-    sc = SongLyrics('AIzaSyCBc9vGiM-q0dIOpt0mSIdhraUGiF1pU_U', '2c0e4a26e5d598f41')
-    js = sc.get_lyrics(
-        song
-    )
-    em = discord.Embed(title=js["title"], description=js["lyrics"], color=discord.Color.dark_grey())
-    await ctx.reply(embed=em)
+  page = requests.get(f'https://api.popcat.xyz/lyrics?song={song}')
+  js = json.loads(page.content)
+  
+  em = discord.Embed(title=js["title"], description=js["lyrics"], color=discord.Color.dark_grey())
+  em.set_thumbnail(url=js['image'])
+  await ctx.reply(embed=em)
     
 
 
@@ -664,14 +657,14 @@ async def balance(ctx ,user: discord.Member = None):
   wallet_amt = users[str(user.id)]["wallet"]
 
   bank_amt = users[str(user.id)]["bank"]
-  em = discord.Embed(title=f'{user.name} Balance',color = 0x0437F2,timestamp=ctx.message.created_at)
-  em.add_field(name="Wallet Balance", value=f'֍{wallet_amt:,}')
-  em.add_field(name='Bank Balance',value=f'֍{bank_amt:,}')
+  em = discord.Embed(title=f'{user.name}'s' Balance',color = user.color,timestamp=ctx.message.created_at)
+  em.add_field(name="Wallet Balance", value=f'֍{wallet_amt:,}',inline=False)
+  em.add_field(name='Bank Balance',value=f'֍{bank_amt:,}',inline=False)
   em.set_thumbnail(url=user.avatar_url)
   em.add_field(name='Terrabux',value=f"<a:Diamond:930350459020017694>{bal['terrabux']}",inline=False)
 
-  tot = bank_amt+wallet_amt+(bal['terrabux']*10)
-  em.set_footer(text=f"🤨 {tot}")        
+
+  em.set_footer(text=f"🤨")        
   msg=await ctx.reply(embed= em)
 
 hacking_status = ['breaching mainframe', 'accessing CPU pins', 'a couple gigabytes of RAM','Accessing Ip adress ','Getting Os info']
@@ -1754,7 +1747,7 @@ async def getidea(ctx):
 @client.command()
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
 async def fact(ctx): 
-  page = requests.get(f'https://api.eriner.repl.co/fun/uselessfact')
+  page = requests.get(f'https://api.popcat.xyz/fact')
   source = json.loads(page.content)
   ft = source["fact"] 
   em=discord.Embed(title="A Fact...",description=ft,color=discord.Color.random())
@@ -1780,25 +1773,10 @@ async def color(ctx,hex):
 
 
   
-'''
-@client.command()
-@commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
-async def kill(ctx,victim:discord.Member=None): 
-  if not victim:
-    victim=ctx.author
-  if victim.id == 900992402356043806 or victim==client.user:
-    return await ctx.reply('Just shut up , go to heck , u cant kill me or my owner stupid twit')
-  page = requests.get(f'https://api.waifu.pics/sfw/kill')
-  source = json.loads(page.content)
-  url=source["url"]
-  em=discord.Embed(description=f"{victim} is being ....",color=discord.Color.red())
-  em.set_image(url=url)
-  await ctx.reply(embed=em)  
-'''
 import psutil
 
 startTime = time.monotonic()
-@client.command(aliases=["bi", "about"])
+@client.command(aliases=["bi", "about","tessarect"])
 async def bot( ctx):
     row = ActionRow(
         Button(
@@ -1824,11 +1802,6 @@ async def bot( ctx):
             label="Website!",
             url='https://tessarect-website.prakarsh17-coder.repl.co/',
             emoji="<:planet:930351400532201532>"
-        ),      
-        Button(
-            style=ButtonStyle.primary,
-            label="Developers!",
-            custom_id="cred"
         )
 
   
@@ -1838,53 +1811,28 @@ async def bot( ctx):
 
     pre = ", ".join(prefix_check(ctx.message.guild))
     embed = discord.Embed(
-        timestamp=ctx.message.created_at, description="<:tessarect:956440587177975878> Making experience better",title="Tessarect", color=0x050A30
+        timestamp=ctx.message.created_at, description="Making experience better",title="Tessarect", color=discord.Color.dark_theme()
     )
     embed.set_thumbnail(url=client.user.avatar_url)
     embed.add_field(
-        name="<:Servers:946289809289281566> With", value=f"{ser} servers"
+        name="<:Servers:946289809289281566> Servers", value=f"┕ {ser} servers"
     )
     embed.add_field(
-        name="<a:panda:930348733844033576> Enjoying With", value=f"{mem} members"
+        name="<:Members:946289063810441248> Enjoying With", value=f"┕ {mem} members"
     )
-    embed.add_field(name="<:blurple_slashcommands:930349698999537746> Prefix", value=f"{pre}")
+    embed.add_field(name="<:blurple_slashcommands:930349698999537746> Prefix", value=f"┕ {pre}")
     embed.add_field(
-        name="<:crownx:920620263584960533> Owner", value="SniperXi199#2209"
+        name="<:blurple_settings:937722489004515418> Developers", value="┕ SniperXi199#2209 - <:owner:946288312220536863> Founder\n┕ Dark-Knight#9193 - Co developer & advisor"
     )
+    embed.add_field(
+        name="<:command:941986813013274625> Commands", value=f"┕ {len(client.all_commands)}"
+    )  
     embed.set_footer(
-        text=f"Requested By: {ctx.author.name}", icon_url=f"{ctx.author.avatar_url}"
+        text=f"For more details visit github repo | Requested By: {ctx.author.name}", icon_url=f"{ctx.author.avatar_url}"
     )
-    em = discord.Embed(title="Updates",description="Fetched from my server",color=discord.Color.gold())
-    #em.set_author(name=client.user,icon_url=client.user.avatar_url)
-    channel=client.get_channel(937559150936879144)
-    async for message in channel.history(limit=9):
-        content = message.content # get content
-        try:
-          if message.content is not None:
-            try:
-              
-              em.add_field(name=f"By {message.author} on {message.created_at}",value=content ,inline=False)
-            except:
-              print(format_exc())
-          else:
-            em.add_field(name="_ _",value='Couldnt Fetch Message',inline=False)
-        except Exception as e:
-          em.add_field(name="_ _",value='Nothin found')       
+    #em.set_author(name=client.user,icon_url=client.user.avatar_url)  
     msg =await ctx.reply(embed=embed,components=[row])
-    await ctx.send(embed=em)
     on_click = msg.create_click_listener(timeout=60)
-    @on_click.matching_id("cred")
-    async def on_test_button(inter):
-      try:
-        
-        em = discord.Embed(title="Contributors",description=f"{client.get_user(900992402356043806).mention} \n Owner and Lead Developer \n\n {client.get_user(432801163126243328).mention}\n Co Developer and a great supporter\n",color=discord.Color.blue())
-        
-        #em.set_image(url="https://contrib.rocks/image?repo=prakarsh17/tessarect-bot")
-        em.set_footer(text="See our Github for details")
-        await inter.reply(embed=em)
-      except  Exception as e:
-        await inter.reply(e)
-
     @on_click.timeout
     async def on_timeout():
         await msg.edit(components=[])    
@@ -1965,8 +1913,11 @@ async def stats(ctx):
     values23 = values22 * 0.001
     values24 = values23 * 0.001
     dpyVersion = discord.__version__
-    em=discord.Embed(title="Stats",description=f"Tessarect Stats \n <:crownx:920620263584960533> **Creator** \n__**SniperXi199#2209**__\n **Channels and Users** \n <:replycont:920287873591296000> {sum(1 for g in client.guilds for _ in g.channels)}\n <:Reply:941181074015412225>{len(client.users)}",color=discord.Color.gold())
-    em.add_field(name="Total Commands used",value=stats['tot'],inline=False)
+    em=discord.Embed(title="Stats",description=f"Tessarect Stats \n <:owner:946288312220536863> **Creator** \n__**SniperXi199#2209**__",color=discord.Color.dark_theme())
+    em.add_field(name="Servers",value=len(client.guilds),inline=True)
+    em.add_field(name="Channels",value=sum(1 for g in client.guilds for _ in g.channels),inline=True)
+    em.add_field(name="Users",value=len(client.users),inline=True)
+    em.add_field(name="Total Commands used",value=stats['tot'],inline=True)
     em.add_field(name='<:CPU:937722162897375282> Hosting Stats', value=f'''```yml
 Cpu_usage: {psutil.cpu_percent(1)}%
 (Actual Cpu Usage May Differ)
@@ -1974,7 +1925,7 @@ Cpu_usage: {psutil.cpu_percent(1)}%
 Cores: {psutil.cpu_count()} 
 Physical_Cores: {psutil.cpu_count(logical=False)}
 BotPlatform: {str(platform.platform())}
-```''',inline=True)
+```''',inline=False)
     em.add_field(name='<:blurple_settings:937722489004515418> Storage', value=
                           f''' ```yml
 Total_ram: {round(values24, 2)} GB                          

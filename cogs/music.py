@@ -159,7 +159,7 @@ class Song:
         embed = (
             discord.Embed(
                 title="Now playing <a:dj:946653289175461899> ",
-                description="```css\n{0.source.title}\n```".format(self),
+                description="```\n{0.source.title}\n```".format(self),
                 color=discord.Color.blue(),
             )
            # .add_field(name="Description", value=self.source.description)
@@ -174,7 +174,7 @@ class Song:
                 #value=f",".join(self.source.tags[5]),
             #)            
             .set_footer(
-                text="Views: {0.source.views} Likes: {0.source.likes} Dislikes: {0.source.dislikes} ".format(self,self,self),
+                text="Views: {0.source.views} Likes: {0.source.likes} Dislikes: {0.source.dislikes} \n You can use lyrics command to get lyrics ".format(self,self,self),
             )            
             .add_field(name="URL", value="[Click]({0.source.url})".format(self))
         )
@@ -326,13 +326,13 @@ class Music(commands.Cog):
 
         ctx.voice_state.voice = await destination.connect()
         embed = discord.Embed(
-            title="Connected to Music <:Audio:912648310672728064>",
-            color=0xFF0000,
+            description="Connected to Music <:Audio:912648310672728064>",
+            color=discord.Color.blue(),
         )
         await ctx.send(embed=embed)
 
     @commands.command(name="summon")
-    @commands.has_permissions(manage_guild=True)
+    
     async def _summon(
         self, ctx: commands.Context, *, channel: discord.VoiceChannel = None
     ):
@@ -348,12 +348,12 @@ class Music(commands.Cog):
 
         ctx.voice_state.voice = await destination.connect()
         embed = discord.Embed(
-            title="Summoned <:Audio:912648310672728064>", color=0xFF0000
+            description="Summoned <:Audio:912648310672728064>", color=0xFF0000
         )
         await ctx.send(embed=embed)
 
     @commands.command(name="leave", aliases=["disconnect"])
-    #@commands.has_permissions(manage_guild=True)
+    #
     async def _leave(self, ctx: commands.Context):
 
         if not ctx.voice_state.voice:
@@ -372,7 +372,7 @@ class Music(commands.Cog):
         await ctx.send(embed=ctx.voice_state.current.create_embed())
 
     @commands.command(name="pause")
-    @commands.has_permissions(manage_guild=True)
+    
     async def _pause(self, ctx: commands.Context):
 
         if ctx.voice_state.is_playing and ctx.voice_state.voice.is_playing():
@@ -380,7 +380,7 @@ class Music(commands.Cog):
             await ctx.message.add_reaction("⏯")
 
     @commands.command(name="resume")
-    @commands.has_permissions(manage_guild=True)
+    
     async def _resume(self, ctx: commands.Context):
 
         if ctx.voice_state.is_playing and ctx.voice_state.voice.is_paused():
@@ -388,7 +388,7 @@ class Music(commands.Cog):
             await ctx.message.add_reaction("⏯")
 
     @commands.command(name="stop")
-    @commands.has_permissions(manage_guild=True)
+    
     async def _stop(self, ctx: commands.Context):
 
         ctx.voice_state.songs.clear()
@@ -482,6 +482,7 @@ class Music(commands.Cog):
 
                 await ctx.voice_state.songs.put(song)
                 await ctx.send(embed=discord.Embed(description="Enqueued {}".format(str(source)),color=discord.Color.blue()))
+                
 
     @_join.before_invoke
     @_play.before_invoke

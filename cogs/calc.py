@@ -4,9 +4,10 @@ import requests
 from discord.ext import commands
 
 
-class Calc(commands.Cog):
+class Calculator(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.description="<:sucess:935052640449077248> Calculator "
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -14,8 +15,8 @@ class Calc(commands.Cog):
 
     @commands.command(description="Calculates the given expression")
     async def calc(self, ctx, *, expression):
-        if len(expression) > 30:
-            await ctx.send("**Too big equation**")
+        if len(expression) > 10000:
+            await ctx.send("**I dont think I can bear that much**")
         else:
             st = expression.replace("+", "%2B")
             async with aiohttp.ClientSession() as session:
@@ -23,8 +24,8 @@ class Calc(commands.Cog):
                     f"https://api.mathjs.org/v4/?expr={st}"
                 ) as response:
                     ex = await response.text()
-                    if len(ex) > 2000:
-                        await ctx.send("Too big result")
+                    if len(ex) > 20000:
+                        await ctx.send("I dont think I can bear that much")
                     else:
 
                         embed = discord.Embed(
@@ -48,4 +49,4 @@ class Calc(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(Calc(client))
+    client.add_cog(Calculator(client))

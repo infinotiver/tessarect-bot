@@ -9,15 +9,39 @@ import aiohttp
 import requests
 import os
 from discord.ext import commands, tasks
-    
-
+import re
+def findurl(string):
+  
+    # findall() has been used 
+    # with valid conditions for urls in string
+    regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+    url = re.findall(regex,string)      
+    return [x[0] for x in url]
 class AI(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = (
-            "Ai related commands , feel smart by using it"
+            "<:sucess:935052640449077248> Ai related commands , feel smart by using it"
         )
+    @commands.command(
+        name="chat",aliases=['chit','c','talk'] ,help="Chat from bot"
+    )
+    async def chat(self, ctx,*,text):
+      key=os.environ['chatbot']
+      page = requests.get(f'https://api.popcat.xyz/chatbot?msg={text}&owner=SniperXi199+and+their+co+devs&botname=Tessarect')
+      d = json.loads(page.content)
 
+      out=d['response']
+      urls=findurl(out)
+      
+      em=discord.Embed(description=out,color=0x34363A)
+
+      if len(urls)==1:
+        
+        em.set_image(url=f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{urls[0]}")
+      elif len(urls)>1:
+        em.add_field(name="Links",value=urls)
+      await ctx.send(embed=em)          
     @commands.command(
         name="generate",aliases=['gen'] ,help="Generate some text"
     )
@@ -108,6 +132,6 @@ class AI(commands.Cog):
       em=discord.Embed(color=0x34363A)
       em.set_image(url=out)     
       await ctx.send(embed=em)    
-         
+       
 def setup(bot):
     bot.add_cog(AI(bot))

@@ -360,7 +360,7 @@ class Security(commands.Cog):
         co2 = random.randrange(40, 65)
         co4 = random.randrange(40, 80)
         draw = ImageDraw.Draw(image)
-        draw.line([(co1, co2), (co3, co4)], width=width, fill=(90, 90, 90))
+        draw.line([(co1, co2), (co3, co4)], width=width, fill=(0, 0, 0))
 
         # Add noise
         noisePercentage = 0.20  # 20%
@@ -370,7 +370,7 @@ class Security(commands.Cog):
             for j in range(image.size[1]):
                 rdn = random.random()  # Give a random %
                 if rdn < noisePercentage:
-                    pixels[i, j] = 	(139, 0, 0)
+                    pixels[i, j] = 	(89,203,232)
 
         # Save
         image.save(f"{folderPath}/output/{captchaName}_2.png")
@@ -513,7 +513,7 @@ class Security(commands.Cog):
             embed = discord.Embed(
                 title="Captcha Logging - Exceeded",
                 description="User {0} has exceeded the captcha response time (120s)".format(member.mention),
-                timestamp=datetime.now().astimezone(tz=de), color=discord.Colour.blue())
+                timestamp=datetime.datetime.now().astimezone(tz=de), color=discord.Colour.blue())
             embed.add_field(
                 name="User ID",
                 value=f'{member.id}', inline=False)

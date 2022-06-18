@@ -44,7 +44,7 @@ class Image(commands.Cog):
         async with aiohttp.ClientSession() as cs:
             async with cs.get('https://some-random-api.ml/animu/hug') as r:
                 res = await r.json()
-                e = discord.Embed(title=f"**{member.name}**, you got a hug by **{ctx.author.name}**!", color=randomcolor)
+                e = discord.Embed(title=f"**{member.name}**, you got a hug🤗 by **{ctx.author.name}**!", color=randomcolor)
                 e.set_image(url=res['link'])
                 return await ctx.send(embed=e)
 
@@ -65,7 +65,7 @@ class Image(commands.Cog):
             e = discord.Embed(title=f"Oh no! **{member.name}**, you're forever alone :(", color=randomcolor)
             e.set_image(url=sadness)
             return await ctx.send(embed=e)
-        e = discord.Embed(title=f"**{member.name}**, you got a kiss by **{ctx.author.name}**!", color=randomcolor)
+        e = discord.Embed(title=f"**{member.name}**, you got a kiss💋 by **{ctx.author.name}**!", color=randomcolor)
         e.set_image(url=random.choice(kisses))
         return await ctx.send(embed=e)
 
@@ -80,7 +80,7 @@ class Image(commands.Cog):
             e = discord.Embed(title=f"Oh no! **{member.name}**, you're forever alone :(", color=randomcolor)
             e.set_image(url=sadness)
             return await ctx.send(embed=e)
-        e = discord.Embed(title=f"**{member.name}**, you got a lick by **{ctx.author.name}**!", color=randomcolor)
+        e = discord.Embed(title=f"**{member.name}**, you got a lick👅 by **{ctx.author.name}**!", color=randomcolor)
         e.set_image(url=random.choice(licks))
         return await ctx.send(embed=e)
 
@@ -182,7 +182,7 @@ class Image(commands.Cog):
             e = discord.Embed(title=f"Oh no! **{member.name}**, you're forever alone :(", color=randomcolor)
             e.set_image(url=sadness)
             return await ctx.send(embed=e)
-        e = discord.Embed(title=f"**{member.name}**, you got a slap by **{ctx.author.name}**!", color=randomcolor)
+        e = discord.Embed(title=f"**{member.name}**, you got a slap🖐🏻 by **{ctx.author.name}**!", color=randomcolor)
 
 
         e.set_image(url=random.choice(slaps))

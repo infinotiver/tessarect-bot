@@ -200,7 +200,7 @@ class Dev(commands.Cog):
         dd = discord.Embed(title='Invalid Input',description=f' Invalid Mode = {mode} \n Accepted mode {listd}',color=discord.Color.red())          
         await ctx.send(embed=dd)     
         return
-      otp_success = await assets.reactor.reactor(ctx, self.bot, 'Do you want to continue the restart project', color=0x607d8b,usr=ctx.author)
+      otp_success = await assets.reactor.reactor(ctx, self.bot, 'Do you want to continue the restart ', color=0x607d8b,usr=ctx.author)
       # random otp generator. if user enters correct otp, returns true. else, returns false
       if not otp_success:
           return 
@@ -211,13 +211,13 @@ class Dev(commands.Cog):
             return 
       modedict={1:'Simple restart',2:'Advanced RESTART'}
       e = discord.Embed(title='Restarting Started',description=f'**Mode = {mode}**\n{modedict[mode]}',color=discord.Color.dark_gold())
-      e.add_field(name="Progress",value=progress_bar(10))
+      e.add_field(name="Progress",value='11%')
       x = await ctx.send(embed=e)
       await asyncio.sleep(1)  
-      e.set_field_at(0,name="Progress",value=progress_bar(30))
+      e.set_field_at(0,name="Progress",value='33%')
       await x.edit(embed=e)
       await asyncio.sleep(2)
-      e.set_field_at(0,name="Progress",value=progress_bar(50))
+      e.set_field_at(0,name="Progress",value='66%')
       e.add_field(name="Status",value='Unloading Cogs')
       await x.edit(embed=e)        
 
@@ -229,16 +229,19 @@ class Dev(commands.Cog):
         except Exception as ex:
           print(f'{filename} - {ex}')         
 
-      e.set_field_at(0,name="Progress",value=progress_bar(100))
+      e.set_field_at(0,name="Progress",value='99%')
       
       e.set_field_at(1,name="Status",value='Changing Status')
       e.color=discord.Color.dark_blue()
+      await asyncio.sleep(1)
+      e.set_field_at(1,name="Status",value='Restarted')
+      e.color=discord.Color.blue()
       await x.edit(embed=e)
       await self.bot.change_presence(
               status=discord.Status.idle,
               activity=discord.Activity(                 
                   type=discord.ActivityType.watching,
-                  name= f"🌠 System Reboot "
+                  name= f"☄ System Reboot "
               ))
       with open("./storage/reboot.json", "w") as rebootFile:
           json.dump(ctx.message.channel.id, rebootFile) 
@@ -447,13 +450,13 @@ class Dev(commands.Cog):
         else:
           embed=discord.Embed(title="My Guilds",color=discord.Color.dark_theme())
           for guild in activeservers:
-            embed.add_field(name=guild,value=f"({str(guild.id)}) {str(guild.member_count)} ({str(guild.owner)})")
+            embed.add_field(name=guild,value=f"({str(guild.id)}) -{str(guild.member_count)} **({str(guild.owner)})**",inline=False)
           await ctx.send(embed=embed) 
     @check(check_Mod)
     @commands.command()
     async def reply(self,ctx,member:discord.User,*,content:str):
       
-      embed = discord.Embed(title=f"Hello {member}",timestamp=ctx.message.created_at,description=content, color=0x8df2db)
+      embed = discord.Embed(timestamp=ctx.message.created_at,description=content, color=0x8df2db)
      
       embed.set_footer(text=f"Sent by  {ctx.author}")
   
