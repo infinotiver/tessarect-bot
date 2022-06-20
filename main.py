@@ -141,13 +141,13 @@ async def on_ready():
     await channel.send(embed=em)
     for x in client.shards:
       if not x==3:#3 is the shard id of tbd
-          
+        emojis = ["🎪","🎁","🎩","🎓","⚽","🥎","🎮","🏆","🔭","🔬","💣","🔌","📺","💡"]
         await client.change_presence(
             status=discord.Status.online,
             shard_id=x, 
             activity=discord.Activity(
                 type=discord.ActivityType.watching,
-                name= f"🦈 Shard {x} | {len(client.guilds)}"
+                name= f"{random.choice(emojis)} Shard {x} | {len(client.guilds)}"
             )
         )
       else:
@@ -169,14 +169,10 @@ async def on_ready():
         await channel.send(embed=ex)
 
         os.remove("./storage/reboot.json")  
-    #deletelogs.start()              
-    #update_s.start()
+
 
 import topgg
-
-# This example uses tasks provided by discord.ext to create a task that posts guild count to Top.gg every 30 minutes.
-
-dbl_token = os.environ['topggt']  # set this to your bot's Top.gg token
+dbl_token = os.environ['topggt']  
 client.topggpy = topgg.DBLClient(client, dbl_token)
 @tasks.loop(minutes=30)
 async def update_stats():
@@ -190,10 +186,7 @@ async def update_stats():
 
 update_stats.start()
 
-
 from googletrans import Translator
-
-
 @client.command()
 async def translate(ctx, lang=None, *, thing=None):
     description = ""
@@ -596,12 +589,6 @@ async def google(ctx, *, query):
 
 
     
-    #
- 
-# ---------------------------------------------------------------------------------------
-
- 
-
 @client.command()
 async def lyrics(ctx, *, song):
   page = requests.get(f'https://api.popcat.xyz/lyrics?song={song}')
@@ -657,7 +644,7 @@ async def balance(ctx ,user: discord.Member = None):
   wallet_amt = users[str(user.id)]["wallet"]
 
   bank_amt = users[str(user.id)]["bank"]
-  em = discord.Embed(title=f'{user.name}'s' Balance',color = user.color,timestamp=ctx.message.created_at)
+  em = discord.Embed(title=f'{user.name} Balance',color = user.color,timestamp=ctx.message.created_at)
   em.add_field(name="Wallet Balance", value=f'֍{wallet_amt:,}',inline=False)
   em.add_field(name='Bank Balance',value=f'֍{bank_amt:,}',inline=False)
   em.set_thumbnail(url=user.avatar_url)
@@ -667,9 +654,6 @@ async def balance(ctx ,user: discord.Member = None):
   em.set_footer(text=f"🤨")        
   msg=await ctx.reply(embed= em)
 
-hacking_status = ['breaching mainframe', 'accessing CPU pins', 'a couple gigabytes of RAM','Accessing Ip adress ','Getting Os info']
-osd = ['unkown windows','windows 11','unknown linux','mac','arch','calinix','windows xp','andriod 2','andriod 12','A poor os ']
- 
  
 @client.command()
 @commands.cooldown(1, 30, commands.BucketType.user)
@@ -812,28 +796,10 @@ async def work(ctx):
     else:
         x = discord.Embed(title="No work fool",description='DUMBASS u dont have a work to do , use job command to find one')
         await ctx.reply(embed=x)
-intervals = (
-    ('weeks', 604800),  # 60 * 60 * 24 * 7
-    ('days', 86400),    # 60 * 60 * 24
-    ('hours', 3600),    # 60 * 60
-    ('minutes', 60),
-    ('seconds', 1),
-)
 
-def display_time(seconds, granularity=2):
-    result = []
-
-    for name, count in intervals:
-        value = seconds // count
-        if value:
-            seconds -= value * count
-            if value == 1:
-                name = name.rstrip('s')
-            result.append("{} {}".format(value, name))
-    return ', '.join(result[:granularity]) 
 
 import requests
-api_key = "c525a3540cb35084c1283ca6252387bd"
+api_key = os.environ['weather']
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
 @client.command()
 async def weather(ctx, *, city: str):
@@ -853,7 +819,7 @@ async def weather(ctx, *, city: str):
             weather_description = z[0]["description"]
             weather_description = z[0]["description"]
             embed = discord.Embed(title=f"Weather in {city_name}",
-                              color=ctx.guild.me.top_role.color,
+                              color=ctx.author.color,
                               timestamp=ctx.message.created_at,)
             embed.add_field(name="Descripition", value=f"**{weather_description}**", inline=False)
             embed.add_field(name="Temperature(C)", value=f"**{current_temperature_celsiuis}°C**", inline=False)
@@ -895,7 +861,7 @@ async def open_streak(user):
     
     with open('streak.json','w') as f:
         json.dump(strx,f)
-    await user.send('yOU HAVE GOt your daily + monthly, dont go on the message which says you already claimed your daily , your amount has been credited too , this issue is know and is under development')
+    await user.send('YOU HAVE GOt your daily + monthly, dont go on the message which says you already claimed your daily , your amount has been credited too , this issue is know and is under development')
     return True    
 import datetime
 from datetime import datetime, timedelta                                              
@@ -905,7 +871,6 @@ async def daily(ctx):
   await open_streak(ctx.author)
   user = ctx.author
   users = await get_bank_data()
-  '''UNDER WORK DONT USE THIS COMMAND'''
   with open ("streak.json","r") as f:
     data = json.load(f)
   streak=data[f"{ctx.author.id}"]["streak"]
@@ -1417,7 +1382,7 @@ players = {}
 
 
 
-@client.command(aliases = ["lb"])
+@client.command(aliases = ["glb"])
 async def globallb(ctx,x = 10):
     users = await get_bank_data()
     leader_board = {}
@@ -1452,30 +1417,13 @@ async def globallb(ctx,x = 10):
 @client.command()
 async def ss(ctx, site):
     embed=discord.Embed(description="Here is the website'ss you requested",colour = discord.Colour.orange(), timestamp=ctx.message.created_at)
-    embed.set_footer(text="WE got some reports that images dont load in embed so they will be sent seperately so please wait for few seconds so image can load")
+    embed.set_footer(text="Please wait for the image to load")
     embed.set_image(url=(f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}"))
     await ctx.reply(embed=embed)
     
 
 
 
-player1 = ""
-player2 = ""
-turn = ""
-gameOver = True
-
-board = []
-
-winningConditions = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-]
 
 def prefix_check(guild):
     # Check if this is a dm instead of a server
@@ -1491,153 +1439,6 @@ def prefix_check(guild):
         # Otherwise, default to a set prefix
         p = "a!"
     return p
-
-
-@client.group()
-async def tictactoe(ctx, p1: discord.Member, p2: discord.Member):
-    #test
-    global count
-    global player1
-    global player2
-    global turn
-    global gameOver
-    if gameOver:
-        global board
-        board = [":white_large_square:", ":white_large_square:", ":white_large_square:",
-                 ":white_large_square:", ":white_large_square:", ":white_large_square:",
-                 ":white_large_square:", ":white_large_square:", ":white_large_square:"]
-        turn = ""
-        gameOver = False
-        count = 0
-
-        player1 = p1
-        player2 = p2
-
-        # print the board
-        line = ""
-        for x in range(len(board)):
-            if x == 2 or x == 5 or x == 8:
-                line += " " + board[x]
-                await ctx.send(line)
-                line = ""
-            else:
-                line += " " + board[x]
-
-        # determine who goes first
-        num = random.randint(1, 2)
-        if num == 1:
-            turn = player1
-            myEmbed = discord.Embed(title= "GAME IN PROGRESS",description="IT IS <@" + str(player1.id) + ">'s TURN.",color=0xe74c3c)
-            await ctx.reply(embed=myEmbed)
-        elif num == 2:
-            turn = player2
-            myEmbed = discord.Embed(title= "GAME IN PROGRESS",description="IT IS <@" + str(player2.id) + ">'s TURN.",color=0xe74c3c)
-            await ctx.reply(embed=myEmbed)
-    else:
-        myEmbed = discord.Embed(title= "GAME IN PROGRESS",description="A GAME IS STILL IN PROGRESS. FINISH IT BEFORE STARTING A NEW ONE",color=0xe74c3c)
-        await ctx.reply(embed=myEmbed)
-
-@client.command()
-async def place(ctx, pos: int):
-    #test
-    global turn
-    global player1
-    global player2
-    global board
-    global count
-    global gameOver
-    if not gameOver:
-        mark = ""
-        if turn == ctx.author:
-            if turn == player1:
-                mark = ":regional_indicator_x:"
-            elif turn == player2:
-                mark = ":o2:"
-            if 0 < pos < 10 and board[pos - 1] == ":white_large_square:" :
-                board[pos - 1] = mark
-                count += 1
-
-                # print the board
-                line = ""
-                for x in range(len(board)):
-                    if x == 2 or x == 5 or x == 8:
-                        line += " " + board[x]
-                        await ctx.reply(line)
-                        line = ""
-                    else:
-                        line += " " + board[x]
-
-                checkWinner(winningConditions, mark)
-                print(count)
-                if gameOver == True:
-                    myEmbed = discord.Embed(title= "WINNER!",description=mark + " :crown: ",color=0xf1c40f)
-                    await ctx.reply(embed=myEmbed)
-                elif count >= 9:
-                    gameOver = True
-                    myEmbed = discord.Embed(title= "TIE",description="IT'S A TIE :handshake:",color=0xf1c40f)
-                    await ctx.reply(embed=myEmbed)
-
-                # switch turns
-                if turn == player1:
-                    turn = player2
-                elif turn == player2:
-                    turn = player1
-            else:
-                myEmbed = discord.Embed(title= "PLACE ERROR!",description="BE SURE TO CHOOSE AN INTEGER BETWEEN 1 AND 9 (INCLUSIVE) AND AN UNMARKED TILE. ",color=0xe74c3c)
-                await ctx.reply(embed=myEmbed)
-        else:
-            myEmbed = discord.Embed(title= "TURN ERROR!",description="IT'S NOT YOUR TURN",color=0xe74c3c)
-            await ctx.reply(embed=myEmbed)
-    else:
-        myEmbed = discord.Embed(title= "START GAME",description="TO START A NEW GAME, USE tictactoe COMMAND",color=0x2ecc71)
-        await ctx.reply(embed=myEmbed)
-
-
-def checkWinner(winningConditions, mark):
-    global gameOver
-    for condition in winningConditions:
-        if board[condition[0]] == mark and board[condition[1]] == mark and board[condition[2]] == mark:
-            gameOver = True
-
-@tictactoe.error
-async def tictactoe_error(ctx, error):
-    print(error)
-    if isinstance(error, commands.MissingRequiredArgument):
-        myEmbed = discord.Embed(title= "MENTION ERROR!",description="PLEASE MENTION 2 USERS",color=0xe74c3c)
-        await ctx.reply(embed=myEmbed)
-    elif isinstance(error, commands.BadArgument):
-        myEmbed = discord.Embed(title= "ERROR!",description="PLEASE MAKE SURE TO MENTION/PING PLAYERS (ie. <@688534433879556134>)",color=0xe74c3c)
-        await ctx.reply(embed=myEmbed)
-
-@place.error
-async def place_error(ctx, error):
-    #test
-    if isinstance(error, commands.MissingRequiredArgument):
-        myEmbed = discord.Embed(title= "NO POSITION",description="PLEASE ENTER A POSITION TO MARK",color=0xe74c3c)
-        await ctx.reply(embed=myEmbed)
-    elif isinstance(error, commands.BadArgument):
-        myEmbed = discord.Embed(title= "INTEGER ERROR!",description="PLEASE MAKE SURE IT'S AN INTEGER",color=0xe74c3c)
-        await ctx.reply(embed=myEmbed)
-@tictactoe.command()
-async def end(ctx):
-        #test
-        # We need to declare them as global first
-        global count
-        global player1
-        global player2
-        global turn
-        global gameOver
-        
-        # Assign their initial value
-        count = 0
-        player1 = ""
-        player2 = ""
-        turn = ""
-        gameOver = True
-
-        # Now print your message or whatever you want
-        myEmbed = discord.Embed(title= "RESET GAME",description="TO START A NEW GAME, USE tictactoe COMMAND",color=0x2ecc71)
-        await ctx.reply(embed=myEmbed)        
 
 
 from asyncio import TimeoutError
@@ -1727,23 +1528,8 @@ async def fakename(ctx):
   e.add_field(name="email_url",value=email_url,inline=False)
   e.add_field(name="domain_url",value=domain_url,inline=False)      
   await ctx.channel.send(embed=e)  
-@client.command()
-async def getadvice(ctx):
-    res = requests.get("https://api.senarc.org/misc/advice")
-    source = json.loads(res.content)
-    acti = source["text"]  
+ 
 
-    em = discord.Embed(title=f"Advice", description=f"{acti}", color=discord.Color.blue())
-    em.set_footer(text="Powered by Senarc API")
-    await ctx.reply(embed=em)  
-@client.command()
-async def getidea(ctx):
-    res = requests.get("https://www.boredapi.com/api/activity")
-    source = json.loads(res.content)
-    acti = source["activity"]  
-    typ = source["type"]
-    em = discord.Embed(title=f"Idea Generator", description=f"{acti}\n Type : {typ}", color=discord.Color.blue())
-    await ctx.reply(embed=em)  
 @client.command()
 @commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
 async def fact(ctx): 
@@ -1752,24 +1538,7 @@ async def fact(ctx):
   ft = source["fact"] 
   em=discord.Embed(title="A Fact...",description=ft,color=discord.Color.random())
   await ctx.reply(embed=em)
-@client.command(help="Shows info about a color by its hex")
-@commands.max_concurrency(1,per=commands.BucketType.default,wait=False)
-async def color(ctx,hex): 
 
-  page = requests.get(f'https://api.eriner.repl.co/search/color?hex={hex}')
-  source = json.loads(page.content)
-  rgb = source["rgb"]
-  hexx = source["hex"]
-  name = source["name"]
-  clean =source["clean"]
-  img = source["image"]
-  c = f"0x{clean}"
-  print(c)
-  emb = discord.Embed(title=name,description=f"Hex: {hexx}")
-  emb.add_field(name="rgb",value=rgb,inline=False)
-  emb.add_field(name="Clean Hex",value=clean)
-  emb.set_thumbnail(url=img)
-  await ctx.reply(embed=emb)  
 
 
   
@@ -1853,7 +1622,7 @@ async def feedback(ctx,*,message):
             style=ButtonStyle.danger,
             label="Cancel!",
             custom_id="red",
-            emoji="<:DiscordCross:940914829781270568>"
+            emoji="<:Red_Cross:988360177017311263>"
         )        
     )   
   
@@ -1997,6 +1766,7 @@ async def quote(ctx):
     q, a = get_quote()
     em = discord.Embed(title=a+" Once said.....", description=q, color=discord.Color.blue())
     await ctx.reply(embed=em)
+''' Need to get this command in dev   
 @client.command()
 @commands.cooldown(1,100,commands.BucketType.guild)
 async def report( ctx, user : discord.Member,*reason):
@@ -2042,7 +1812,7 @@ async def report( ctx, user : discord.Member,*reason):
         await channel.send(f"{author} has reported {user.mention} ({user.id}), reason: {rearray}, Parameters {', '.join(labelsx)}")
  
         await ctx.message.delete() 
-
+'''
 
            
 @client.command()
@@ -2069,7 +1839,7 @@ async def wolf(ctx, *, question):
 def get_answer1(question=""):
     if question == "_ _":
         embed = discord.Embed(
-            title="Oops",
+            title="Not so fast ",
             description="You need to enter a question",
 
         )
@@ -2084,8 +1854,8 @@ def get_answer1(question=""):
         file.write(a)
         file.close()
         embed = discord.Embed(
-            title="Wolfram",
-            description="This result is from Wolfram",
+            title="Wolfram ",
+            description="Here is what I got from Wolfram",
             color=discord.Color.dark_red()
         )
         embed.set_thumbnail(
@@ -2094,14 +1864,6 @@ def get_answer1(question=""):
         file = discord.File("output.png")
         embed.set_image(url="attachment://output.png")
         return (embed, file)
-
-def replace_chars(stri):
-    stri2 = ""
-    for char in stri:
-        if char not in "<@!>":
-            stri2 += char
-    # print (f'stri2 is {stri2}')
-    return stri2
 
 
 @client.after_invoke 
@@ -2130,6 +1892,5 @@ async def checkblack(message):
       users_list = json.load(f)
       if message.author.id  in users_list:
           raise discord.ext.commands.CommandError(f'You are blacklisted')
-
 web.keep_alive()
 client.run(os.environ['btoken'],reconnect=True)

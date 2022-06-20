@@ -9,13 +9,13 @@
 [![GitHub license](https://img.shields.io/github/license/prakarsh17/tessarect-bot.svg)](https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE)
 [![Issues](https://img.shields.io/github/issues/prakarsh17/tessarect-bot.svg?colorB=3333ff)](https://github.com/Gorialis/jishaku/issues)
 [![Commit activity](https://img.shields.io/github/commit-activity/w/prakarsh17/tessarect-bot.svg)](https://github.com/Gorialis/jishaku/commits)
-[![ForTheBadge makes-people-smile](http://ForTheBadge.com/images/badges/makes-people-smile.svg)](http://ForTheBadge.com)
+
 ___
 ##### Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .
 
 ⭐ Star us on GitHub — it motivates us a lot!
 
-
+🔗Always Up of PRs - Contribute now
 </a>
 </p>
 <p align="center">
