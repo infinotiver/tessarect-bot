@@ -3,6 +3,8 @@
 *.txt
 .cache/
 *.pyc
+.replit #replit file hiding
+.gitignore #no need to show to others what we have hidden
 mainbank.json
 prefixes.json
 data.json
