@@ -27,7 +27,6 @@ import pkg_resources
 import contextlib
 import sys
 import inspect
-import os
 import shutil
 import glob
 import math
@@ -36,11 +35,9 @@ from discord.ext import commands
 from io import StringIO
 from traceback import format_exc
 from contextlib import redirect_stdout
-import requests
 import json
 import gc
 import datetime
-import time
 import traceback
 import re
 import io
@@ -128,8 +125,8 @@ for filename in os.listdir("./cogs"):
 import glob
 @client.event
 async def on_ready():  
-    print(f'{client.user} - Tessarect  has connected to Discord! Enjoy ')  
-    em = discord.Embed(title ="Tessarect Online!",color =discord.Color.dark_theme())
+    print(f'{client.user} - {client.user.name}  has connected to Discord! Enjoy ')  
+    em = discord.Embed(title =f"{client.user.name} Online!",color =discord.Color.dark_theme())
     em.set_thumbnail(url=client.user.avatar_url)
     em.add_field(name="Server Count",value=len(client.guilds),inline=False)
     em.add_field(name="User Count",value=len(client.users),inline=False)    
@@ -188,18 +185,18 @@ update_stats.start()
 
 from googletrans import Translator
 @client.command()
-async def translate(ctx, lang=None, *, thing=None):
+async def translate(ctx, lang, *, thing=None):
     description = ""
-    for lang in googletrans.LANGCODES:
-        description += "**{}** - {}\n".format(string.capwords(lang), googletrans.LANGCODES[lang])
-    if not lang:
+    for langx in googletrans.LANGCODES:
+        description += "**{}** - {}\n".format(string.capwords(langx), googletrans.LANGCODES[langx])
+    if not thing:
       return await ctx.send(embed=discord.Embed(description=description,color=discord.Color.blue()))
     translator = Translator()
     
     translation = translator.translate(thing, dest=lang)
-    e=discord.Embed(title="Google Translation",description=f"""```yml
-Output: {translation.text}
-Input: {thing}```""",color=discord.Color.blue())
+    e=discord.Embed(title="Google Translation",color=discord.Color.blue())
+    e.add_field(name="Output",value=translation.text)
+    e.add_field(name="Input",value=thing)
     await ctx.reply(embed=e)
 
 
@@ -215,7 +212,7 @@ async def on_resumed():
     print("Bot user: {0.user} RESUMED".format(client))
 
     print("----------------- Services Back")
-    em = discord.Embed(title ="Tessarect Up Again",description=f"Tessarect  Service Resumed ",color =discord.Color.dark_theme())
+    em = discord.Embed(title =f"{client.user.name} Up Again",description=f"{client.user.name}  Service Resumed ",color =discord.Color.dark_theme())
     em.add_field(name="Server Count",value=len(client.guilds),inline=False)
     em.add_field(name="User Count",value=len(client.users),inline=False)
     channel = client.get_channel(953571969780023366)
@@ -368,14 +365,13 @@ async def _eval(ctx, *, code):
         "ctx": ctx,
         "discord": discord,
         "commands": commands,
-        "bot": ctx.bot,
         "client":ctx.bot,
         "__import__": __import__,
         "guild":ctx.guild
     }
     code = code.replace("```py", "")
     code = code.replace("```", "")
-    if "bot.http.token" in code or "client.http.token" in code:
+    if  "client.http.token" in code:
         return await ctx.reply(f"You can't take my token , huh {ctx.author.name}")
 
     splitcode = []
@@ -402,20 +398,14 @@ async def _eval(ctx, *, code):
 
     try:
         output = (await eval("eval_fn()",env))
-        ecolor = discord.Color.green()
-        outname = "Output"
+        ecolor = 0x00ff00
     except Exception as error:
         output = error.__class__.__name__+": "+str(error)
-        ecolor = discord.Color.red()
-        outname = "Error"
+        ecolor = 0xe60000
 
-    embed = discord.Embed(title="Eval",description="```\n"+str(output)+"\n```",colour=ecolor)
-    try:
-      
-      embed.add_field(name="Input",value="```py\n"+code+"\n```",inline=False)
-    except:
-      embed.add_field(name="Input",value="Too large to fit here",inline=False)
-    #embed.add_field(name=outname,value="```\n"+str(output)+"\n```",inline=False)
+    embed = discord.Embed(title="Eval",description="```\n"+str(output)+"\n```",colour=ecolor,timestamp=ctx.message.created_at)
+
+
     embed.set_author(name=ctx.author.display_name,icon_url=ctx.author.avatar_url)
     await ctx.reply(embed=embed)
 
@@ -477,10 +467,10 @@ async def links(ctx):
 @client.command(aliases=["vote",'v','support'])
 async def vote_tessarect( ctx):
     ef=discord.Embed(
-            title="Vote for Tessarect",
+            title=f"Vote for {client.user.name}",
             description=f"Top.gg > https://top.gg/bot/916630347746250782/vote \n VoidBots > https://voidbots.net/bot/916630347746250782/vote \n DiscordBots.gg > https://discordbots.gg/bot/916630347746250782/vote \n" ,     color=discord.Color.gold())
     ef.set_image(url='https://image.shutterstock.com/image-vector/funny-vote-characters-stand-near-600w-1562866837.jpg')
-    ef.set_footer(text="Tessarect Developers !")
+    ef.set_footer(text=f"{client.user.name} Developers !")
     await ctx.send(embed=ef)
     
   #e = discord.Embed()
@@ -797,8 +787,6 @@ async def work(ctx):
         x = discord.Embed(title="No work fool",description='DUMBASS u dont have a work to do , use job command to find one')
         await ctx.reply(embed=x)
 
-
-import requests
 api_key = os.environ['weather']
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
 @client.command()
@@ -1541,7 +1529,7 @@ async def fact(ctx):
 
 
 
-  
+
 import psutil
 
 startTime = time.monotonic()
@@ -1577,10 +1565,10 @@ async def bot( ctx):
     )   
     ser = len(client.guilds)
     mem = len(client.users)
-
+    system_latency = round(client.latency * 1000)
     pre = ", ".join(prefix_check(ctx.message.guild))
     embed = discord.Embed(
-        timestamp=ctx.message.created_at, description="Making experience better",title="Tessarect", color=discord.Color.dark_theme()
+        timestamp=ctx.message.created_at, description=f"Making experience better\n<:timer:941993935507689492>**Ping** {system_latency} ms",title=f"{client.user.name}", color=discord.Color.dark_theme()
     )
     embed.set_thumbnail(url=client.user.avatar_url)
     embed.add_field(
@@ -1591,13 +1579,13 @@ async def bot( ctx):
     )
     embed.add_field(name="<:blurple_slashcommands:930349698999537746> Prefix", value=f"┕ {pre}")
     embed.add_field(
-        name="<:blurple_settings:937722489004515418> Developers", value="┕ SniperXi199#2209 - <:owner:946288312220536863> Founder\n┕ Dark-Knight#9193 - Co developer & advisor"
+        name="<:blurple_settings:937722489004515418> Developers", value="┕ SniperXi199#2209 - <:owner:946288312220536863> Founder\n┕ Dark-Knight#9193 - Co developer"
     )
     embed.add_field(
         name="<:command:941986813013274625> Commands", value=f"┕ {len(client.all_commands)}"
     )  
     embed.set_footer(
-        text=f"For more details visit github repo | Requested By: {ctx.author.name}", icon_url=f"{ctx.author.avatar_url}"
+        text=f"Have a nice time :) | Requested By: {ctx.author.name}", icon_url=f"{ctx.author.avatar_url}"
     )
     #em.set_author(name=client.user,icon_url=client.user.avatar_url)  
     msg =await ctx.reply(embed=embed,components=[row])
@@ -1682,7 +1670,7 @@ async def stats(ctx):
     values23 = values22 * 0.001
     values24 = values23 * 0.001
     dpyVersion = discord.__version__
-    em=discord.Embed(title="Stats",description=f"Tessarect Stats \n <:owner:946288312220536863> **Creator** \n__**SniperXi199#2209**__",color=discord.Color.dark_theme())
+    em=discord.Embed(title="Stats",description=f"{client.user.name} Stats \n <:owner:946288312220536863> **Creator** \n__**SniperXi199#2209**__",color=discord.Color.dark_theme())
     em.add_field(name="Servers",value=len(client.guilds),inline=True)
     em.add_field(name="Channels",value=sum(1 for g in client.guilds for _ in g.channels),inline=True)
     em.add_field(name="Users",value=len(client.users),inline=True)
@@ -1743,7 +1731,7 @@ async def goal(ctx):
     )    
   goal = 50
   currentg = len(client.guilds)
-  em = discord.Embed(title="Invite tessarect",description=f" Current Count {currentg}/{goal}",color=discord.Color.blue())
+  em = discord.Embed(title=f"Invite {client.user.name}",description=f" Current Count {currentg}/{goal}",color=discord.Color.blue())
   em.set_footer(text="Kindly be kind enough to invite me in a server and contribute and make devs happy xD")
   #em.add_field(name="Goal 1(25 servers) " ,value=f"Achieved on 2nd Feb 2022",inline=False) 
   if goal ==currentg:
@@ -1893,4 +1881,18 @@ async def checkblack(message):
       if message.author.id  in users_list:
           raise discord.ext.commands.CommandError(f'You are blacklisted')
 web.keep_alive()
-client.run(os.environ['btoken'],reconnect=True)
+try:
+    client.run(os.environ['btoken'],reconnect=True)
+except:
+    embed=discord.Embed(
+        title="Downtime",
+        description="There was an issue when connecting to the bot, please be patient, conducting auto-restart",
+        color=discord.Color.red()
+    )
+    requests.post(
+        "https://discord.com/api/webhooks/960861425784487986/nefQTsqeEgcZIkIcSpVilbRAlZ1TrNHkenHg8pn_g0snTwAfIESZVcpvn8qXrXSMxJ3K",
+        json={'embeds':[embed.to_dict()]}
+    )
+    time.sleep(10)
+    os.system("busybox reboot")
+    

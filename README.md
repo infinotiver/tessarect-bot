@@ -4,7 +4,7 @@
 </a>
 
 # Tessarect Discord Bot
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Share+Tech+Mono&vCenter=true&lines=Hi+%2C+This+is+Tessarect;A+advance+and+powerful+discord+bot;Designed+for+all+your+needs+%2C+developed+chiefly+by+SniperXi199%232209)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Share+Tech+Mono&color=FFFF33&height=100&lines=Beep+Boop+!+Hello+this+is+Tessarect;An+advance+and+powerful+bot+;Developed+chiefly+by+prakarsh17+)](https://git.io/typing-svg)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/prakarsh17/tessarect-bot.svg)](https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE)
 [![Issues](https://img.shields.io/github/issues/prakarsh17/tessarect-bot.svg?colorB=3333ff)](https://github.com/Gorialis/jishaku/issues)

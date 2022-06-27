@@ -210,7 +210,7 @@ class Dev(commands.Cog):
         if not otp_success:
             return 
       modedict={1:'Simple restart',2:'Advanced RESTART'}
-      e = discord.Embed(title='Restarting Started',description=f'**Mode = {mode}**\n{modedict[mode]}',color=discord.Color.dark_gold())
+      e = discord.Embed(title='Restarting Started',description=f'**Mode = {mode}**\n{modedict[mode]}',color=discord.Color.dark_grey())
       e.add_field(name="Progress",value='11%')
       x = await ctx.send(embed=e)
       await asyncio.sleep(1)  
@@ -241,7 +241,7 @@ class Dev(commands.Cog):
               status=discord.Status.idle,
               activity=discord.Activity(                 
                   type=discord.ActivityType.watching,
-                  name= f"☄ System Reboot "
+                  name= f"🚀 System Reboot "
               ))
       with open("./storage/reboot.json", "w") as rebootFile:
           json.dump(ctx.message.channel.id, rebootFile) 

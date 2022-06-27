@@ -24,7 +24,7 @@ class Note(commands.Cog):
     async def on_ready(self):
         print("Note cog loaded successfully")
 
-    @commands.command(cooldown_after_parsing=True, description="Creates a note for you")
+    @commands.command(cooldown_after_parsing=True, description="Notes down  a note for you")
     @cooldown(1, 10, BucketType.user)
     async def note(self, ctx, *, message):
         message = str(message)
@@ -58,6 +58,7 @@ class Note(commands.Cog):
 
     @commands.command(description="Shows your note")
     async def notes(self, ctx):
+        await ctx.send()
         stats = await notedb.find_one({"id": ctx.author.id})
         if stats is None:
             embed = discord.Embed(

@@ -17,9 +17,7 @@ class TBD(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.description="Commands for my Official support server Tessa Bot developers https://discord.gg/avpet3NjTE "
-        self.dailyjoke.start()
-        self.dailymeme.start()
+        self.description="Commands for my Official support server Tessa Bot Developers  https://discord.gg/avpet3NjTE"
         inter_client = InteractionClient(self.bot)
     class emoji:
         checkmark, cross, link = '<:sucess:935052640449077248>', '<:DiscordCross:940914829781270568>', '<:command:941986813013274625>'
@@ -156,7 +154,7 @@ class TBD(commands.Cog):
     async def _addbot(self, ctx, bot: discord.User = None, *, reason: str = None):
         
         if ctx.guild.id !=912569937116147772:
-          return await ctx.send('Heyo this command is only for my support server . Join it and use this command to add your bot  \n https://discord.gg/avpet3NjTE ')
+          return await ctx.send(embed=discord.Embed(title="Not my house",description='Heyo this command is only for my support server . Join it and use this command to add your bot  \n https://discord.gg/avpet3NjTE ',color = ctx.author.color))
         if ctx.channel.id !=955745362306543616:
           return await ctx.send('This command works only in <#955745362306543616>')
         if not bot:
@@ -184,7 +182,7 @@ class TBD(commands.Cog):
         if not reason:
             await ctx.send(
                 embed=discord.Embed(title="Add Bot",
-                                description="Please provide its prefix and a brief description.",color=discord.Color.blurple()))
+                                description="Please provide its prefix ",color=discord.Color.blurple()))
 
             def check(m):
                 return m.channel == ctx.channel and m.author == ctx.author
@@ -199,7 +197,7 @@ class TBD(commands.Cog):
         bott=self.bot.get_user(int(bot.id))
         await ctx.message.delete()
         await ctx.channel.purge(limit=None, check=lambda msg: not msg.pinned)
-        d= discord.Embed(description=f" \n**Botname** > `{bot}`\n**Id ** > `{bot.id}` \n **Your reason +prefix** > `{reason}`",color=discord.Color.green(),timestamp=ctx.message.created_at)
+        d= discord.Embed(description=f" \n**Botname** <:rightarrow:941994550124245013> `{bot}`\n**Id ** <:rightarrow:941994550124245013> `{bot.id}` \n **Prefix** <:rightarrow:941994550124245013> `{reason}`",color=discord.Color.green(),timestamp=ctx.message.created_at)
         #d.add_field(name="_ _ ",value="<:Info:939018353396310036> Kindly wait for a bot reviewer to review your bot  and dont send same bot entry again and again | Also you should be the owner of the bot | Keep your dms open")
         try:
             d.set_thumbnail(url=bott.avatar_url)
@@ -217,7 +215,7 @@ class TBD(commands.Cog):
         embedx = discord.Embed(title='User-Made Bot', description='Click bot name to invite. React here to confirm or deny the bot.',color=discord.Color.gold())
         embedx.add_field(name='Status', value='Pending approval',inline=False)
         embedx.add_field(name='Submitted By', value=ctx.author.mention + ' (' + str(ctx.author.id) + ')',inline=False)
-        embedx.add_field(name='Prefix + Reason', value=reason,inline=False)
+        embedx.add_field(name='Prefix', value=reason,inline=False)
         embedx.add_field(name='Bot Account', value=bot.mention,inline=False)
         embedx.add_field(name='Bot Id', value=bot.id,inline=False)
         #bott=self.bot.get_user(int(bot.id))
@@ -290,36 +288,34 @@ class TBD(commands.Cog):
         await member.add_roles(mod)
         await check.send(content=member.mention,embed=e2)
         await member.send(embed=e)
+    @commands.command(name='tbd',help="Know about tbd")
+    async def tessabotdevelopers(self,ctx):
+      d="""**Tessɑ Bσt Deνelσpeɾs ( TBD)**
 
-    
-    @tasks.loop(hours = 24) 
-    async def dailyjoke(self):
-      try:
-        c=self.bot.get_channel(967774377334702132)
-        page = requests.get('https://joke.deno.dev/')
-        jokesource = json.loads(page.content)
-        joke = jokesource['setup']
-        answer = jokesource['punchline']
-        je=discord.Embed(title='Joke for today',color=discord.Color.gold(),description=f"**{joke}**\n{answer}")        .set_footer(text=f"Type: {jokesource['type']} joke")
-        await c.send(embed=je)
-      except Exception as e:
-        print(e)
-    @tasks.loop(hours = 10) 
-    async def dailymeme(self):
-      try:
-        c=self.bot.get_channel(967774377334702132)
-        page = requests.get(f'https://api.popcat.xyz/meme')
-        d = json.loads(page.content)
-        title=d['title']
-        img=d['image']
-        url=d['url']
-        like = d['upvotes']
-        comm=d['comments']
-        embed = discord.Embed(title="10 Hourly Meme Time",description=title,url=url,color=0x34363A)
-        embed.set_image(url=img)
-        embed.set_footer(text=f"👍🏻{like} 💬 {comm} ")
-        await c.send(embed=embed)
-      except Exception as e:
-        print(e)        
+𝕱𝖔𝖚𝖓𝖉𝖊𝖉 𝖇𝖞 𝕾𝖓𝖎𝖕𝖊𝖗𝖃𝖎𝟏𝟗𝟗 
+
+𝐴𝑏𝑜𝑢𝑡 𝑢𝑠 : 𝑊𝑒 𝑎𝑟𝑒 𝑎 𝑔𝑟𝑒𝑎𝑡 𝑛𝑒𝑡𝑤𝑜𝑟𝑘 .𝑇𝑒𝑠𝑠𝑎 𝐵𝑜𝑡 𝐷𝑒𝑣𝑒𝑙𝑜𝑝𝑒𝑟𝑠 . 𝑇𝐵𝐷 𝐼𝑆  𝑎 𝑐𝑜𝑚𝑚𝑢𝑛𝑖𝑡𝑦 𝑐𝑢𝑚 𝑏𝑜𝑡 𝑠𝑒𝑟𝑣𝑒𝑟 𝑎𝑛𝑑 𝑎𝑙𝑠𝑜 𝑠𝑢𝑝𝑝𝑜𝑟𝑡 𝑠𝑒𝑟𝑣𝑒𝑟 𝑓𝑜𝑟 𝑜𝑢𝑟 𝑏𝑜𝑡 𝑇𝑒𝑠𝑠𝑎𝑟𝑒𝑐𝑡 . 𝐶𝘩𝑎𝑡 𝘩𝑒𝑟𝑒 𝑤𝑖𝑡𝘩 𝑜𝑡𝘩𝑒𝑟 𝑚𝑒𝑚𝑏𝑒𝑟𝑠 , 𝑎𝑝𝑝𝑙𝑦 𝑓𝑜𝑟 𝑦𝑜𝑢𝑟 𝑏𝑜𝑡 𝑡𝑜 𝑏𝑒 𝘩𝑒𝑟𝑒 𝑎𝑛𝑑 𝑔𝑒𝑡 𝑒𝑎𝑟𝑙𝑦 𝑎𝑐𝑐𝑒𝑠𝑠 𝑡𝑜 𝑎𝑙𝑙 𝑜𝑢𝑟 𝑏𝑜𝑡𝑠 𝑎𝑛𝑑 𝑚𝑢𝑐𝘩 𝑚𝑜𝑟𝑒 . 𝑂𝑓𝑓𝑖𝑐𝑖𝑎𝑙 𝑠𝑢𝑝𝑝𝑜𝑟𝑡 𝑠𝑒𝑟𝑣𝑒𝑟 𝑓𝑜𝑟 𝑜𝑢𝑟 𝑏𝑜𝑡 𝑇𝑒𝑠𝑠𝑎𝑟𝑒𝑐𝑡(𝑐𝑢𝑟𝑟𝑒𝑛𝑡𝑙𝑦 𝑖𝑛 𝟹𝟶+ 𝑠𝑒𝑟𝑣𝑒𝑟𝑠) 𝑑𝑠𝑐.𝑔𝑔/𝑡𝑒𝑠𝑠𝑎𝑟𝑒𝑐𝑡. 𝐺𝑟𝑜𝑤 𝑦𝑜𝑢𝑟 𝑏𝑜𝑡 𝑎𝑛𝑑 𝑠𝑒𝑟𝑣𝑒𝑟 
+
+───── ❝ **Why choose us** ❞ ─────
+
+»»— Talkative and smart community
+»»— Better Guidance
+»»— Handpicked bots made by users 
+»»— Top used bots for extra fun
+»»— Get updates on our bots
+»»— Apply  your bot and make it grow
+»»— Get tips from our expert
+»»— Have fun
+»»— Much More
+≿━━━━༺❀༻━━━━≾
+8 + Popular Bots
+38+ Members
+30+ Channels
+and much more
+⊱ ────── {.⋅ ✯ ⋅.} ────── ⊰
+Join Ʈᥱ⳽⳽ᥲ ᙖot ᙃᥱʋᥱꙆoρᥱɾ⳽ Now :
+https://discord.gg/avpet3NjTE"""
+      em=discord.Embed(title="Tessa Bot Developers",description=d,color=ctx.author.color)
+      await ctx.send(embed=em)
 def setup(bot):
     bot.add_cog(TBD(bot))

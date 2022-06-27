@@ -17,8 +17,8 @@ class Tickets(commands.Cog):
     @cooldown(1, 10, BucketType.user)
     async def new(self, ctx, *, reason = None):
 
-        em = discord.Embed(title = "Confirm New Ticket", color =  ctx.author.color)
-        em.add_field(name = "Reason:", value = "We don't want people to spam!")
+        em = discord.Embed(title = "Confirm New Ticket", color =  0x0098d2)
+        #em.add_field(name = "Reason:", value = "We don't want people to spam!")
         em.add_field(name = "Next Step:", value = "Type `confirm` in the chat to confirm this ticket!")
         em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
         em.set_footer(text = "Be nice with the support Team")
@@ -30,14 +30,14 @@ class Tickets(commands.Cog):
         try:
             msg = await self.client.wait_for('message', timeout = 15.0, check= msg_check)
         except:
-            em = discord.Embed(title = "c New Ticket Failed!", color = ctx.author.color)
+            em = discord.Embed(title = " New Ticket Failed!", color = 0x0098d2)
             em.add_field(name = "Reason:", value = "You took too long!")
             em.add_field(name = "Cooldown", value = "1 minute more!")
             em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
             await ctx.send(embed = em)
         else:
             if msg.content != "confirm":
-                em = discord.Embed(title = "New Ticket Failed!", color = ctx.author.color)
+                em = discord.Embed(title = "New Ticket Failed!", color = 0x0098d2)
                 em.add_field(name = "Reason:", value = "You did not want to create one!")
                 em.add_field(name = "Cooldown", value = "1 minute more!")
                 em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
@@ -49,14 +49,14 @@ class Tickets(commands.Cog):
                     if _channel.name == channelname:
                         return await ctx.channel.send(f"You already have a ticket! Please contact staff in {_channel.mention}!")
 
-                warning = f"""{ctx.author.mention} it is good to provide a reason for your inquires with the Support Staff\nNext time try `[p] new <reason>`
+                warning = f"""{ctx.author.mention} it is always good to provide a reason for your inquiry with the Support Staff\nNext time try `[p]new <reason>`
                 """
                 tickets = await self.get_tickets()
                 guild = ctx.guild
                 author = ctx.author
                 # Logic
-                if str(ctx.guild.id) not in tickets:
-                    em = discord.Embed(title = "<:Warn:922468797108080660> New Failed",color = ctx.author.color)
+                if str(ctx.guild.id) not in tickets or tickets[str(ctx.guild.id)]["ticketrole"] ==[]:
+                    em = discord.Embed(title = "<:Red_Cross:988360177017311263> New Failed",color = 0x0098d2)
                     em.add_field(name = "Reason:", value = "Tickets are not setup!")
                     em.add_field(name ="Usage:", value = "Usage for an admin:\n```diff\n+ [p] addticketrole <@role> [reason]\n- [p] new [reason]\n```")
                     await ctx.send(embed = em)
@@ -70,11 +70,12 @@ class Tickets(commands.Cog):
                 channel = await ctx.guild.create_text_channel(f'ticket-{ctx.author.name}')
                 # Creating the embed
                 em = discord.Embed(title = f"<:sucess:935052640449077248> New ticket", color = 0x1a1110)
-                em.add_field(name = "Ticket Channel:", value= f"{channel.mention}")
+                
+                
                 em.add_field(name = "Description:", value = "Staff will be with your shortly")
                 em.add_field(name = "Member:", value = f"{ctx.author.mention}")
                 em.add_field(name = "Reason:", value = f"`{reason}`")
-                em.set_footer(text="Bot Made By SniperXi199#2209")
+                em.set_footer(text="Recommended setting up all the stuff")
                 # Perms
                 # Make sure the author can type!
                 await channel.set_permissions(ctx.author, read_messages = True, send_messages = True)
@@ -84,26 +85,22 @@ class Tickets(commands.Cog):
                   x=ctx.guild.get_role(int(xx))
                   
                   await channel.set_permissions(x, read_messages = True, send_messages = True)
-                             
-                # And now make sure the helper_role should see this, incase the owner is busy
-                #await channel.set_permissions(helper_role, read_messages = True, send_messages = True)
-                """
-                and before you ask, how are we gonna set our Perms
-                if we can manage_channels (create a channel), then hell ye
-                we can speak, we dont need to actually set perms for ourselves
-                """
+                staff=[]      
+                for x in ticketrole:
+                  staff.append(f'<@&{x}>')
+                staff=''.join(staff)
                 # Sending the embed
-                await channel.send(embed = em)
+                await channel.send(content=staff,embed = em)
                 if reason == None:
                     await channel.send(warning)
-                await ctx.send(f"Created the ticket! Check {channel.mention}")
+                await ctx.send(f"Created the ticket for {ctx.author.mention} , Check {channel.mention}")
 
                 # send the mod log
                 try:
                     channelId = int(tickets[str(ctx.guild.id)]["ticketchannel"])
                     for channel_ in ctx.guild.channels:
                         if channel_.id == channelId:
-                            em = discord.Embed(title = "<:sucess:935052640449077248> Ticket Opened!", color = ctx.author.color)
+                            em = discord.Embed(title = "<:sucess:935052640449077248> Ticket Opened!", color = 0x0098d2)
                             em.add_field(name = "Member:", value = f"{ctx.author.mention}")
                             em.add_field(name ="Reason:", value = f"`{reason}`")
                             em.add_field(name= "Channel / Access Point", value = f'{channel.mention}')
@@ -116,14 +113,14 @@ class Tickets(commands.Cog):
     @new.error
     async def new_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
-            em = discord.Embed(title = "<:Warn:922468797108080660> New Error", color = ctx.author.color)
+            em = discord.Embed(title = "<:Red_Cross:988360177017311263> New Error", color = 0x0098d2)
             em.add_field(name = "Reason:", value = "If your trying to spam the server then get off!")
             em.add_field(name = "Try again in:", value = "`{:.2f}s`".format(error.retry_after))
             em.set_footer(text="Lots of Spam can lead to a ban")
             em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
             await ctx.send(embed = em)
         if isinstance(error, commands.BotMissingPermissions):
-            em = discord.Embed(title = f'<:Warn:922468797108080660> {ctx.command.name} Failed!', color = discord.Color.random(), description = "<:Coder_Hammer:826315685142462474> Guys huh we created uhhhhhhhhh yeahhhhhh")
+            em = discord.Embed(title = f'<:Red_Cross:988360177017311263> {ctx.command.name} Failed!', color = discord.Color.random(), description = "<:Coder_Hammer:826315685142462474> Guys huh we created uhhhhhhhhh yeahhhhhh")
             em.add_field(name = 'Reason', value = 'I don\'t have the perms to do that-')
             em.add_field(name = 'What to do:', value = "Give me perms when?")
             em.set_footer(text = "-_-", icon_url = ctx.author.avatar_url)
@@ -137,12 +134,12 @@ class Tickets(commands.Cog):
             return
 
         tickets = await self.get_tickets()
-        em = discord.Embed(title= "<:sucess:935052640449077248> Added ticketrole", color = ctx.author.color)
+        em = discord.Embed(title= "<:sucess:935052640449077248> Added ticketrole", color = 0x0098d2)
         em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
         guild = ctx.guild
         author = ctx.author
         if str(ctx.guild.id) not in tickets:
-            em.add_field(name = "Switch:", value = f"`None` => {role.mention}")
+            em.add_field(name = "Switch:", value = f"`None` <➡️940608259075764265> {role.mention}")
             tickets[str(guild.id)] = {}
             tickets[str(guild.id)]["ticketrole"]=[]
             tickets[str(guild.id)]["ticketrole"].append(int(role.id))
@@ -152,7 +149,7 @@ class Tickets(commands.Cog):
             em.add_field(name = "Role:", value = f"{role.mention}")
         em.add_field(name = "Features:", value = "Users can now type `[p] new <reason>`")
         em.add_field(name = "Reason:", value = f"`{reason}`")
-        em.set_footer(text="Bot Made By SniperXi199#2209")
+        em.set_footer(text="Recommended setting up all the stuff")
         await ctx.send(embed = em)
         
         # send the mod log
@@ -160,8 +157,8 @@ class Tickets(commands.Cog):
             channelId = int(tickets[str(ctx.guild.id)]["ticketchannel"])
             for channel_ in ctx.guild.channels:
                 if channel_.id == channelId:
-                    em = discord.Embed(title = "<:sucess:935052640449077248> Ticket Role Set!", color = ctx.author.color)
-                    em.add_field(name = "Moderator:", value = f"{ctx.author.mention}")
+                    em = discord.Embed(title = "<:sucess:935052640449077248> Ticket Role Set!", color = 0x0098d2)
+                    em.add_field(name = "Staff Member:", value = f"{ctx.author.mention}")
                     em.add_field(name ="Reason:", value = f"`{reason}`")
                     em.add_field(name= "Ticket Role", value = f'{role.mention}')
                     em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
@@ -183,44 +180,49 @@ class Tickets(commands.Cog):
             return
 
         tickets = await self.get_tickets()
-        em = discord.Embed(title= "<:sucess:935052640449077248> Removed ticketrole", color = ctx.author.color)
-        em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
         guild = ctx.guild
         author = ctx.author
         if str(ctx.guild.id) not in tickets:
             return await ctx.send(embed=discord.Embed(title="Failed",description="No record for this guild , setup tickets"))
           
         else:
-            if role in tickets[str(guild.id)]["ticketrole"]:
-              tickets[str(guild.id)]["ticketrole"].pop(role)
-              em.add_field(name = "Role:", value = f"{role.mention}")
-              em.add_field(name = "New:", value = f"People having {role} as their topmost role can't see tickets any more")
-              em.add_field(name = "Reason:", value = f"`{reason}`")
-              em.set_footer(text="Bot Made By SniperXi199#2209")
-              await ctx.send(embed = em)
+            if role.id in tickets[str(guild.id)]["ticketrole"]:
 
-        # Updating the database
-        with open("data.json", "w") as f:
-            json.dump(tickets, f)        
+              try:
+                em = discord.Embed(title= "<:sucess:935052640449077248> Removed ticketrole", color = 0x0098d2)
+                em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)              
+                tickets[str(guild.id)]["ticketrole"].remove(role.id)
+                # Updating the database
+                with open("data.json", "w") as f:
+                    json.dump(tickets, f)        
+                        
+                em.add_field(name = "Role:", value = f"{role.mention}")
+                em.add_field(name = "Now:", value = f"People having {role} as their topmost role can't see tickets any more")
+                em.add_field(name = "Reason:", value = f"`{reason}`")
+                em.set_footer(text="Recommended setting up all the stuff")
+                await ctx.send(embed = em)
+                
+              except Exception as e:
+                await ctx.send(e)
 
     @addticketrole.error
     async def addticketrole_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):
-            em = discord.Embed(title = "<:Warn:922468797108080660> Ticket Error", color = ctx.author.color)
+            em = discord.Embed(title = "<:Red_Cross:988360177017311263> Ticket Error", color = 0x0098d2)
             em.add_field(name = "Reason:", value = "You don't have the perms dont try to control me duh!")
             em.add_field(name = "Perms:", value = "`Manage Server permission missing!`")
             em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
-            em.set_footer(text="Bot Made By SniperXi199#2209")
+            em.set_footer(text="Recommended setting up all the stuff")
             await ctx.send(embed = em)
         if isinstance(error, commands.BadArgument):
-            em = discord.Embed(title=  "<:Warn:922468797108080660> Ticket Error", color = ctx.author.color)
+            em = discord.Embed(title=  "<:Red_Cross:988360177017311263> Ticket Error", color = 0x0098d2)
             em.add_field(name ="Reason:", value = f"{ctx.author.mention}, you need to provide a valid role!")
             em.add_field(name = "Usage:", value = '```diff\n+ [p] addticketrole <@role> [reason]\n- [p] addticketrole bruh\n```')
             em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
             em.set_footer(text = "Read the docs, heheboi!")
             await ctx.send(embed = em)
         if isinstance(error, commands.BotMissingPermissions):
-            em = discord.Embed(title = f'<:Warn:922468797108080660> {ctx.command.name} Failed!', color = discord.Color.random(), description = "<:Coder_Hammer:826315685142462474> Ladies and gentlemen we got ||...||")
+            em = discord.Embed(title = f'<:Red_Cross:988360177017311263> {ctx.command.name} Failed!', color = discord.Color.random(), description = "<:Coder_Hammer:826315685142462474> Ladies and gentlemen we got ||...||")
             em.add_field(name = 'Reason', value = 'I don\'t have the perms to do that-')
             em.add_field(name = 'What to do:', value = "Give me perms when?")
             em.set_footer(text = "-_-", icon_url = ctx.author.avatar_url)
@@ -232,8 +234,8 @@ class Tickets(commands.Cog):
         if channel is None:
             await ctx.send("You need to provide a valid channel!")            
         
-        em = discord.Embed(title ="<:sucess:935052640449077248> Ticket Logs Set", color = ctx.author.color)
-        em.add_field(name = "Moderator:", value = f"{ctx.author.mention}")
+        em = discord.Embed(title ="<:sucess:935052640449077248> Ticket Logs Set", color = 0x0098d2)
+        em.add_field(name = "Staff Member:", value = f"{ctx.author.mention}")
         em.add_field(name = "Channel:", value = f"{channel.mention}")
         em.add_field(name = "Reason:", value = f"`{reason}`", inline = False)
         em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
@@ -255,14 +257,14 @@ class Tickets(commands.Cog):
     @setticketlogs.error
     async def setticketlogs_error(self,ctx, error):
         if isinstance(error, commands.MissingPermissions):
-            em = discord.Embed(title = '<:Warn:922468797108080660> Setticketlogs Failed', color = ctx.author.color)
+            em = discord.Embed(title = '<:Red_Cross:988360177017311263> Setticketlogs Failed', color = 0x0098d2)
             em.add_field(name = "Reason:", value = "`Manage Server permission is missing!`")
             em.set_thumbnail(url = ctx.author.avatar_url)
             em.set_footer(text="Smh, imagine thinking you have the perms!")
             em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
             await ctx.send(embed = em)
         if isinstance(error, commands.BadArgument):
-            em = discord.Embed(title = '<:Warn:922468797108080660> Setticketlogs Failed', color = ctx.author.color)
+            em = discord.Embed(title = '<:Red_Cross:988360177017311263> Setticketlogs Failed', color = 0x0098d2)
             em.add_field(name = "Reason:", value = "Mention a channel properly, like {}".format(ctx.channel.mention))
             em.add_field(name= "Usage:", value = "```diff\n+ [p] setticketlogs #ticket-logs better ticket logs\n- [p] setticketlogs SniperXi199#2209 setting a member as logs\n```")
             em.set_thumbnail(url = ctx.author.avatar_url)
@@ -270,7 +272,7 @@ class Tickets(commands.Cog):
             em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
             await ctx.send(embed = em)
         if isinstance(error, commands.BotMissingPermissions):
-            em = discord.Embed(title = f'<:Warn:922468797108080660> {ctx.command.name} Failed!', color = discord.Color.random(), description = "<:Coder_Hammer:826315685142462474> Ladies and gentlemen we got ||...||")
+            em = discord.Embed(title = f'<:Red_Cross:988360177017311263> {ctx.command.name} Failed!', color = discord.Color.random(), description = "<:Coder_Hammer:826315685142462474> Ladies and gentlemen we got ||...||")
             em.add_field(name = 'Reason', value = 'I don\'t have the perms to do that-')
             em.add_field(name = 'What to do:', value = "Give me perms when?")
             em.set_footer(text = "-_-", icon_url = ctx.author.avatar_url)
@@ -285,25 +287,27 @@ class Tickets(commands.Cog):
 
         if name.startswith("ticket-"):
             # send mod log
+          
             channelId = int(tickets[str(ctx.guild.id)]["ticketchannel"])
+            print(channelId)
             for ticketChannel in ctx.guild.channels:
                 # find channel
                 if ticketChannel.id == channelId:
-                    em = discord.Embed(title = "<:Warn:922468797108080660> Ticket Closed!", color = ctx.author.color)
-                    em.add_field(name = "Moderator:", value = f"{ctx.author.mention}")
+                    em = discord.Embed(title = "<:Red_Cross:988360177017311263> Ticket Closed!", color = 0x0098d2)
+                    em.add_field(name = "Staff Member:", value = f"{ctx.author.mention}")
                     em.add_field(name ="Reason:", value = f"`{reason}`")
                     # get the name of member
                     ticket, name = name.split("-")
-                    em.add_field(name = "Member who's ticket it was:", value = f"{name}")
+                    em.add_field(name = "Inquirer:", value = f"{name}")
                     em.set_thumbnail(url = ctx.author.avatar_url)
                     await ticketChannel.send(embed = em)
                     break
             
-            messageEmbed = discord.Embed(title = "<:sucess:935052640449077248> Ticket Will Close!", color = ctx.author.color,
+            messageEmbed = discord.Embed(title = "<:sucess:935052640449077248> Ticket Will Close!", color = 0x0098d2,
             description = "This ticket will close in ten seconds. Thanks for your time!")
             seconds = 10
             messageEmbed.add_field(name= "Time remaining:", value = f"`{seconds}`")
-            messageEmbed.add_field(name = "Moderator:", value = f"{ctx.author.mention}")
+            messageEmbed.add_field(name = "Staff Member:", value = f"{ctx.author.mention}")
             messageEmbed.add_field(name = "Reason:", value = f"`{reason}`")
             messageEmbed.add_field(name = "Mod Logs:", value = "Sending logs in 5 seconds!")
             messageEmbed.set_footer(text = "Wanna invite me eh? `[p] invite`)")
@@ -313,23 +317,23 @@ class Tickets(commands.Cog):
             # now delete the channel
             await channel.delete()
         else:
-            em = discord.Embed(title = "<:Warn:922468797108080660> Closing Failed!", color= ctx.author.color)
+            em = discord.Embed(title = "<:Red_Cross:988360177017311263> Closing Failed!", color= 0x0098d2)
             em.add_field(name = "Reason:", value = f'This channel ({ctx.channel.mention}) is not a ticket channel!')
             em.add_field(name = "Try again later!", value = "Only a channel which has been a ticket can be closed!")
-            em.set_footer(text="Bot Made By SniperXi199#2209")
+            em.set_footer(text="Recommended setting up all the stuff")
             em.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
             await ctx.send(embed = em)
 
     @close.error
     async def close_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):
-            em = discord.Embed(title = '<:Warn:922468797108080660> Close Failed', color = ctx.author.color)
+            em = discord.Embed(title = '<:Red_Cross:988360177017311263> Close Failed', color = 0x0098d2)
             em.add_field(name = "Reason:", value = "`Manage Channels permission is missing!`")
             em.set_thumbnail(url = ctx.author.avatar_url)
             em.set_footer(text="Smh, imagine thinking you have the perms!")
             await ctx.send(embed = em)
         if isinstance(error, commands.BotMissingPermissions):
-            em = discord.Embed(title = f'<:Warn:922468797108080660> {ctx.command.name} Failed!', color = discord.Color.random(), description = "<:Coder_Hammer:826315685142462474> Ladies and gentlemen we got ||...||")
+            em = discord.Embed(title = f'<:Red_Cross:988360177017311263> {ctx.command.name} Failed!', color = discord.Color.random(), description = "<:Coder_Hammer:826315685142462474> Ladies and gentlemen we got ||...||")
             em.add_field(name = 'Reason', value = 'I don\'t have the perms to do that-')
             em.add_field(name = 'What to do:', value = "Give me perms when?")
             em.set_footer(text = "-_-", icon_url = ctx.author.avatar_url)
