@@ -1,9 +1,0 @@
-run="bash main.sh"
-lang="python3"
-
-hidden=[
-"**/.gitignore",
-"**/.github",
-"LICENSE",
-".replit"
-]
