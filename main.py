@@ -102,7 +102,7 @@ intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
     command_prefix= (get_prefix),intents=intents,description="Support server https://discord.gg/avpet3NjTE \n Invite https://dsc.gg/tessarect",case_insensitive=True, help_command=PrettyHelp(index_title="Help <:book:939017828852449310>",no_category="Basic Commands",sort_commands=False,show_index=True))
 #slash = SlashCommand(client)
-m = '֍'
+m = '⎊'
 
 #____emojis______
 blueokay = '<a:Tick:922450348730355712>'
@@ -137,24 +137,24 @@ async def on_ready():
     unloaded_cogs = [c.split(".")[1] for c in cog_list if c.split(".")[1] not in loaded_cogs]
     await channel.send(embed=em)
     for x in client.shards:
-      if not x==3:#3 is the shard id of tbd
+      if not x==3: #3 is the shard id of tbd
         emojis = ["🎪","🎁","🎩","🎓","⚽","🥎","🎮","🏆","🔭","🔬","💣","🔌","📺","💡"]
         await client.change_presence(
-            status=discord.Status.online,
+            status=discord.Status.idle,
             shard_id=x, 
             activity=discord.Activity(
-                type=discord.ActivityType.watching,
+                type=discord.ActivityType.listening,
                 name= f"{random.choice(emojis)} Shard {x} | {len(client.guilds)}"
             )
         )
       else:
                   
         await client.change_presence(
-                status=discord.Status.dnd,
+                status=discord.Status.idle,
                 shard_id=x, 
                 activity=discord.Activity(
-                    type=discord.ActivityType.watching,
-                    name= f"{len(client.users):,} 👤 / {len(client.guilds)}🛸"
+                    type=discord.ActivityType.listening,
+                    name= f"{len(client.users):,} 👤 / {len(client.guilds)} 🛸"
                 ))
 
     if os.path.exists("./storage/reboot.json"):
