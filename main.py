@@ -638,8 +638,8 @@ async def balance(ctx ,user: discord.Member = None):
 
   bank_amt = users[str(user.id)]["bank"]
   em = discord.Embed(title=f'{user.name} Balance',color = user.color,timestamp=ctx.message.created_at)
-  em.add_field(name="Wallet Balance", value=f'֍{wallet_amt:,}',inline=False)
-  em.add_field(name='Bank Balance',value=f'֍{bank_amt:,}',inline=False)
+  em.add_field(name="Wallet Balance", value=f'⎊{wallet_amt:,}',inline=False)
+  em.add_field(name='Bank Balance',value=f'⎊{bank_amt:,}',inline=False)
   em.set_thumbnail(url=user.avatar_url)
   em.add_field(name='Terrabux',value=f"<a:Diamond:930350459020017694>{bal['terrabux']}",inline=False)
 
@@ -657,7 +657,7 @@ async def beg(ctx):
     users = await get_bank_data()
 
     earnings = random.randrange(400)
-    em = discord.Embed(title =random.choice(names),description =f'Gave {ctx.author.mention} ֍ {earnings} ',color = discord.Color.green())
+    em = discord.Embed(title =random.choice(names),description =f'Gave {ctx.author.mention} ⎊ {earnings} ',color = discord.Color.green())
     await ctx.reply(embed=em)
 
     users[str(user.id)]["wallet"] += earnings
