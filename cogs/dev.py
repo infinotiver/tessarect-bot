@@ -90,7 +90,7 @@ class Dev(commands.Cog):
     @commands.command(help="Lists Some poor souls having dev access for me" ,aliases=['devlist'])
     @check(check_Mod)
     async def listdev(self,ctx):
-        x = discord.Embed(title="<:online_status:930347639172657164> ",description="Users having Dev access for me",color=0x34363A)
+        x = discord.Embed(description="Users having Dev access for me",color=0x34363A)
         with open("storage/dev.json") as f:
             dev_users_list = json.load(f)
         pa =1
@@ -151,45 +151,66 @@ class Dev(commands.Cog):
         await ctx.send(f"{user.mention} has been removed!")                   
     @commands.command(aliases=["m","evaldev","deveval"],help="Execuete some stuff")
     @check(check_Mod)  
-    async def python_shell(self, ctx, *, text):
-       
-        if  "client.http.token" in text:
-          return await ctx.send('not my token') 
-        print(f"{Fore.GREEN}Python Shell Invoked: {Style.RESET_ALL}")
-        print(Fore.CYAN,text, str(ctx.author))
-
-        print(Style.RESET_ALL)
-        if str(ctx.author.guild.id) == "912569937116147772":
-            try:
-                text = text.replace("```py", "")
-                text = text.replace("```", "")
-                a = eval(text)
-
-                em = discord.Embed(
-                    title="Successfully Execueted",
-                    description=f"```py\n{str(a)}\n```",
-                    color=discord.Color.green(),
-                )
-                await ctx.send(embed=em)
-         
-            except Exception as e:
-                desired_trace = traceback.format_exc()
-                await ctx.send(
-                    embed=discord.Embed(
-                        title="Oops ! there was a error",
-                        description=f'```py\n{desired_trace}\n```',
-                        color=0xff0000,
-                    )
-                )
-        else:
-
+    async def python_shell(self, ctx, *, code):
+      if ctx.guild.id !=912569937116147772:
+        
+        re = discord.Embed(
+            title="Unverified Server",
+            description=f"{ctx.author.mention} This command is now only for the main server which is Tessa Bot Developers",
+            color=discord.Color.blue(),
+        )
+        await ctx.send(embed=re)  
+        re.title=" Attempt of using deveval outside TBD"
+        re.description=f"{ctx.author.mention} Tried to use dev eval outside TBD but failed \n Requested Code = {code}"
+        devchannel=self.bot.get_channel(979345665081610271)
+        return await devchannel.send(embed=re)
+      env = {
+          "ctx": ctx,
+          "discord": discord,
+          "commands": commands,
+          "client":ctx.bot,
+          "__import__": __import__,
+          "guild":ctx.guild
+      }
+      code = code.replace("```py", "")
+      code = code.replace("```", "")
+      if  "client.http.token" in code:
+          return await ctx.reply(f"You can't take my token , huh {ctx.author.name}")
+  
+      splitcode = []
       
-          re = discord.Embed(
-              title="Unverified Server",
-              description=f"{ctx.author.mention} This command is now only for the main server which is Tessa Bot Developers",
-              color=discord.Color.blue(),
-          )
-          await ctx.send(embed=re)      
+      for line in code.splitlines():
+          splitcode.append(line)
+      
+      try:
+          compile(splitcode[len(splitcode)-1],"<stdin>","eval")
+          splitcode[len(splitcode)-1] = f"return {splitcode[len(splitcode)-1]}"
+      except:
+          pass
+      
+      parsedcode = []
+  
+      for line in splitcode:
+          parsedcode.append("  "+line)
+  
+      parsedcode = "\n".join(parsedcode)
+  
+      fn = f"async def eval_fn():\n{parsedcode}"
+  
+      exec(fn,env)
+  
+      try:
+          output = (await eval("eval_fn()",env))
+          ecolor = 0x00ff00
+      except Exception as error:
+          output = error.__class__.__name__+": "+str(error)
+          ecolor = 0xe60000
+  
+      embed = discord.Embed(title="Eval",description="```\n"+str(output)+"\n```",colour=ecolor,timestamp=ctx.message.created_at)
+  
+  
+      embed.set_author(name=ctx.author.display_name,icon_url=ctx.author.avatar_url)
+      await ctx.reply(embed=embed)
 
                
     @commands.command(name= 'restart',help='Hidden command, youre not supposed to access this.Now off you go. Nothing to see here.',aliases=['reboot'])

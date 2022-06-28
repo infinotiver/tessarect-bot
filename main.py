@@ -409,12 +409,15 @@ async def _eval(ctx, *, code):
     embed.set_author(name=ctx.author.display_name,icon_url=ctx.author.avatar_url)
     await ctx.reply(embed=embed)
 
-@client.command(aliases=['namaste','hi','bonjour'],hidden=True) 
+@client.command(aliases=['namaste','hi','sup'],hidden=True) 
 async def hello(ctx):
-  #test 
-  em = discord.Embed(title="Hi", description=f" Namaste  ,Hi , Bonjour 🙏  {ctx.author.mention}", color=discord.Color.green())
-  em.set_image(url="https://media2.giphy.com/media/SbKNFpFZEumGTkgPgA/giphy.gif?cid=ecf05e47bhxa7graukqo2r3o6o83x9a3wja60ym4y9rmud4o&rid=giphy.gif&ct=g")
-#no errors ok to move on checked 2nd error nothing useful 
+
+  em = discord.Embed(title="Hi", description=f"Thats Me ! Doing great as ever \nAll right pal   {ctx.author.mention} ? ", color=discord.Color.blue())
+  
+  page = requests.get(f'https://api.popcat.xyz/fact')
+  source = json.loads(page.content)
+  f=source['fact']
+  em.add_field(name="Quick Knowledge",value=f)
   await ctx.channel.send(embed = em)
 
 @client.command(aliases=['supportserver','githubrepo','src','invite','website'])
