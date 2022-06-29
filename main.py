@@ -1,6 +1,4 @@
 import os
-with open("requirements.txt") as file:
-    os.system(f"pip3 install {' '.join(file.read().split())}")
 import time
 from discord.ext import tasks
 import  discord
