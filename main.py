@@ -102,7 +102,7 @@ intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
     command_prefix= (get_prefix),intents=intents,description="Support server https://discord.gg/avpet3NjTE \n Invite https://dsc.gg/tessarect",case_insensitive=True, help_command=PrettyHelp(index_title="Help <:book:939017828852449310>",no_category="Basic Commands",sort_commands=False,show_index=True))
 #slash = SlashCommand(client)
-m = '⎊'
+m = '**⌾** '
 
 #____emojis______
 blueokay = '<a:Tick:922450348730355712>'
@@ -638,13 +638,11 @@ async def balance(ctx ,user: discord.Member = None):
 
   bank_amt = users[str(user.id)]["bank"]
   em = discord.Embed(title=f'{user.name} Balance',color = user.color,timestamp=ctx.message.created_at)
-  em.add_field(name="Wallet Balance", value=f'⎊{wallet_amt:,}',inline=False)
-  em.add_field(name='Bank Balance',value=f'⎊{bank_amt:,}',inline=False)
+  em.add_field(name="Wallet Balance", value=f'**⌾** {wallet_amt:,}',inline=False)
+  em.add_field(name='Bank Balance',value=f'**⌾** {bank_amt:,}',inline=False)
   em.set_thumbnail(url=user.avatar_url)
-  em.add_field(name='Terrabux',value=f"<a:Diamond:930350459020017694>{bal['terrabux']}",inline=False)
-
-
-  em.set_footer(text=f"🤨")        
+  em.add_field(name='Terrabux',value=f"<a:Diamond:930350459020017694> {bal['terrabux']}",inline=False)
+  em.set_footer(text=f"You can be rich")        
   msg=await ctx.reply(embed= em)
 
  
@@ -657,7 +655,7 @@ async def beg(ctx):
     users = await get_bank_data()
 
     earnings = random.randrange(400)
-    em = discord.Embed(title =random.choice(names),description =f'Gave {ctx.author.mention} ⎊ {earnings} ',color = discord.Color.green())
+    em = discord.Embed(title =random.choice(names),description =f'Gave {ctx.author.mention} **⌾**  {earnings} ',color = discord.Color.green())
     await ctx.reply(embed=em)
 
     users[str(user.id)]["wallet"] += earnings
