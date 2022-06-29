@@ -85,7 +85,7 @@ class ServerConnect(commands.Cog):
       else:
         for x in list:
           g=self.client.get_guild(x)
-          e=discord.Embed(title=g.name,value=g.id,color=discord.Color.random())
+          e=discord.Embed(title=f"{g.name} - {g.id}",value=g.id,color=discord.Color.random())
           e.set_thumbnail(url=g.icon_url)
           e.add_field(name="Owner",value=g.owner)
           e.add_field(name="Total Chanels",value=len(g.channels))
@@ -102,6 +102,40 @@ class ServerConnect(commands.Cog):
                 e.add_field(name=f"`{x.name}`",value=x.category,inline=False)            
           await ctx.send(embed=e) 
 
-                                  
+    @commands.command(aliases=['importtemplate'])
+    async def Import(self, ctx,g:int):      
+      stats = await db.find_one({"n":"stemplates"}) 
+      guild=self.client.get_guild(g)
+      if guild.id in stats['id']:
+        m=True
+      else:
+        m=False
+      if m==False:
+        return await ctx.send(embed=discord.Embed(description='Sorry , couldnt find that server in database and we are not hackers of discord '))
+      else:
+        await ctx.send(embed=discord.Embed(description=f'Guild: {guild.name}\nOwner: {guild.owner}\nIn Database: {m}\n\nProceeding..'))
+        await ctx.send('Creating Roles')
+        for role in guild.roles:
+          name = role.name
+          color = role.colour
+          perms = role.permissions
+          await ctx.guild.create_role(name=name, permissions=perms, colour=color)        
+        await ctx.send('Adding channels and categories')
+        for x in guild.channels:
+          overwrites = x.overwrites  
+          if str(x.type)=="text":
+            category=x.category
+            
+            #if category.name not in ctx.guild.channels:
+              #await ctx.guild.create_category(category.name)
+            #category=self.client.get_channel(category.name)
+            await ctx.guild.create_text_channel(x.name, overwrites=overwrites)#,category=category) 
+            await ctx.send(f'Created Text channel- {x.name}')
+          elif str(x.type)=="voice":
+            await ctx.guild.create_voice_channel(x.name, overwrites=overwrites)
+            
+            
+            await ctx.send(f'Created Voice Channel- {x.name}')
+        await ctx.send('Done')
 def setup(client):
     client.add_cog(ServerConnect(client))
