@@ -3,11 +3,11 @@
 *.txt
 .cache/
 *.pyc
-.breakpoints
-.replit
+*.breakpoints
+*.replit
 replit.nix
 poetry.lock
-.gitignore
+*.gitignore
 mainbank.json
 prefixes.json
 data.json
