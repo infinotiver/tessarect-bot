@@ -37,9 +37,7 @@ def restart_bot(mode):
     os.execv(sys.executable, ['python'] + sys.argv)
   if mode==2:
     os.system('busybox reboot')
-def progress_bar(progress):
-    return '[{0}{1}] {2}%'.format('█'*(int(round(progress/2))), ' '*(50-(int(round(progress/2)))), progress)
-def check_Mod(ctx):
+def devc(ctx):
   with open("storage/dev.json") as f:
       dev_users_list = json.load(f)
       if ctx.author.id not in dev_users_list:
@@ -88,7 +86,7 @@ class Dev(commands.Cog):
         )        
 
     @commands.command(help="Lists Some poor souls having dev access for me" ,aliases=['devlist'])
-    @check(check_Mod)
+    @check(devc)
     async def listdev(self,ctx):
         x = discord.Embed(description="Users having Dev access for me",color=0x34363A)
         with open("storage/dev.json") as f:
@@ -103,7 +101,7 @@ class Dev(commands.Cog):
         await ctx.send(embed=x)
 
     @commands.command(help="Lists Some idiots who cant even use me",aliases=['blist','blacklisted'])
-    @check(check_Mod)
+    @check(devc)
     async def listblack(self,ctx):
         x = discord.Embed(description="<:dnd_status:946652840053600256> Blacklisted User",color=0x34363A)
         with open("storage/black.json") as f:
@@ -117,7 +115,7 @@ class Dev(commands.Cog):
         x.set_footer(text=f"Total users : {pa-1}")
         await ctx.send(embed=x)        
     @commands.command(help="Dont have silly juicy ideas used for adding some more devs (imagine my owner is too poor)")
-    @check(check_Mod)
+    @check(devc)
     async def adddev(self,ctx, user : discord.Member):
   
 
@@ -134,7 +132,7 @@ class Dev(commands.Cog):
         else:
           await ctx.send('See Developer , either you are adding a dev again as dev or a bot (bots arent that much cool)') 
     @commands.command(help="Removes a silly soul having dev access ")
-    @check(check_Mod)
+    @check(devc)
     async def removedev(self,ctx, user : discord.Member):
         with open("storage/dev.json") as f:
             dev_users_list = json.load(f)
@@ -149,8 +147,8 @@ class Dev(commands.Cog):
             json.dump(dev_users_list, f)
 
         await ctx.send(f"{user.mention} has been removed!")                   
-    @commands.command(aliases=["m","evaldev","deveval"],help="Execuete some stuff")
-    @check(check_Mod)  
+    @commands.command(aliases=["m","evaldev","deveval","eval"],help="Execuete some stuff")
+    @check(devc)  
     async def python_shell(self, ctx, *, code):
       if ctx.guild.id !=912569937116147772:
         
@@ -161,7 +159,7 @@ class Dev(commands.Cog):
         )
         await ctx.send(embed=re)  
         re.title=" Attempt of using deveval outside TBD"
-        re.description=f"{ctx.author.mention} Tried to use dev eval outside TBD but failed \n Requested Code = {code}"
+        re.description=f"{ctx.author.mention} Tried to use dev eval outside TBD but failed \n Requested Code \n `{code}`"
         devchannel=self.bot.get_channel(979345665081610271)
         return await devchannel.send(embed=re)
       env = {
@@ -170,7 +168,9 @@ class Dev(commands.Cog):
           "commands": commands,
           "client":ctx.bot,
           "__import__": __import__,
-          "guild":ctx.guild
+          "guild":ctx.guild,
+          "last_result":self._last_result 
+          
       }
       code = code.replace("```py", "")
       code = code.replace("```", "")
@@ -202,10 +202,11 @@ class Dev(commands.Cog):
       try:
           output = (await eval("eval_fn()",env))
           ecolor = 0x00ff00
+
       except Exception as error:
           output = error.__class__.__name__+": "+str(error)
           ecolor = 0xe60000
-  
+      self._last_result = "Last Result\n"+str(output)
       embed = discord.Embed(title="Eval",description="```\n"+str(output)+"\n```",colour=ecolor,timestamp=ctx.message.created_at)
   
   
@@ -214,7 +215,7 @@ class Dev(commands.Cog):
 
                
     @commands.command(name= 'restart',help='Hidden command, youre not supposed to access this.Now off you go. Nothing to see here.',aliases=['reboot'])
-    @check(check_Mod)
+    @check(devc)
     async def restart(self,ctx,mode:int=1):
       listd=[1,2] 
       if mode not in listd:
@@ -275,7 +276,7 @@ class Dev(commands.Cog):
 
     @commands.command(name='reload', description="Reload all/one of the bot's cogs.\n"
                                                  "This is Dev-only, so don't have any Devny ideas.", )
-    @check(check_Mod)
+    @check(devc)
     async def reload(self, ctx, cog=None):
         async with ctx.typing():
             if not cog:
@@ -323,7 +324,7 @@ class Dev(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command(name='load', description='Loads a cog. Mention the python file\'s name as `cog_file_name`')
-    @check(check_Mod)
+    @check(devc)
     async def load_cog(self, ctx, cog_file_name):
         embed = discord.Embed(title=f"Loading Cog {cog_file_name}.py!", 
                               timestamp=ctx.message.created_at)
@@ -340,7 +341,7 @@ class Dev(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command(name='unload', description="Unloads a cog. Mention the python file\'s name as `cog_file_name`")
-    @check(check_Mod)
+    @check(devc)
     async def unload_cog(self, ctx, cog_file_name):
         embed = discord.Embed(title=f"Unloading Cog {cog_file_name}.py!", color=discord.Color.random(),
                               timestamp=ctx.message.created_at)
@@ -358,7 +359,7 @@ class Dev(commands.Cog):
 
     @commands.command(name="gitpull",help="Pull stuff from my github repo")
     @commands.guild_only()
-    @check(check_Mod)
+    @check(devc)
     async def update(self, ctx):
         async with ctx.typing():
             print(sys.argv)
@@ -375,7 +376,7 @@ class Dev(commands.Cog):
             pass
 
     @commands.command(name="loadjsk")
-    @check(check_Mod)
+    @check(devc)
     async def loadjsk(self, ctx):
         async with ctx.typing():
             try:
@@ -389,7 +390,7 @@ class Dev(commands.Cog):
             await ctx.send(embed=em)
 
     @commands.command(name="unloadjsk")
-    @check(check_Mod)
+    @check(devc)
     async def unloadjsk(self, ctx):
         async with ctx.typing():
             try:
@@ -400,7 +401,7 @@ class Dev(commands.Cog):
                 return await ctx.send("Could not unload!")
             await ctx.send("Unloaded!")
     @commands.command(help="Blacklist some idiot from using me")
-    @check(check_Mod)
+    @check(devc)
     async def blacklist(self,ctx, user : discord.Member,*,reason:str):
         with open("storage/black.json") as f:
             users_list = json.load(f)
@@ -419,7 +420,7 @@ class Dev(commands.Cog):
         else:
           await ctx.send('See Developer , either you are adding a blacklisted user again ') 
     @commands.command(help="Unblacklist some users if they are behaving nice")
-    @check(check_Mod)
+    @check(devc)
     async def unblacklist(self,ctx, user : discord.Member):
         with open("storage/black.json") as f:
             users_list = json.load(f)
@@ -441,7 +442,7 @@ class Dev(commands.Cog):
 
            
 
-    @check(check_Mod)
+    @check(devc)
     @commands.command(hidden=True,help="get info on all my guilds , add False to get Compact Info")
     async def servers(self,ctx,compact=True):       
         activeservers = self.bot.guilds
@@ -473,7 +474,7 @@ class Dev(commands.Cog):
           for guild in activeservers:
             embed.add_field(name=guild,value=f"({str(guild.id)}) -{str(guild.member_count)} **({str(guild.owner)})**",inline=False)
           await ctx.send(embed=embed) 
-    @check(check_Mod)
+    @check(devc)
     @commands.command()
     async def reply(self,ctx,member:discord.User,*,content:str):
       
@@ -487,7 +488,7 @@ class Dev(commands.Cog):
         await ctx.send(embed=discord.Embed(title="User has DM's Disabled",color=discord.Color.red()))
         return
       await ctx.send(embed= discord.Embed(title=f"<:user:941986233574367253> DM SENT <:sucess:935052640449077248> ", description=f"Your Message was Successfully Sent.", timestamp=ctx.message.created_at, color=0x02e7e7))
-    @check(check_Mod)
+    @check(devc)
     @commands.command(hidden=True)
     async def invservers(self,ctx):
         invites = []
@@ -500,6 +501,18 @@ class Dev(commands.Cog):
                     break 
         print(invites) # stop iterating over guild.text_channels, since you only need one invite per guild
         await ctx.send(embed=em)
+    @commands.command(name="username")
+    @commands.check(devc)
+    async def change_username(self, ctx, *, name: str):
+        """ Change username. """
+        try:
+            await self.bot.user.edit(username=name)
+            await ctx.send(f"Successfully changed username to **{name}**")
+            devchannel=self.bot.get_channel(979345665081610271)
+            await devchannel.send(f"{ctx.author} successfully changed my username to **{name}**")
+        except discord.HTTPException as err:
+            await ctx.send(err)
+
 
 def setup(client):
     client.add_cog(Dev(client))

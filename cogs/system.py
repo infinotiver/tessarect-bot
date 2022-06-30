@@ -67,8 +67,8 @@ class Tessarect(commands.Cog):
             color=discord.Color.red(),
         )
         embed.add_field(name="Guild",value=f"{guild.name} \n<:owner:946288312220536863> Owner: {guild.owner}")
-        embed.set_image(url=guild.icon_url)
-        embed.set_thumbnail(url="https://image.shutterstock.com/image-vector/down-arrow-vector-line-icon-260nw-1162804441.jpg")
+        embed.set_thumbnail(url=guild.icon_url)
+        
         embed.add_field(name="Server ID",value=guild.id,inline=False)                        
         embed.add_field(name="Current Guild count",value=len(self.bot.guilds),inline=False)  
         await self.bot.get_channel(self.logs_channel).send(embed=embed)
@@ -96,7 +96,9 @@ class Tessarect(commands.Cog):
         "yml":"Yaml files (for some silly stuff ) (.yml)",
         "sh":"Shell Script (.sh)",
         "txt":"Text files (.txt)",
-        "md":"Markdown Files (.md)"}
+        "md":"Markdown Files (.md)",
+        "css":"CSS Files (.css)",
+        "html":"HTML Code (.html)"}
       
       # Get the extensions <:checkboxsquare:942779132159356959>include our include list
       extensions = self.get_extensions(path, list(ext_dict))
@@ -114,10 +116,10 @@ class Tessarect(commands.Cog):
       fields = [{"name":ext_dict.get(extensions[x],extensions[x]),"value":"{:,} line{}".format(code_count[x],"" if code_count[x]==1 else "s")} for x in range(len(code_count))]
       dd=discord.Embed(
         title="Counted Lines of Code",
-        description="My lazy devs took the time to sloppily write the following to bring me life...",
+        description="My developers took so much time to sloppily write the following to bring me life...that it took me so many seconds to fetch that up ",
         color=discord.Color.blurple()
       )
-      dd.set_footer(text="Thesse counts are fetched from my github repo and may not be up to date")
+      dd.set_footer(text="These counts are fetched from my github repo and may not be up to date")
       dd.set_thumbnail(url=self.bot.user.avatar_url)
       for x in fields:
         dd.add_field(name=x['name'],value=x['value'])
@@ -270,7 +272,7 @@ class Tessarect(commands.Cog):
         else:
           devlogs=self.bot.get_channel(979345665081610271)
           err_code=discord_pass.secure_password_gen(10)             
-          log=discord.Embed(title=f"<:messagealert:942777256160428063> Error ( {err_code} )",description=f"```\n{error}\n```",color=self._theme_color,timestamp=ctx.message.created_at)
+          
 
           row2 = ActionRow(
               Button(
@@ -302,7 +304,10 @@ class Tessarect(commands.Cog):
             with open ('storage/errors.json', 'w') as f:
                 json.dump(data, f, indent=4)
           if not known_error:
-            log.add_field(name="Desc",value=f"```json\n{str(data[str(err_code)])}\n```",inline=False)
+            log=discord.Embed(description=f"**{err_code}**\n```\n{error}\n```\n{str(ctx.message.content)}",color=self.theme_color,timestamp=ctx.message.created_at)
+            
+            
+            log.set_footer(text=f"{ctx.author} @ {ctx.guild}")
             await devlogs.send(embed=log)  
           uem=discord.Embed(title="Oops!",description=f'It seems like an unexpected error happened\n|| ** {error} ** ||',color=0xe74c3c).add_field(name="Known Error?",value=known_error)
           uem.set_author(name=ctx.author,icon_url=ctx.author.avatar_url)

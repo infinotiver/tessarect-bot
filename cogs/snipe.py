@@ -112,7 +112,7 @@ class Snipe(commands.Cog):
 
             embeds=[]
             for msg in msgs:
-                editsnipe_embed = discord.Embed(title="Edit Snipe",
+                editsnipe_embed = discord.Embed(title=f"Edit Snipe ({len(self.edited_msgs[ctx.channel.id][::-1][:limit])} Entries)",
                 description=f"Author  •  {msg[1].author}  |  Edited", color=self.theme_color
             )
                 editsnipe_embed.add_field(

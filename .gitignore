@@ -4,8 +4,10 @@
 .cache/
 *.pyc
 .breakpoints
-.replit #replit file hiding
-.gitignore #no need to show to others what we have hidden
+.replit
+replit.nix
+poetry.lock
+.gitignore
 mainbank.json
 prefixes.json
 data.json

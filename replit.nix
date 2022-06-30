@@ -1,7 +1,7 @@
 { pkgs }: {
   deps = [
     pkgs.python39Full
-    pkgs.python39Packages.pip.out
+    pkgs.python39Packages.poetry.out
   ];
   env = {
     PYTHON_LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [

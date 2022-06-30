@@ -1,12 +1,12 @@
 # The command that runs the program. Commented out because it is not run when the interpreter command is set
-# run = ["python3", "main.py"]
+run = ["sh start.sh"]
 # The primary language of the repl. There can be others, though!
 language = "python3"
 # The main file, which will be shown by default in the editor.
 entrypoint = "main.py"
 # A list of globs that specify which files and directories should
 # be hidden in the workspace.
-hidden = [".github", "LICENSE", ".venv", ".config", "**/__pycache__", "**/.mypy_cache", "**/*.pyc"]
+hidden = ["poetry.lock", ".github", ".gitignore", "LICENSE", ".venv", ".config", "**/__pycache__", "**/.mypy_cache", "**/*.pyc"]
 
 # Specifies which nix channel to use when building the environment.
 [nix]
@@ -42,9 +42,9 @@ syntax = "python"
 # The environment variables needed to correctly start Python and use the
 # package proxy.
 [env]
-VIRTUAL_ENV = "/home/runner/${REPL_SLUG}/venv"
+VIRTUAL_ENV = "/home/runner/${REPL_SLUG}/.venv"
 PATH = "${VIRTUAL_ENV}/bin"
-PYTHONPATH="${VIRTUAL_ENV}/lib/python3.8/site-packages"
+PYTHONPATH="${VIRTUAL_ENV}/lib/python3.9/site-packages"
 REPLIT_POETRY_PYPI_REPOSITORY="https://package-proxy.replit.com/pypi/"
 MPLBACKEND="TkAgg"
 

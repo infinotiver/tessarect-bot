@@ -51,12 +51,12 @@ import motor.motor_asyncio
 #import datetime
 import socket  
 import datetime
-
+from termcolor import colored
+from pyfiglet import Figlet
 import urllib.request
 from dislash import  Option, OptionType
 import typing
 import random
-from PIL import Image
 import io
 def get_prefix(client, message):
     try:
@@ -122,12 +122,17 @@ for filename in os.listdir("./cogs"):
 
 import glob
 @client.event
-async def on_ready():  
-    print(f'{client.user} - {client.user.name}  has connected to Discord! Enjoy ')  
-    em = discord.Embed(title =f"{client.user.name} Online!",color =discord.Color.dark_theme())
+async def on_ready(): 
+    os.system("clear")
+    font = Figlet(font="standard")
+    print(colored(font.renderText(client.user.name), "blue"))
+    print(f"[+] Logged in as {client.user} ( ID : {client.user.id} )")
+    em = discord.Embed(title =f"{client.user.name} Online!",color =discord.Color.green())
+    system_latency = round(client.latency * 1000)
     em.set_thumbnail(url=client.user.avatar_url)
-    em.add_field(name="Server Count",value=len(client.guilds),inline=False)
-    em.add_field(name="User Count",value=len(client.users),inline=False)    
+    em.add_field(name="Ping",value=system_latency,inline=False)
+    em.add_field(name="Server Count",value=len(client.guilds),inline=True)
+    em.add_field(name="User Count",value=len(client.users),inline=True)    
     channel=client.get_channel(953571969780023366)
     await channel.purge(limit=None, check=lambda msg: not msg.pinned)
     cog_list = ["cogs." + os.path.splitext(f)[0] for f in [os.path.basename(f) for f in glob.glob("cogs/*.py")]]
@@ -136,23 +141,23 @@ async def on_ready():
     await channel.send(embed=em)
     for x in client.shards:
       if not x==3: #3 is the shard id of tbd
-        emojis = ["🎪","🎁","🎩","🎓","⚽","🥎","🎮","🏆","🔭","🔬","💣","🔌","📺","💡"]
+        emojis = ['😀', '😁', '🤣', '😃', '😄', '😅', '😆', '😉', '😊', '😋', '😎', '😍', '😘', '😗']
         await client.change_presence(
-            status=discord.Status.idle,
+            status=discord.Status.dnd,
             shard_id=x, 
             activity=discord.Activity(
                 type=discord.ActivityType.listening,
-                name= f"{random.choice(emojis)} Shard {x} | {len(client.guilds)}"
+                name= f"{random.choice(emojis)} Shard {x}"
             )
         )
       else:
                   
         await client.change_presence(
-                status=discord.Status.idle,
+                status=discord.Status.dnd,
                 shard_id=x, 
                 activity=discord.Activity(
                     type=discord.ActivityType.listening,
-                    name= f"{len(client.users):,} 👤 / {len(client.guilds)} 🛸"
+                    name= f"{len(client.users):,} 👤 @ {len(client.guilds)} 🛸"
                 ))
 
     if os.path.exists("./storage/reboot.json"):
@@ -209,14 +214,6 @@ import datetime
 async def on_resumed():
     print("Bot user: {0.user} RESUMED".format(client))
 
-    print("----------------- Services Back")
-    em = discord.Embed(title =f"{client.user.name} Up Again",description=f"{client.user.name}  Service Resumed ",color =discord.Color.dark_theme())
-    em.add_field(name="Server Count",value=len(client.guilds),inline=False)
-    em.add_field(name="User Count",value=len(client.users),inline=False)
-    channel = client.get_channel(953571969780023366)
-
-    await channel.send(embed=em)    
-
 import topgg
 
 # This example uses tasks provided by discord.ext to create a task that posts guild count to Top.gg every 30 minutes.
@@ -250,7 +247,7 @@ async def on_guild_remove(guild): #when the bot is removed from the guild
 
             activity=discord.Activity(
                 type=discord.ActivityType.watching,
-                name= f"{str(len(client.guilds))} Servers"
+                name= f"😢 {str(len(client.guilds))} Servers"
             ))
         
 @client.command(pass_context=True)
@@ -268,16 +265,9 @@ async def changeprefix(ctx, prefix): #command: a!changeprefix ...
     await ctx.reply(f'Prefix changed to: {prefix}')
     #test #confirms the prefix it's been changed to
 
-    await client.change_presence(
-            activity=discord.Activity(
-                type=discord.ActivityType.watching,
-                name= f"{str(len(client.guilds))} Servers"
-            ))
 
-def dev():
-    def predicate(ctx):
-        return ctx.message.author.id == 904221795358478366 or 855327915301404674  or 892376302831677520 or 900992402356043806 or 900992402356043806
-    return commands.check(predicate)
+
+
 @client.event
 async def on_guild_join(guild): #when the bot joins the guild
     with open('prefixes.json', 'r') as f: #read the prefix.json file
@@ -294,34 +284,6 @@ async def on_guild_join(guild): #when the bot joins the guild
 
 names =['Spencer M. McKnight','Saul D. Burgess','Ghiyath Haddad Shadid','Ramzi Muta Hakimi','Callum Peel','Joao Barbosa Pinto','Bertram Hoving','Cian Reith','Mat Twofoot''Alexander Achen''Rohan ','Manish Nadela']   
    
-    
-@client.command(hidden=True)
-@commands.is_owner()
-async def shutdown(ctx):
-
-    log_out = ['Man am I tired, I think I need to get some shuteye',
-               'CAN\'T SEE, NEED TO CLOSE EYES',
-               'I think I\'ll just lay down for a minute ',
-               'Short of breath, vision fading..... leave me here to DIIIE'
-               ]
-
-    response3 = random.choice(log_out)
-    await ctx.reply(response3)
-    await client.logout()
-@shutdown.error
-async def error(ctx,error):
-
-        annoyed = [
-            'Your\'re not the boss of me!!',
-            'You dare to defy ME????',
-            'Yeah, you bugger off!!',
-            'You\'r words mean nothing to me!!!'
-        ]
-        pain = random.choice(annoyed)
-        await ctx.reply(pain)
-
-
-
 
 import urllib
 @client.command(alises=['dict','define'])
@@ -356,61 +318,11 @@ async def dictionary(ctx, *, text):
   embed=discord.Embed(title=word,
     description=description,color=discord.Color.dark_theme())
   await ctx.send(embed=embed)
-@client.command(name="eval",hidden=True)
-@commands.is_owner()
-async def _eval(ctx, *, code):
-    env = {
-        "ctx": ctx,
-        "discord": discord,
-        "commands": commands,
-        "client":ctx.bot,
-        "__import__": __import__,
-        "guild":ctx.guild
-    }
-    code = code.replace("```py", "")
-    code = code.replace("```", "")
-    if  "client.http.token" in code:
-        return await ctx.reply(f"You can't take my token , huh {ctx.author.name}")
-
-    splitcode = []
-    
-    for line in code.splitlines():
-        splitcode.append(line)
-    
-    try:
-        compile(splitcode[len(splitcode)-1],"<stdin>","eval")
-        splitcode[len(splitcode)-1] = f"return {splitcode[len(splitcode)-1]}"
-    except:
-        pass
-    
-    parsedcode = []
-
-    for line in splitcode:
-        parsedcode.append("  "+line)
-
-    parsedcode = "\n".join(parsedcode)
-
-    fn = f"async def eval_fn():\n{parsedcode}"
-
-    exec(fn,env)
-
-    try:
-        output = (await eval("eval_fn()",env))
-        ecolor = 0x00ff00
-    except Exception as error:
-        output = error.__class__.__name__+": "+str(error)
-        ecolor = 0xe60000
-
-    embed = discord.Embed(title="Eval",description="```\n"+str(output)+"\n```",colour=ecolor,timestamp=ctx.message.created_at)
-
-
-    embed.set_author(name=ctx.author.display_name,icon_url=ctx.author.avatar_url)
-    await ctx.reply(embed=embed)
 
 @client.command(aliases=['namaste','hi','sup'],hidden=True) 
 async def hello(ctx):
 
-  em = discord.Embed(title="Hi", description=f"Thats Me ! Doing great as ever \nAll right pal   {ctx.author.mention} ? ", color=discord.Color.blue())
+  em = discord.Embed(title="Hi <a:panda:930348733844033576>", description=f"Thats Me ! Doing great as ever<a:happyblob:946284960271175710> \nAll right pal   {ctx.author.mention} ? ", color=discord.Color.blue())
   
   page = requests.get(f'https://api.popcat.xyz/fact')
   source = json.loads(page.content)
@@ -501,14 +413,16 @@ async def on_member_join(member):
         wel = json.load(f)  
     if str(member.guild.id) not in wel:
         return
-    channel = client.get_channel(wel[str(member.guild.id)][0])
-    if channel==None:
-      return print('not set')
-    embed = discord.Embed(colour=discord.Colour.blue(),description=wel[str(member.guild.id)][1])
-    name=member.display_name.split()
-    finalname='+'.join(name)
-    link=f"https://api.popcat.xyz/welcomecard?background=https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png&text1={finalname}&text2=Welcome&text3=#+{str(len(member.guild.members))}+Member&avatar={str(member.avatar_url_as(format='png'))}"
-    embed.set_image(url=link)
+    try:
+      channel = client.get_channel(wel[str(member.guild.id)][0])
+    except:
+      return
+    embed = discord.Embed(colour=discord.Colour.dark_orange(),description=wel[str(member.guild.id)][1])
+    finalname='+'.join(member.display_name.split())
+    finalguild='+'.join(member.guild.name.split())
+    
+    url=f"https://api.popcat.xyz/welcomecard?background=https://media.discordapp.net/attachments/929334504236122123/991957100790026331/Sunset_2.jpg&text1={finalname}&text2=Welcome+To+{finalguild}&text3=Member+{str(len(member.guild.members))}&avatar={str(member.avatar_url_as(format='png'))}"
+    embed.set_image(url=url)
     await channel.send(embed=embed)    
 
 @client.event
@@ -1700,24 +1614,8 @@ Available_Ram : {round(val4, 2)} GB```''',inline=False)
         try: em.add_field(name='Bot version', value='%s' % os.popen('git rev-parse --verify HEAD').read()[:7])
         except: pass
     em.add_field(name='Python Version', value='%s (%s)'%(sys.version,sys.api_version), inline=False)
-    dependencies = ''
-    dep_file = sorted(open('%s/requirements.txt' % os.getcwd()).read().split("\n"), key=str.lower)
-    for dep in dep_file:
-        if not '==' in dep: continue
-        dep = dep.split('==')
-        cur = pkg_resources.get_distribution(dep[0]).version
-        if cur == dep[1]: dependencies += '\✔  %s: %s\n'%(dep[0], cur)
-        else: dependencies += '\❌ %s: %s / %s\n'%(dep[0], cur, dep[1])
-    
-
-   
-    await ctx.reply(embed=em)
   
-    want_depends=await assets.reactor.reactor(ctx, client, 'Do you want to check current dependencies', 0x34363A,ctx.author)
-    if want_depends:
-      emx=discord.Embed(title="Dependencies",color=discord.Color.dark_gray())
-      emx.add_field(name='Dependencies', value='%s' % dependencies)
-      await ctx.send(embed=emx)
+    await ctx.reply(embed=em)
 @client.command()
 async def goal(ctx):
 

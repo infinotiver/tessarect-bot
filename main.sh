@@ -1,1 +1,1 @@
-python3 main.py
+clear && poetry shell && clear && poetry run python main.py
