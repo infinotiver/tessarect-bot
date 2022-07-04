@@ -4,6 +4,7 @@ import sys
 import requests
 import asyncio
 import json
+import aiohttp
 import psutil
 from discord.ext import tasks
 import datetime
@@ -13,7 +14,9 @@ from functools import cached_property
 from discord.ext import commands
 from dislash import InteractionClient, ActionRow, Button, ButtonStyle
 from discord.utils import get
-class TBD(commands.Cog):
+from discord import Webhook, AsyncWebhookAdapter 
+
+class Misc(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -317,5 +320,81 @@ Join Ʈᥱ⳽⳽ᥲ ᙖot ᙃᥱʋᥱꙆoρᥱɾ⳽ Now :
 https://discord.gg/avpet3NjTE"""
       em=discord.Embed(title="Tessa Bot Developers",description=d,color=ctx.author.color)
       await ctx.send(embed=em)
+    @commands.command(name='createficter')
+    async def cf(self,ctx,avatar:str,spl:str,*,user:str):  
+      
+      with open("storage/tubble.json", "r") as modlogsFile:
+          jsonfile = json.load(modlogsFile)   
+        
+      if spl in jsonfile:
+        return await ctx.send('Sorry but you cant use that spl text it is taken already')
+      if avatar=="None":
+        avatar=None
+      jsonfile[spl]={'name':user,'avatar':avatar,'invoke':spl,'owner':ctx.author.id}
+      with open("storage/tubble.json", "w") as File:
+          json.dump(jsonfile,File)      
+      e=discord.Embed(title="Created a ficter",description=f"User- {user}\n Invoking Special Code - {spl}\n To use this fictere send `[p]sendfictermsg {spl} [your text you want to send]`",color=discord.Color.magenta())
+      await ctx.send(embed=e)
+    @commands.command(name='editficter')
+    async def ctb(self,ctx,spl:str,avatar:str,*,user:str):  
+      
+      with open("storage/tubble.json", "r") as modlogsFile:
+          jsonfile = json.load(modlogsFile)   
+        
+
+      if avatar=="None":
+        avatar=None
+      jsonfile[spl]={'name':user,'avatar':avatar,'invoke':spl,'owner':ctx.author.id}
+      with open("storage/tubble.json", "w") as File:
+          json.dump(jsonfile,File)      
+      e=discord.Embed(title="Edited a ficter",description=f"User- {user}\n Invoking Special Code - {spl}\n To use this fictere send `[p]sendfictermsg {spl} [your text you want to send]`",color=discord.Color.magenta())
+      await ctx.send(embed=e)      
+    @commands.command(name='removeficter')
+    async def rtb(self,ctx,spl:str):  
+      
+      with open("storage/tubble.json", "r") as modlogsFile:
+          jsonfile = json.load(modlogsFile)   
+      if spl in jsonfile:
+        jsonfile.pop(spl)
+      with open("storage/tubble.json", "w") as File:
+          json.dump(jsonfile,File)    
+      e=discord.Embed(title="Removed a ficter",description=f"Removed successfully",color=discord.Color.magenta())
+      await ctx.send(embed=e)
+    @commands.command(name='listficter')
+    async def ltf(self,ctx):  
+      
+      with open("storage/tubble.json", "r") as modlogsFile:
+          jsonfile = json.load(modlogsFile)   
+      ed=discord.Embed(title="My Ficters",color=discord.Color.magenta())
+      for x in jsonfile:
+        if jsonfile[x]['owner']==ctx.author.id:
+          ed.add_field(name=jsonfile[x]['name'],value=f"Invoke-{jsonfile[x]['invoke']}\n Avatar Url-{jsonfile[x]['avatar']}",inline=False)
+      await ctx.send(embed=ed)
+    @commands.command(name='sendfictermsg',aliases=['fictersend','fm'])
+    async def sendwebhookmsg(self,ctx,spl:str,*,text):  
+      with open("storage/tubble.json", "r") as jsfile:
+          jsonfile = json.load(jsfile)    
+      #tubble=jsonfile[spl]
+      if spl not in jsonfile:
+        return await ctx.send('No Ficter found with that code ')
+      else:
+        tubble=jsonfile[spl]
+      user=tubble['name']
+      avatar=tubble['avatar']
+      owner=tubble['owner']
+
+      if ctx.author.id != owner:
+        return await ctx.send('You are not the author of this Ficter')
+
+      
+      #if not 'https'or'http' in avatar:
+        #return await ctx.send('Invalid url for avatar')
+      web=await ctx.channel.create_webhook(name=f"Ficter {spl}")
+     
+      async with aiohttp.ClientSession() as session:  
+        webhook = Webhook.from_url(web.url, adapter=AsyncWebhookAdapter(session)) # Initializing webhook with AsyncWebhookAdapter
+        await webhook.send(username=user, avatar_url=avatar,content=text) 
+        await web.delete()# Executing webhook.
+        await ctx.message.delete()
 def setup(bot):
-    bot.add_cog(TBD(bot))
+    bot.add_cog(Misc(bot))

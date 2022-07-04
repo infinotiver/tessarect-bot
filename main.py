@@ -417,13 +417,13 @@ async def on_member_join(member):
       channel = client.get_channel(wel[str(member.guild.id)][0])
     except:
       return
-    embed = discord.Embed(colour=discord.Colour.dark_orange(),description=wel[str(member.guild.id)][1])
+    embed = discord.Embed(title=f"{member.name} joined the Party",colour=discord.Colour.dark_orange(),description=wel[str(member.guild.id)][1])
     finalname='+'.join(member.display_name.split())
     finalguild='+'.join(member.guild.name.split())
     
     url=f"https://api.popcat.xyz/welcomecard?background=https://media.discordapp.net/attachments/929334504236122123/991957100790026331/Sunset_2.jpg&text1={finalname}&text2=Welcome+To+{finalguild}&text3=Member+{str(len(member.guild.members))}&avatar={str(member.avatar_url_as(format='png'))}"
     embed.set_image(url=url)
-    await channel.send(embed=embed)    
+    await channel.send(content=f"🌹 Roses are red, 🌸 violets are blue, {member.mention} joined this server with you",embed=embed)    
 
 @client.event
 async def on_member_remove(member):
@@ -435,9 +435,10 @@ async def on_member_remove(member):
     if channel==None:
       return print('not set')
     embed = discord.Embed(colour=discord.Colour.blue(),description=f"{member} left")
-    name=member.display_name.split()
-    finalname='+'.join(name)
-    link=f"https://api.popcat.xyz/welcomecard?background=https://media.discordapp.net/attachments/929332390432735243/945522028985872424/9k.png&text1={finalname}&text2=Left&text3=Hope+They+had+a+Good+time+and+maybe+join+back&avatar={str(member.avatar_url_as(format='png'))}"
+    finalname='+'.join(member.display_name.split())
+    finalguild='+'.join(member.guild.name.split())
+    link=f"https://api.popcat.xyz/welcomecard?background=https://static.vecteezy.com/system/resources/previews/001/907/544/original/flat-design-background-with-abstract-pattern-free-vector.jpg&text1={finalname}&text2=Left+{finalguild}&text3=We+have+now+{str(len(member.guild.members))}+people&avatar={str(member.avatar_url_as(format='png'))}"
+    
     embed.set_image(url=link)
     await channel.send(embed=embed)    
 
@@ -496,12 +497,14 @@ async def google(ctx, *, query):
     
 @client.command()
 async def lyrics(ctx, *, song):
-  page = requests.get(f'https://api.popcat.xyz/lyrics?song={song}')
-  js = json.loads(page.content)
-  
-  em = discord.Embed(title=js["title"], description=js["lyrics"], color=discord.Color.dark_grey())
-  em.set_thumbnail(url=js['image'])
-  await ctx.reply(embed=em)
+    from lyrics_extractor import SongLyrics
+
+    sc = SongLyrics('AIzaSyCBc9vGiM-q0dIOpt0mSIdhraUGiF1pU_U', '2c0e4a26e5d598f41')
+    js = sc.get_lyrics(
+        song
+    )
+    em = discord.Embed(title=js["title"], description=js["lyrics"], color=discord.Color.dark_grey())
+    await ctx.reply(embed=em)
     
 
 
@@ -1716,40 +1719,6 @@ async def nasa( ctx):
       embednasa.set_image(url=requestUrl)
       embednasa.set_footer(text="Press the blue text to see the full resolution image!")
       await ctx.reply(embed=embednasa)
-@client.command(aliases=['wolfram'],help="Get information from wolfram|alpha")
-async def wolf(ctx, *, question):
-    out = get_answer1(question)
-    await ctx.reply(embed=out[0], file=out[1])
-
-def get_answer1(question=""):
-    if question == "_ _":
-        embed = discord.Embed(
-            title="Not so fast ",
-            description="You need to enter a question",
-
-        )
-        embed.set_thumbnail(url=client.user.avatar_url_as(format="png"))
-        return (embed, None)
-    else:
-        question = urllib.parse.quote(question)
-        a = requests.get(
-            f"http://api.wolframalpha.com/v1/simple?appid={os.environ['wolf']}&i={question}&layout=labelbar&width=1500&fontsize=20"
-        ).content
-        file = open("output.png", "wb")
-        file.write(a)
-        file.close()
-        embed = discord.Embed(
-            title="Wolfram ",
-            description="Here is what I got from Wolfram",
-            color=discord.Color.dark_red()
-        )
-        embed.set_thumbnail(
-            url="https://www.wolfram.com/homepage/img/carousel-wolfram-alpha.png"
-        )
-        file = discord.File("output.png")
-        embed.set_image(url="attachment://output.png")
-        return (embed, file)
-
 
 @client.after_invoke 
 async def data(ctx):
