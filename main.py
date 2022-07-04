@@ -126,7 +126,7 @@ async def on_ready():
     os.system("clear")
     font = Figlet(font="standard")
     print(colored(font.renderText(client.user.name), "blue"))
-    print(f"[+] Logged in as {client.user} ( ID : {client.user.id} )")
+    print(f"[🟢] Logged in as {client.user} ( ID : {client.user.id} )")
     em = discord.Embed(title =f"{client.user.name} Online!",color =discord.Color.green())
     system_latency = round(client.latency * 1000)
     em.set_thumbnail(url=client.user.avatar_url)
@@ -134,14 +134,14 @@ async def on_ready():
     em.add_field(name="Server Count",value=len(client.guilds),inline=True)
     em.add_field(name="User Count",value=len(client.users),inline=True)    
     channel=client.get_channel(953571969780023366)
-    await channel.purge(limit=None, check=lambda msg: not msg.pinned)
+
     cog_list = ["cogs." + os.path.splitext(f)[0] for f in [os.path.basename(f) for f in glob.glob("cogs/*.py")]]
     loaded_cogs = [x.__module__.split(".")[1] for x in client.cogs.values()]
     unloaded_cogs = [c.split(".")[1] for c in cog_list if c.split(".")[1] not in loaded_cogs]
     await channel.send(embed=em)
     for x in client.shards:
       if not x==3: #3 is the shard id of tbd
-        emojis = ['😀', '😁', '🤣', '😃', '😄', '😅', '😆', '😉', '😊', '😋', '😎', '😍', '😘', '😗']
+        emojis = ['😀', '😁', '🤣', '😃', '😄', '😅', '😆', '😉', '😊', '😋', '😎', '😍', '😘', '😗','']
         await client.change_presence(
             status=discord.Status.dnd,
             shard_id=x, 
@@ -179,9 +179,9 @@ async def update_stats():
     """This function runs every 30 minutes to automatically update your server count."""
     try:
         await client.topggpy.post_guild_count()
-        print(f"Posted server count ({client.topggpy.guild_count})")
+        print(f"[🟢] Posted server count ({client.topggpy.guild_count})")
     except Exception as e:
-        print(f"Failed to post server count\n{e.__class__.__name__}: {e}")
+        print(f"[🔴] Failed to post server count\n{e.__class__.__name__}: {e}")
 
 
 update_stats.start()
@@ -212,30 +212,10 @@ import datetime
 
 @client.event
 async def on_resumed():
-    print("Bot user: {0.user} RESUMED".format(client))
+    print("[🟢] {0.user} Resumed ".format(client))
 
-import topgg
-
-# This example uses tasks provided by discord.ext to create a task that posts guild count to Top.gg every 30 minutes.
-
-dbl_token = os.environ['topgg']  # set this to your bot's Top.gg token
-client.topggpy = topgg.DBLClient(client, dbl_token)
-
-@tasks.loop(minutes=30)
-async def update_stats():
-    """This function runs every 30 minutes to automatically update your server count."""
-    try:
-        await client.topggpy.post_guild_count()
-        print(f"Posted server count ({client.topggpy.guild_count})")
-    except Exception as e:
-        print(f"Failed to post server count\n{e.__class__.__name__}: {e}")
-import topgg
-
-
-
-#update_stats.start()
 @client.event
-async def on_guild_remove(guild): #when the bot is removed from the guild
+async def on_guild_remove(guild): 
     with open('prefixes.json', 'r') as f: #read the file
         prefixes = json.load(f)
 
@@ -250,19 +230,19 @@ async def on_guild_remove(guild): #when the bot is removed from the guild
                 name= f"😢 {str(len(client.guilds))} Servers"
             ))
         
-@client.command(pass_context=True)
+@client.command(pass_context=True,aliases=['prefix'])
 @commands.has_permissions(administrator=True)
 async def changeprefix(ctx, prefix): #command: a!changeprefix ...
     #test
     with open('prefixes.json', 'r') as f:
         prefixes = json.load(f)
 
-    prefixes[str(ctx.guild.id)] = [prefix,"amt "]
+    prefixes[str(ctx.guild.id)] = [prefix]
 
     with open('prefixes.json', 'w') as f: #writes the new prefix into the .json
         json.dump(prefixes, f, indent=4)
 
-    await ctx.reply(f'Prefix changed to: {prefix}')
+    await ctx.reply(f'[🟢] Prefix changed to: {prefix}')
     #test #confirms the prefix it's been changed to
 
 
@@ -273,7 +253,7 @@ async def on_guild_join(guild): #when the bot joins the guild
     with open('prefixes.json', 'r') as f: #read the prefix.json file
         prefixes = json.load(f) #load the json file
 
-    prefixes[str(guild.id)] = ['a!','amt ']#default prefix
+    prefixes[str(guild.id)] = ['a!']#default prefix
 
     with open('prefixes.json', 'w') as f: #write in the prefix.json "message.guild.id": "a!"
         json.dump(prefixes, f, indent=4) #the indent is to make everything look a bit neater
@@ -282,7 +262,7 @@ async def on_guild_join(guild): #when the bot joins the guild
 
 
 
-names =['Spencer M. McKnight','Saul D. Burgess','Ghiyath Haddad Shadid','Ramzi Muta Hakimi','Callum Peel','Joao Barbosa Pinto','Bertram Hoving','Cian Reith','Mat Twofoot''Alexander Achen''Rohan ','Manish Nadela']   
+names =['Spencer M.',' McKnight','Saul D. Burgess','Ghiyath Haddad Shadid','Ramzi Muta Hakimi','Callum Peel','Joao Barbosa Pinto','Bertram Hoving','Cian Reith','Mat Twofoot''Alexander Achen''Rohan ','Manish Nadela']   
    
 
 import urllib
@@ -298,24 +278,24 @@ async def dictionary(ctx, *, text):
       if "phonetics" in data.keys():
           if "text" in data["phonetics"][0]:
               phonetics = (
-                  "**Phonetics:**\n" + data["phonetics"][0]["text"] + "\n\n"
+                  "**<:arrow_right:940608259075764265> Phonetics:**\n" + data["phonetics"][0]["text"] + "\n\n"
               )
               description += phonetics
       if "origin" in list(data.keys()):
-          origin = "**Origin: **" + data["origin"] + "\n\n"
+          origin = "**<:arrow_right:940608259075764265> Origin: **" + data["origin"] + "\n\n"
           description += origin
       if "meanings" in data.keys() and "definitions" in data["meanings"][0]:
           meanings = data["meanings"][0]["definitions"][0]
           if "definition" in list(meanings.keys()):
-              meaning = "**Definition: **" + meanings["definition"] + "\n\n"
+              meaning = "**<:arrow_right:940608259075764265> Definition: **" + meanings["definition"] + "\n\n"
               description += meaning
           if "example" in list(meanings.keys()):
-              example = "**Example: **" + meanings["example"]
+              example = "**<:arrow_right:940608259075764265> Example: **" + meanings["example"]
               description += example
   else:
       word = data["title"]
       description = data["message"]
-  embed=discord.Embed(title=word,
+  embed=discord.Embed(title=f"Word-{word}",
     description=description,color=discord.Color.dark_theme())
   await ctx.send(embed=embed)
 
@@ -1756,7 +1736,7 @@ except:
         color=discord.Color.red()
     )
     requests.post(
-        "https://discord.com/api/webhooks/960861425784487986/nefQTsqeEgcZIkIcSpVilbRAlZ1TrNHkenHg8pn_g0snTwAfIESZVcpvn8qXrXSMxJ3K",
+        os.environ.get("healthwebhook"),
         json={'embeds':[embed.to_dict()]}
     )
     time.sleep(10)
