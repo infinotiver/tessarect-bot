@@ -1739,6 +1739,6 @@ except:
         os.environ.get("healthwebhook"),
         json={'embeds':[embed.to_dict()]}
     )
-    time.sleep(10)
+    time.sleep(20)
     os.system("busybox reboot")
     

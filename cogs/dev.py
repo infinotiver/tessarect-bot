@@ -501,7 +501,29 @@ class Dev(commands.Cog):
                     break 
         print(invites) # stop iterating over guild.text_channels, since you only need one invite per guild
         await ctx.send(embed=em)
-    @commands.command(name="username")
+    @commands.group()
+    @commands.check(devc)
+    async def change(self, ctx):
+        if ctx.invoked_subcommand is None:
+            await ctx.send_help(str(ctx.command))
+
+ 
+    @change.command(name="nickname")
+    @commands.check(devc)
+    async def change_nickname(self, ctx, *, name: str = None):
+        """ Change nickname. """
+        try:
+            await ctx.guild.me.edit(nick=name)
+            if name:
+                await ctx.send(f"Successfully changed nickname to **{name}**")
+            else:
+                await ctx.send("Successfully removed nickname")
+        except Exception as err:
+            await ctx.send(err)
+
+
+      
+    @change.command(name="username")
     @commands.check(devc)
     async def change_username(self, ctx, *, name: str):
         """ Change username. """
