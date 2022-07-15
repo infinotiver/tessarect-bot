@@ -96,7 +96,7 @@ class Level(commands.Cog):
             stats = await levelling.find_one({"id": user.id})
             if stats is None:
                 embed = discord.Embed(
-                    description=f"No messages, no rank(or you are mentioning a bot are you a stupid person? ) !!!"
+                    description=f"No messages, no rank(or you are mentioning a bot) !!!"
                 )
 
                 await ctx.channel.send(embed=embed)
@@ -163,8 +163,10 @@ class Level(commands.Cog):
             rankings = levelling.find().sort("xp", -1)
             i = 1
             embed = discord.Embed(
-                timestamp=ctx.message.created_at, title="Rankings", color=0xFF0000
+                timestamp=ctx.message.created_at, title=ctx.guild.name, color=ctx.author.color
             )
+            embed.set_author(name="🏆 Server Leaderboard")
+            embed.set_thumbnail(url=ctx.guild.icon_url)
             async for x in rankings:
                 try:
                     temp = ctx.guild.get_member(x["id"])
@@ -175,7 +177,7 @@ class Level(commands.Cog):
                     elif i == 2:
                       emo='<:2rd:939020302426460220>'
                     else:
-                      emo='<:offline_status:946652644083113984>'
+                      emo=':small_blue_diamond:'
                     embed.add_field(
                         name=f"{emo} {i} : {temp.name}", value=f"XP: {tempxp}", inline=False
                     )

@@ -370,7 +370,7 @@ https://discord.gg/avpet3NjTE"""
         if jsonfile[x]['owner']==ctx.author.id:
           ed.add_field(name=jsonfile[x]['name'],value=f"Invoke-{jsonfile[x]['invoke']}\n Avatar Url-{jsonfile[x]['avatar']}",inline=False)
       await ctx.send(embed=ed)
-    @commands.command(name='sendfictermsg',aliases=['fictersend','fm'])
+    @commands.command(name='sendfictermsg',aliases=['fictersend','fm','sfm','swm'])
     async def sendwebhookmsg(self,ctx,spl:str,*,text):  
       with open("storage/tubble.json", "r") as jsfile:
           jsonfile = json.load(jsfile)    

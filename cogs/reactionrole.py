@@ -52,7 +52,8 @@ class ReactionRoles(commands.Cog):
         title,*,
         message:str,
     ):
-        embed = discord.Embed(title=title, description=message,color=discord.Color.dark_theme())
+        embed = discord.Embed(title=title, description=message,color=discord.Color.dark_blue())
+        embed.set_footer(text=f"React to get {role.name}")
         msg = await channel.send(embed=embed)
         await msg.add_reaction(emote)
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, msg.id)

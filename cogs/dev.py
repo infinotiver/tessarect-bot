@@ -80,7 +80,7 @@ class Dev(commands.Cog):
         await ctx.send(
             embed=discord.Embed(
                 title="<a:Tick:922450348730355712> Verified",
-                description=f"Found entry in Database. {user} is a developer \n The lord? {owner}",
+                description=f"Found entry in Database.\n {user.mention} is a developer \n The lord? {owner}",
                 color=discord.Color.green(),
             )
         )        
@@ -88,29 +88,37 @@ class Dev(commands.Cog):
     @commands.command(help="Lists Some poor souls having dev access for me" ,aliases=['devlist'])
     @check(devc)
     async def listdev(self,ctx):
-        x = discord.Embed(description="Users having Dev access for me",color=0x34363A)
+        x = discord.Embed(color=0x34363A)
+        x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Developer Access")
         with open("storage/dev.json") as f:
             dev_users_list = json.load(f)
         pa =1
+        description=''
         for user in dev_users_list:
           
           e = self.bot.get_user(user)
-          x.add_field(name="_ _",value=e,inline=False)
+          mention=e.mention
+          description+=f"{pa}. {mention}\n"
+          #x.add_field(name="_ _",value=e,inline=False)
           pa +=1
+        x.description=description
         x.set_footer(text=f"Total users : {pa-1}")
         await ctx.send(embed=x)
 
-    @commands.command(help="Lists Some idiots who cant even use me",aliases=['blist','blacklisted'])
+    @commands.command(help="Lists Some users who cant even use me",aliases=['blist','blacklisted'])
     @check(devc)
     async def listblack(self,ctx):
-        x = discord.Embed(description="<:dnd_status:946652840053600256> Blacklisted User",color=0x34363A)
+        x = discord.Embed(color=0x34363A)
+        x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Blacklisted Users")
         with open("storage/black.json") as f:
             dev_users_list = json.load(f)
         pa =1
         for user in dev_users_list:
-          
-          e = self.bot.get_user(user)
-          x.add_field(name=e,value=e.id,inline=False)
+          try:
+            e = self.bot.get_user(user)
+            x.add_field(name=e,value=e.id,inline=False)
+          except:
+            x.add_field(name='?',value="Couldn't find a user with that id ",inline=False)
           pa +=1
         x.set_footer(text=f"Total users : {pa-1}")
         await ctx.send(embed=x)        
@@ -127,8 +135,9 @@ class Dev(commands.Cog):
 
             with open("storage/dev.json", "w+") as f:
                 json.dump(dev_users_list, f)
-
-            await ctx.send(f"{user.mention} has been added!")  
+            x = discord.Embed(description=f"{user.mention} has been added!",color=0x34363A)
+            x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Developer Added")
+            await ctx.send(embed=x)  
         else:
           await ctx.send('See Developer , either you are adding a dev again as dev or a bot (bots arent that much cool)') 
     @commands.command(help="Removes a silly soul having dev access ")
@@ -145,9 +154,10 @@ class Dev(commands.Cog):
 
         with open("storage/dev.json", "w+") as f:
             json.dump(dev_users_list, f)
-
-        await ctx.send(f"{user.mention} has been removed!")                   
-    @commands.command(aliases=["m","evaldev","deveval","eval"],help="Execuete some stuff")
+        x = discord.Embed(description=f"{user.mention} has been removed!",color=0x34363A)
+        x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Developer Removed")       
+        await ctx.send(embed=x)                   
+    @commands.command(aliases=["m","evaldev","deveval","eval"],help="Execuete")
     @check(devc)  
     async def python_shell(self, ctx, *, code):
       if ctx.guild.id !=912569937116147772:
@@ -201,16 +211,16 @@ class Dev(commands.Cog):
   
       try:
           output = (await eval("eval_fn()",env))
-          ecolor = 0x00ff00
+          ecolor = 0x0bda51
 
       except Exception as error:
           output = error.__class__.__name__+": "+str(error)
-          ecolor = 0xe60000
-      self._last_result = "Last Result\n"+str(output)
-      embed = discord.Embed(title="Eval",description="```\n"+str(output)+"\n```",colour=ecolor,timestamp=ctx.message.created_at)
+          ecolor = 0xFF0000
+      self._last_result = "Last Result="+str(output)
+      embed = discord.Embed(description="```py\n"+str(output)+"\n```",colour=ecolor,timestamp=ctx.message.created_at)
   
   
-      embed.set_author(name=ctx.author.display_name,icon_url=ctx.author.avatar_url)
+      embed.set_author(name='Eval',icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp')
       await ctx.reply(embed=embed)
 
                
@@ -231,16 +241,18 @@ class Dev(commands.Cog):
         otp_success = await assets.reactor.reactor(ctx, self.bot, 'Do you want to continue the restart process while people are listening to me ', color=0x607d8b,usr=ctx.author)
         if not otp_success:
             return 
-      modedict={1:'Simple restart',2:'Advanced RESTART'}
-      e = discord.Embed(title='Restarting Started',description=f'**Mode = {mode}**\n{modedict[mode]}',color=discord.Color.dark_grey())
+      modedict={1:'Simple restart',2:'Advanced Restart'}
+      e = discord.Embed(title='Restarting Started',description=f'**Mode = {mode}**\n{modedict[mode]}',color=discord.Color.dark_teal())
       e.add_field(name="Progress",value='11%')
       x = await ctx.send(embed=e)
       await asyncio.sleep(1)  
       e.set_field_at(0,name="Progress",value='33%')
+      e.color=discord.Color.blurple()
       await x.edit(embed=e)
-      await asyncio.sleep(2)
+      await asyncio.sleep(1)
       e.set_field_at(0,name="Progress",value='66%')
       e.add_field(name="Status",value='Unloading Cogs')
+      e.color=discord.Color.blue()
       await x.edit(embed=e)        
 
 

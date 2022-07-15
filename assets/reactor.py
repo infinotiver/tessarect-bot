@@ -1,8 +1,8 @@
 import emoji , discord
 
 async def reactor(ctx, client, message, color=0x34363A,usr=None):
-    suc = '🟢'
-    det='🔴'
+    suc = '✅'
+    det='❎'
     mess = await ctx.channel.send(
         embed=discord.Embed(
             title="Confirm Action", description=message, color=discord.Color(color)
@@ -24,15 +24,12 @@ async def reactor(ctx, client, message, color=0x34363A,usr=None):
 
     reaction, user = await client.wait_for("reaction_add", check=check)
     if reaction.emoji == suc:
-        await mess.edit(
-            embed=discord.Embed(
-                title="Yey", description=f"Action  Confirmed ", color=color
-            )
-        )
+        await mess.delete()
       
         return True
     if reaction.emoji == det:
-        await mess.edit(
+        await mess.delete()
+        await ctx.channel.send(
             embed=discord.Embed(
                 title="Oh Okay !", description="Aborted , never mind . You can use that command again if you change your mind", color=color
             )

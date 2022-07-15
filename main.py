@@ -58,6 +58,15 @@ from dislash import  Option, OptionType
 import typing
 import random
 import io
+import aiohttp
+import warnings
+from discord.ext.commands import AutoShardedBot
+from pretty_help import DefaultMenu, PrettyHelp
+from itertools import cycle
+from discord.ext import  tasks
+import topgg
+import nest_asyncio 
+import glob
 def get_prefix(client, message):
     try:
         with open('prefixes.json', 'r') as f:
@@ -80,18 +89,14 @@ def get_prefix(client, message):
         print("Not ok")
         return ['a!']
 #-----------------------------------------------------------------------------------------------------------------------
-import aiohttp
-import warnings
-from discord.ext.commands import AutoShardedBot
-from pretty_help import DefaultMenu, PrettyHelp
 
 r = requests.head(url="https://discord.com/api/v1")
 try:
-  print(f"Rate limit {int(r.headers['Retry-After']) / 60} minutes left")
+  print(f"[🔴] Rate limit {int(r.headers['Retry-After']) / 60} minutes left")
 except:
-  print('No ratelimit')
+  print('[🟢] No ratelimit')
 
-import nest_asyncio              
+             
 nest_asyncio.apply()
 mongo_url = os.environ.get("tst")
 cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
@@ -102,25 +107,20 @@ client =AutoShardedBot(shard_count=5,
 #slash = SlashCommand(client)
 m = '**⌾** '
 
-#____emojis______
 blueokay = '<a:Tick:922450348730355712>'
 bluetrusted=''
 mongo_url = os.environ['enalevel']
-
 cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
 ecomoney = cluster["discord"]["terrabux"]
 prefix=(get_prefix)
-from itertools import cycle
-from discord.ext import  tasks
-
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
         try:
           client.load_extension(f"cogs.{filename[:-3]}")
         except Exception as e:
-          print(f"{filename} - {traceback.print_exc()}") 
+          print(f"[🔴] {filename} - {traceback.print_exc()}") 
 
-import glob
+
 @client.event
 async def on_ready(): 
     os.system("clear")
@@ -141,7 +141,7 @@ async def on_ready():
     await channel.send(embed=em)
     for x in client.shards:
       if not x==3: #3 is the shard id of tbd
-        emojis = ['😀', '😁', '🤣', '😃', '😄', '😅', '😆', '😉', '😊', '😋', '😎', '😍', '😘', '😗','']
+        emojis = ['😀', '😁', '🤣', '😃', '😄', '😅', '😆', '😉', '😊', '😋', '😎', '😍', '😘', '😗']
         await client.change_presence(
             status=discord.Status.dnd,
             shard_id=x, 
@@ -165,13 +165,13 @@ async def on_ready():
             channel_id = json.load(readFile)
 
         channel = client.get_channel(channel_id)
-        ex=discord.Embed(title="Successfully Restarted",description="100% \nBeep Beep Boop Beep !, I am back after reboot ",color=discord.Color.dark_blue())
+        ex=discord.Embed(title="Successfully Restarted",description="100% \nBeep Beep Boop Beep !, Reboot done  ",color=discord.Color.dark_blue())
         await channel.send(embed=ex)
 
         os.remove("./storage/reboot.json")  
 
 
-import topgg
+
 dbl_token = os.environ['topggt']  
 client.topggpy = topgg.DBLClient(client, dbl_token)
 @tasks.loop(minutes=30)
@@ -188,23 +188,19 @@ update_stats.start()
 
 from googletrans import Translator
 @client.command()
-async def translate(ctx, lang, *, thing=None):
+async def translate(ctx, lang=None, *, thing=None):
     description = ""
     for langx in googletrans.LANGCODES:
         description += "**{}** - {}\n".format(string.capwords(langx), googletrans.LANGCODES[langx])
-    if not thing:
+    if not thing or not lang:
       return await ctx.send(embed=discord.Embed(description=description,color=discord.Color.blue()))
     translator = Translator()
     
     translation = translator.translate(thing, dest=lang)
     e=discord.Embed(title="Google Translation",color=discord.Color.blue())
     e.add_field(name="Output",value=translation.text)
-    e.add_field(name="Input",value=thing)
+    e.add_field(name="Input",value=thing,inline=False)
     await ctx.reply(embed=e)
-
-
-
-
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 client.session = aiohttp.ClientSession()
 client.load_extension('jishaku')
@@ -362,7 +358,7 @@ async def vote_tessarect( ctx):
     ef=discord.Embed(
             title=f"Vote for {client.user.name}",
             description=f"Top.gg > https://top.gg/bot/916630347746250782/vote \n VoidBots > https://voidbots.net/bot/916630347746250782/vote \n DiscordBots.gg > https://discordbots.gg/bot/916630347746250782/vote \n" ,     color=discord.Color.gold())
-    ef.set_image(url='https://image.shutterstock.com/image-vector/funny-vote-characters-stand-near-600w-1562866837.jpg')
+    ef.set_thumnail(url='https://image.shutterstock.com/image-vector/funny-vote-characters-stand-near-600w-1562866837.jpg')
     ef.set_footer(text=f"{client.user.name} Developers !")
     await ctx.send(embed=ef)
     
@@ -376,10 +372,6 @@ async def setwelcomechannel(ctx,channel:discord.TextChannel,*,txt=None):
     with open('storage/welcome.json', 'r') as f:
         wel = json.load(f)
     wel[str(ctx.guild.id)] = [int(channel.id),txt]
-
-      
-   
-
     with open('storage/welcome.json', 'w') as f: #writes the new prefix into the .json
         json.dump(wel, f, indent=4)
 
@@ -401,8 +393,8 @@ async def on_member_join(member):
     finalname='+'.join(member.display_name.split())
     finalguild='+'.join(member.guild.name.split())
     
-    url=f"https://api.popcat.xyz/welcomecard?background=https://media.discordapp.net/attachments/929334504236122123/991957100790026331/Sunset_2.jpg&text1={finalname}&text2=Welcome+To+{finalguild}&text3=Member+{str(len(member.guild.members))}&avatar={str(member.avatar_url_as(format='png'))}"
-    embed.set_image(url=url)
+    link=f"https://api.popcat.xyz/welcomecard?background=https://media.discordapp.net/attachments/929334504236122123/997496526903447592/unknown.png&text1={finalname}&text2=Left+{finalguild}&text3=We+have+now+{str(len(member.guild.members))}+people&avatar={str(member.avatar_url_as(format='png'))}"
+    embed.set_image(url=link)
     await channel.send(content=f"🌹 Roses are red, 🌸 violets are blue, {member.mention} joined this server with you",embed=embed)    
 
 @client.event
@@ -417,14 +409,13 @@ async def on_member_remove(member):
     embed = discord.Embed(colour=discord.Colour.blue(),description=f"{member} left")
     finalname='+'.join(member.display_name.split())
     finalguild='+'.join(member.guild.name.split())
-    link=f"https://api.popcat.xyz/welcomecard?background=https://static.vecteezy.com/system/resources/previews/001/907/544/original/flat-design-background-with-abstract-pattern-free-vector.jpg&text1={finalname}&text2=Left+{finalguild}&text3=We+have+now+{str(len(member.guild.members))}+people&avatar={str(member.avatar_url_as(format='png'))}"
+    link=f"https://api.popcat.xyz/welcomecard?background=https://media.discordapp.net/attachments/929334504236122123/997496526903447592/unknown.png&text1={finalname}&text2=Left+{finalguild}&text3=We+have+now+{str(len(member.guild.members))}+people&avatar={str(member.avatar_url_as(format='png'))}"
     
     embed.set_image(url=link)
     await channel.send(embed=embed)    
 
 
 @client.command()
-
 async def meme(ctx):
     page = requests.get(f'https://api.popcat.xyz/meme')
     d = json.loads(page.content)
@@ -557,131 +548,7 @@ async def beg(ctx):
 
     with open("mainbank.json",'w') as f:
         json.dump(users,f)
-@client.command(hidden=True)
-@commands.is_owner()
-async def max_bal(ctx):
 
-    await open_account(ctx.author)
-    user = ctx.author
-
-    users = await get_bank_data()
-
-    earnings = 100000000
-
-    em = discord.Embed(title =' Max Command',description =f'Maxed Money {earnings}',color = discord.Color.green())
-    await ctx.reply(embed=em)
-
-    users[str(user.id)]["bank"] += earnings
-
-    with open("mainbank.json",'w') as f:
-        json.dump(users,f)
-
-
-
-
-# JOB COMMANDS  ## 
-### CURRENCY COMMANDS  ###
-
-cashier_employers = ['Lidl', 'Aldi', 'Sainsbury\'s', 'Morrison\'s', 'Tesco', 'Premier', 'Londis']
-fastfood_employers = ['KFC', 'McDonalds', 'Subway', 'Taco Bell']
-stocker_employers = ['Halford\'s', 'B&Q', 'Ikea', 'The Range', 'Home Bargain\'s']
-dev_epy=['MiS','lINux','OMac','Discord']
-victims = ['a blind woman', 'a blind man', 'a dog', 'a business person', 'a furry', 'Jeff Bezos', 'Patrick Gaming']
-sucess_phrases = ['got away with the cash', 'ran away with the cash', 'ran away with the money', 'got away with the money']
-fail_phrases = ['was beaten up', 'got sucker punched', 'was knocked out', 'was stabbed', 'was caught']
-
-
-
-
-@client.group(aliases=['job'],invoke_without_command=True)
-async def findjob(ctx):
-    await open_account(ctx.author)
-
-    job_menu = discord.Embed(title='The Job Centre :money_with_wings:', color=0xd400ff)
-    job_menu.add_field(name='Cashier', value=f'Wage - {m}1 Per Work\nEmployer - {random.choice(cashier_employers)}', inline=True)
-    job_menu.add_field(name='Fastfood Cook', value=f'Wage - {m}3 Per Work\nEmployer - {random.choice(fastfood_employers)}', inline=True)
-    job_menu.add_field(name='Shelf Stocker', value=f'Wage - {m}2 Per Work\nEmployer - {random.choice(stocker_employers)}', inline=True)
-    job_menu.add_field(name='Python Developer', value=f'Wage - {m}6 Per Work\nEmployer - {random.choice(dev_epy)}', inline=True)
-    job_menu.set_footer(text=f'Use {" or ".join(prefix_check(ctx.message.guild))}apply <job> title to get started.')
-
-    await ctx.reply(embed=job_menu)
-@findjob.command()
-@commands.cooldown(1, 2000, commands.BucketType.user)
-async def resign(ctx):
-    await open_account(ctx.author)
-
-    with open(r'mainbank.json', 'r') as f:
-            user_info = json.load(f)
-    
-    await ctx.reply(f'YOU RESIGNED now u have no work to do')
-    user_info[str(ctx.author.id)]['career']='None'
-
-    with open(r'mainbank.json', 'w') as f:
-        json.dump(user_info, f)   
-@client.command()
-async def apply(ctx, *, title: str):
-    await open_account(ctx.author)
-
-    with open(r'mainbank.json', 'r') as f:
-            user_info = json.load(f)
-
-    if title.lower() == 'cashier':
-        title = 'Cashier'
-    elif title.lower() == 'fastfood cook' or title.lower() == 'cook':
-        title = 'Fastfood Cook'
-    elif title.lower() == 'stocker' or title.lower() == 'shelf stocker':
-        title = 'Shelf Stocker'
-    elif title.lower() == 'python' or title.lower() == 'python developer':
-        title = 'Python Developer'
-    else: # job not found
-        title = ''
-    
-    if title != '':
-        user_info[str(ctx.author.id)]['career'] = title
-        await ctx.reply(embed=discord.Embed(title='Interview Passed :money_with_wings:', description=f'{ctx.author.name} started a job as a {title}. Type {" or ".join(prefix_check(ctx.message.guild))}work to begin.', color=0xd400ff))
-
-        with open(r'mainbank.json', 'w') as f:
-            json.dump(user_info, f)
-async def add_money(author, amount):
-        with open(r'mainbank.json', 'r') as f:
-            user_info = json.load(f)
-
-        user_info[str(author.id)]['wallet'] += amount
-
-        with open(r'mainbank.json', 'w') as f:
-            json.dump(user_info, f)
-
-async def work_embed(ctx, action, value):
-    embed = discord.Embed(
-        colour=0xd400ff,
-        title=f"{action} :money_with_wings:",
-    )
-
-    embed.add_field(name="Pay", value=f"``{m}{value}``")
-    embed.add_field(name="Recognition", value=f"``{random.randint(1,100)}%``")
-
-    await add_money(ctx.author, value)
-    await ctx.channel.send(embed=embed)
-
-@client.command()
-@commands.cooldown(1, 200, commands.BucketType.user)
-async def work(ctx):
-    await open_account(ctx.author)
-
-    with open(r'mainbank.json', 'r') as f:
-            user_info = json.load(f)
-
-    if user_info[str(ctx.author.id)]['career'] == 'Fastfood Cook':
-        await work_embed(ctx, 'Burger Flipped', 3)
-    elif user_info[str(ctx.author.id)]['career'] == 'Cashier':
-        await work_embed(ctx, 'Shopping Scanned', 1)
-    elif user_info[str(ctx.author.id)]['career'] == 'Shelf Stocker':
-        await work_embed(ctx, 'Shelf Stacked', 2)
-    elif user_info[str(ctx.author.id)]['career'] == 'Python Developer':
-        await work_embed(ctx, 'Module Made', 6)
-    else:
-        x = discord.Embed(title="No work fool",description='DUMBASS u dont have a work to do , use job command to find one')
-        await ctx.reply(embed=x)
 
 api_key = os.environ['weather']
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
@@ -697,6 +564,8 @@ async def weather(ctx, *, city: str):
             y = x["main"]
             current_temperature = y["temp"]
             current_temperature_celsiuis = str(round(current_temperature - 273.15))
+            feellike = y["feels_like"]
+            feellike_celsiuis = str(round(current_temperature - 273.15))
             current_pressure = y["pressure"]
             current_humidity = y["humidity"]
             z = x["weather"]
@@ -707,6 +576,7 @@ async def weather(ctx, *, city: str):
                               timestamp=ctx.message.created_at,)
             embed.add_field(name="Descripition", value=f"**{weather_description}**", inline=False)
             embed.add_field(name="Temperature(C)", value=f"**{current_temperature_celsiuis}°C**", inline=False)
+            embed.add_field(name="Feels Like(C)", value=f"**{feellike_celsiuis}°C**", inline=False)
             embed.add_field(name="Humidity(%)", value=f"**{current_humidity}%**", inline=False)
             embed.add_field(name="Atmospheric Pressure(hPa)", value=f"**{current_pressure}hPa**", inline=False)
             embed.set_thumbnail(url="https://i.ibb.co/CMrsxdX/weather.png")
@@ -1298,9 +1168,9 @@ async def globallb(ctx,x = 10):
 
 
 
-@client.command()
+@client.command(aliases=['screenshot','websitecapture'])
 async def ss(ctx, site):
-    embed=discord.Embed(description="Here is the website'ss you requested",colour = discord.Colour.orange(), timestamp=ctx.message.created_at)
+    embed=discord.Embed(description="Here is the Website's ScreenShot you requested",colour = discord.Colour.orange(), timestamp=ctx.message.created_at)
     embed.set_footer(text="Please wait for the image to load")
     embed.set_image(url=(f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{site}"))
     await ctx.reply(embed=embed)
@@ -1715,8 +1585,8 @@ async def data(ctx):
 
     
     #dumbest technique , ik
-    tips = ['Enjoy ','Check out other features','I have tickets too','Check out Security Cog','Any problem , join our support server','Join my support server-https://discord.gg/avpet3NjTE','Vote for me on top.gg','Check out my AI features by sending [p]help AI','Snipe out people hiding by using [p]snipe command','Do you know , I have two developers','Get info on covid by using Covid cog yeh !','Try me new leveling sys by using<prefix>level','Have you used our leveling system? Try <prefix>level<user(optional)> to check out','We have added daily command which gives you some money per day once ','Have you ever robbed someone? || in economy cog dont get bad ideas ||','Try the new Ticket System'] 
-    em=discord.Embed(description=f"**Tip**-{random.choice(tips)}",color=discord.Color.random())
+    tips = ['Enjoy ','Check out other features','I have tickets too','Check out Security Cog','Any problem , join our support server','Join my support server-https://discord.gg/avpet3NjTE','Vote for me on top.gg','Check out my AI features by sending [p]help AI','Snipe out people hiding by using [p]snipe command','Do you know , I have two developers','Get info on covid by using Covid cog yeh !','Try me new leveling sys by using<prefix>level','Have you used our leveling system? Try <prefix>level<user(optional)> to check out','We have added daily command which gives you some money per day once ','Have you ever robbed someone? || in economy section, dont get bad ideas ||','Try the new Ticket System'] 
+    em=discord.Embed(description=f"**Tip**-{random.choice(tips)}",color=discord.Color.dark_theme())
     if random.random()>0.9:
       await ctx.send(embed=em)
         
