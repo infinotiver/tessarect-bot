@@ -15,7 +15,7 @@ from discord.ext import commands
 from dislash import InteractionClient, ActionRow, Button, ButtonStyle
 from discord.utils import get
 from discord import Webhook, AsyncWebhookAdapter 
-
+import DiscordUtils
 class Misc(commands.Cog):
 
     def __init__(self, bot):
@@ -320,6 +320,25 @@ Join Ʈᥱ⳽⳽ᥲ ᙖot ᙃᥱʋᥱꙆoρᥱɾ⳽ Now :
 https://discord.gg/avpet3NjTE"""
       em=discord.Embed(title="Tessa Bot Developers",description=d,color=ctx.author.color)
       await ctx.send(embed=em)
+    @commands.command(name='ficter')
+    async def ficter(self,ctx):
+      embed=discord.Embed(title="Ficters Helpguide",description="**𝔉𝔦𝔠𝔱𝔢𝔯𝔰 ~ 𝔉𝔦𝔠𝔱𝔦𝔬𝔫𝔞𝔩+𝔠𝔥𝔞𝔯𝔞𝔠𝔱𝔢𝔯𝔰**\n A extension that allows you to send messages as other pseudo-users using Discord webhooks . It allows you to send messages that look like they came from other profiles.It is best for roleplay servers . You can set a special invoke text ( that needs to be unique and can be anything , avatar (optional) and name",color=discord.Color.magenta())
+      embed.set_thumbnail(url="https://media.discordapp.net/attachments/979999231572070400/998936566514847815/3621-mixer-sparkbot.png")
+      embed1=discord.Embed(title="Setting up",description="**Syntax=`[p]createficter <avatar> <spl> <user>`**\n\nYou can set 3 things(two needed , 1 optional).\nThe name can be anything\nThe 'spl' is a special command that you use to summon your ficter. Example `ABH` , `CORD`, you even use emojis and fancy text (not recommended though). Anything you'd like. It tells Tessarect 'if I type these brackets, then my ficter will appear'\n\n**Name**\nJust anything like Joe , Smith , Arvus , Harry Potter \n**Avatar**\nThis is entirely optional , if you want to set an avatar you can send image link in this or simply fill None in this place\n**Spl**\n Anything like set of words like `GH2` or some small phrase `Ilvcarrots` or something fancy like `{{@!` just remember no spaces in between!",color=discord.Color.magenta())
+      embed1.set_image(url="https://media.discordapp.net/attachments/942735208195711050/998932074327183382/unknown.png?width=645&height=402")
+      embed3=discord.Embed(title="Other Commands",description="The List and discription of other commands \n\nEditficter: Something wrong ? No worries solve it using this command\nRemoveficter: No longer wanna use a ficter? Reduce the load of bot \nListficter: Keep track of your ficters\nSendfictermessage : Use your ficter , send messages from it ! Happy time",color=discord.Color.dark_magenta())
+      embed3.set_image(url="https://media.discordapp.net/attachments/942735208195711050/998932411079467048/unknown.png")
+      embed2=discord.Embed(title="Setbacks",description="There are two common pitfalls when working with ficter avatars.\nThe first is choosing an image that's too large. Discord has certain size limits for webhook avatars that depend on a variety of factors. The safest thing to do is to try and choose an image with a resolution of about 500x500 and under 500kb in filesize.\nThe second is the image getting deleted. If you uploaded the image to Discord, and the message was deleted (or the channel, or the server), Discord will no longer host the image. It will be deleted off of Discord's servers, and Tessarect can no longer serve it.",color=discord.Color.magenta()).set_thumbnail(url="https://media.discordapp.net/attachments/979999231572070400/998936277778976788/5161-mixer-devbot.png")
+      embeds=[embed,embed1,embed3,embed2]
+      paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx,remove_reactions=True)
+      paginator.add_reaction('<:arrow_left:940845517703889016>', "first")
+      paginator.add_reaction('<:leftarrow:941994549935472670>', "back")
+        
+      paginator.add_reaction('<:rightarrow:941994550124245013>', "next")
+      paginator.add_reaction('<:arrow_right:940608259075764265>', "last")
+      paginator.add_reaction('<:DiscordCross:940914829781270568>', "lock")
+      await paginator.run(embeds)
+
     @commands.command(name='createficter')
     async def cf(self,ctx,avatar:str,spl:str,*,user:str):  
       
@@ -385,7 +404,8 @@ https://discord.gg/avpet3NjTE"""
 
       if ctx.author.id != owner:
         return await ctx.send('You are not the author of this Ficter')
-
+      if '@everyone' in text:
+        return await ctx.send('Do you think I am idiot to ping everyone !')
       
       #if not 'https'or'http' in avatar:
         #return await ctx.send('Invalid url for avatar')

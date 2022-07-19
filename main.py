@@ -5,7 +5,8 @@ import  discord
 import assets.reactor
 import traceback
 from dislash import SelectMenu,SelectOption
-import web        
+import web    
+import platform
 #dislash.py 
 from discord.ext import commands
 import subprocess
@@ -367,10 +368,12 @@ ser = []
 
 from requests import PreparedRequest
 @client.command(pass_context=True)
-@commands.has_permissions(administrator=True) #ensure that only administrators can use this command
+@commands.has_permissions(manage_guild=True) #ensure that only administrators can use this command
 async def setwelcomechannel(ctx,channel:discord.TextChannel,*,txt=None): 
     with open('storage/welcome.json', 'r') as f:
         wel = json.load(f)
+    if not txt:
+      txt=''
     wel[str(ctx.guild.id)] = [int(channel.id),txt]
     with open('storage/welcome.json', 'w') as f: #writes the new prefix into the .json
         json.dump(wel, f, indent=4)
@@ -389,11 +392,16 @@ async def on_member_join(member):
       channel = client.get_channel(wel[str(member.guild.id)][0])
     except:
       return
-    embed = discord.Embed(title=f"{member.name} joined the Party",colour=discord.Colour.dark_orange(),description=wel[str(member.guild.id)][1])
+    embed = discord.Embed(title=f"{member.name} joined the Party",colour=0xe60000,description=wel[str(member.guild.id)][1])
     finalname='+'.join(member.display_name.split())
     finalguild='+'.join(member.guild.name.split())
-    
-    link=f"https://api.popcat.xyz/welcomecard?background=https://media.discordapp.net/attachments/929334504236122123/997496526903447592/unknown.png&text1={finalname}&text2=Left+{finalguild}&text3=We+have+now+{str(len(member.guild.members))}+people&avatar={str(member.avatar_url_as(format='png'))}"
+    text1=finalname
+    text2="Joined"
+    text3=f"We+have+{str(len(member.guild.members))}+members"
+    baseurl="https://api.popcat.xyz/welcomecard?background="
+  
+    url=f"https://media.discordapp.net/attachments/979345665081610271/998133764028907630/unknown.png&text1={text1}&text2={text2}&text3={text3}&avatar={str(member.avatar_url_as(format='png'))}"
+    link=baseurl+url
     embed.set_image(url=link)
     await channel.send(content=f"🌹 Roses are red, 🌸 violets are blue, {member.mention} joined this server with you",embed=embed)    
 
@@ -406,11 +414,15 @@ async def on_member_remove(member):
     channel = client.get_channel(wel[str(member.guild.id)][0])
     if channel==None:
       return print('not set')
-    embed = discord.Embed(colour=discord.Colour.blue(),description=f"{member} left")
+    embed = discord.Embed(colour=0xe60000,description=f"{member.name} left {member.guild.name} at <t:{int(time.time())}>\n Hope they had a great stay",title="Adieu 😢")
     finalname='+'.join(member.display_name.split())
     finalguild='+'.join(member.guild.name.split())
-    link=f"https://api.popcat.xyz/welcomecard?background=https://media.discordapp.net/attachments/929334504236122123/997496526903447592/unknown.png&text1={finalname}&text2=Left+{finalguild}&text3=We+have+now+{str(len(member.guild.members))}+people&avatar={str(member.avatar_url_as(format='png'))}"
-    
+    text1=finalname
+    text2="Left"
+    text3=f"We+have+{str(len(member.guild.members))}+members"
+    baseurl="https://api.popcat.xyz/welcomecard?background="
+    url=f"https://media.discordapp.net/attachments/979345665081610271/998133764028907630/unknown.png&text1={text1}&text2={text2}&text3={text3}&avatar={str(member.avatar_url_as(format='png'))}"
+    link=baseurl+url
     embed.set_image(url=link)
     await channel.send(embed=embed)    
 
@@ -432,22 +444,17 @@ async def meme(ctx):
 
 
 
-def searchyt(song):
-    music_name = song
-    query_string = urllib.parse.urlencode({"search_query": music_name})
-    formatUrl = urllib.request.urlopen("https://www.youtube.com/results?" + query_string)
-    search_results = re.findall(r"watch\?v=(\S{11})", formatUrl.read().decode())
-    clip2 = "https://www.youtube.com/watch?v=" + "{}".format(search_results[0])
-    return clip2
 
 @client.command()
 @commands.is_nsfw()
 async def yt(ctx, *, url):
-    await ctx.reply(searchyt(url))
-
-import platform
-
-
+    music_name = url
+    query_string = urllib.parse.urlencode({"search_query": music_name})
+    formatUrl = urllib.request.urlopen("https://www.youtube.com/results?" + query_string)
+    search_results = re.findall(r"watch\?v=(\S{11})", formatUrl.read().decode())
+    clip2 = "https://www.youtube.com/watch?v=" + "{}".format(search_results[0])
+      
+    await ctx.reply(clip2)
 
 
 
@@ -573,10 +580,11 @@ async def weather(ctx, *, city: str):
             weather_description = z[0]["description"]
             embed = discord.Embed(title=f"Weather in {city_name}",
                               color=ctx.author.color,
-                              timestamp=ctx.message.created_at,)
-            embed.add_field(name="Descripition", value=f"**{weather_description}**", inline=False)
-            embed.add_field(name="Temperature(C)", value=f"**{current_temperature_celsiuis}°C**", inline=False)
-            embed.add_field(name="Feels Like(C)", value=f"**{feellike_celsiuis}°C**", inline=False)
+                              timestamp=ctx.message.created_at,
+                              description=f"**{weather_description}**")
+            
+            embed.add_field(name="Temperature (C)", value=f"**{current_temperature_celsiuis}°C**", inline=False)
+            embed.add_field(name="Feels Like (C)", value=f"**{feellike_celsiuis}°C**", inline=False)
             embed.add_field(name="Humidity(%)", value=f"**{current_humidity}%**", inline=False)
             embed.add_field(name="Atmospheric Pressure(hPa)", value=f"**{current_pressure}hPa**", inline=False)
             embed.set_thumbnail(url="https://i.ibb.co/CMrsxdX/weather.png")
@@ -615,7 +623,7 @@ async def open_streak(user):
     
     with open('streak.json','w') as f:
         json.dump(strx,f)
-    await user.send('YOU HAVE GOt your daily + monthly, dont go on the message which says you already claimed your daily , your amount has been credited too , this issue is know and is under development')
+    await user.send('You have got your daily + monthly, dont go on the message which says you already claimed your daily , your amount has been credited too , this issue is know and is under development')
     return True    
 import datetime
 from datetime import datetime, timedelta                                              
@@ -806,59 +814,11 @@ async def rob(ctx,member : discord.Member):
   await update_bank(ctx.author,earning)
   await update_bank(member,-1*earning)
   em = discord.Embed(title =f'{ctx.author} robbed {member}',description =f'{ctx.author.mention}  robbed {member} and got {m}{earning} ')
-  emd = discord.Embed(title =f'{ctx.author} tried to robb You',description =f'{ctx.author}  tried to rob {member} and got {m}{earning} ')
+  emd = discord.Embed(title =f'{ctx.author} tried to rob You',description =f'{ctx.author}  tried to rob {member} and got {m}{earning} ')
   await ctx.reply(embed=em)
   await member.send(embed=emd)
 
-@client.command()
-@commands.guild_only()
-@commands.cooldown(rate=1, per=3.0, type=commands.BucketType.user)
-async def slots( ctx, bet: int):
-    await open_account(ctx.author)
-    bal = await update_bank(ctx.author)
-    amount = int(bet)
 
-    if amount > bal[0]:
-        await ctx.reply('You do not have sufficient balance')
-        return
-    if amount < 0:
-        await ctx.reply('Amount must be positive!')
-        return    
-    if 1 > bet:
-        return await ctx.reply("Give some money! ;w;")
-
-    losshearts = [ "💔"]
-    doublehearts = ["❤️", "💚", "💛", "🧡", "💜", "💙","🖤",]
-    triplehearts = ["💗", "💖","💟","🤎"]
-    jackpothearts = ["💘"]
-    hearts = {}
-    heartlist = ["❤️", "🖤", "💗", "💚", "💖", "💛", "💔", "🧡", "💜", "💙", "💘","💟","🤎"]
-    for x in range(1, 10):
-        hearts[f"heart{x}"] = random.choice(heartlist)
-    msg = await ctx.reply(
-        f"```\n{hearts['heart1']}{hearts['heart2']}{hearts['heart3']}\n{hearts['heart4']}{hearts['heart5']}{hearts['heart6']}\n{hearts['heart7']}{hearts['heart8']}{hearts['heart9']}\n```"
-    )
-    if hearts["heart4"] == hearts["heart5"] == hearts["heart6"]:
-        if hearts["heart4"] in losshearts:
-            multiplier = 0
-        if hearts["heart4"] in doublehearts:
-            multiplier = 2
-        if hearts["heart4"] in triplehearts:
-            multiplier = 3
-        if hearts["heart4"] in jackpothearts:
-            multiplier = 10
-    else:
-        multiplier = 0
-    msg = await ctx.channel.fetch_message(msg.id)
-    await msg.edit(
-        content=f"{msg.content}\nAnd you got a multiplier of {multiplier}!"
-    )
-    betresult = int(bet * multiplier)
-    if multiplier == 0:
-        await update_bank(ctx.author,-1*amount)
-    else:
-        await update_bank(ctx.author,1*betresult)
-    
 import DiscordUtils 
 @client.group(invoke_without_command=True)
 async def shop(ctx):
@@ -1248,7 +1208,7 @@ async def fakename(ctx):
   ipv4_url = source["ipv4_url"]  
   email_url = source["email_url"]  
   domain_url = source["domain_url"]  
-  e = discord.Embed(title="Fake Name Generator",description=f"Here are some  generated info about a fake person . \n **Name : {name}**")   
+  e = discord.Embed(title="Fake Name Generator",description=f"Here are some  generated info about a fake person . \n **Name : {name}**",color=discord.Color.dark_orange())   
   e.add_field(name="address",value=address,inline=False)
   e.add_field(name="latitude",value=latitude,inline=False)  
   e.add_field(name="longitude",value=longitude,inline=False) 
@@ -1394,9 +1354,6 @@ async def feedback(ctx,*,message):
     @on_click.matching_id("gr")
     async def on_test_button(inter):
       bugs_channel = client.get_channel(979345665081610271)
-
-
-
       embed = discord.Embed(
             title='Feedback',
             colour = 0x000133
@@ -1405,11 +1362,8 @@ async def feedback(ctx,*,message):
       embed.add_field(name='User id', value=inter.author.id,inline=True)
       embed.add_field(name='Report: ', value=message,inline=False)
       await bugs_channel.send(f"<@&912569937116147777>",embed=embed)
-
-
-
       em = discord.Embed(title="Done",description="Thank you for your feedback kindly keep your dms open they may contact anyway enjoy",color=discord.Color.green())   
-      await inter.reply(content=None,embed=em)
+      await inter.reply(embed=em)
       await msg.edit(components=[])
 
     @on_click.timeout
@@ -1436,23 +1390,22 @@ async def stats(ctx):
     values23 = values22 * 0.001
     values24 = values23 * 0.001
     dpyVersion = discord.__version__
-    em=discord.Embed(title="Stats",description=f"{client.user.name} Stats \n <:owner:946288312220536863> **Creator** \n__**SniperXi199#2209**__",color=discord.Color.dark_theme())
-    em.add_field(name="Servers",value=len(client.guilds),inline=True)
-    em.add_field(name="Channels",value=sum(1 for g in client.guilds for _ in g.channels),inline=True)
-    em.add_field(name="Users",value=len(client.users),inline=True)
-    em.add_field(name="Total Commands used",value=stats['tot'],inline=True)
-    em.add_field(name='<:CPU:937722162897375282> Hosting Stats', value=f'''```yml
-Cpu_usage: {psutil.cpu_percent(1)}%
+    em=discord.Embed(title="Stats",description=f"{client.user.name} **Stats** ",color=discord.Color.blue())
+
+    text=f"<:arrow_right:940608259075764265>Servers-{len(client.guilds)}\n<:arrow_right:940608259075764265>Channels-{sum(1 for g in client.guilds for _ in g.channels)}\n<:arrow_right:940608259075764265>Users-{len(client.users)}\n<:arrow_right:940608259075764265>Total Commands used-{str(stats['tot'])}"
+    em.add_field(name="Stats",value=text)
+    em.add_field(name='<:CPU:937722162897375282> Hosting Stats', value=f'''```css
+[Cpu_usage:] {psutil.cpu_percent(1)}%
 (Actual Cpu Usage May Differ)
                           
-Cores: {psutil.cpu_count()} 
-Physical_Cores: {psutil.cpu_count(logical=False)}
-BotPlatform: {str(platform.platform())}
+[Cores:] {psutil.cpu_count()} 
+[Physical_Cores:] {psutil.cpu_count(logical=False)}
+[Host Platform:] {str(platform.platform())}
 ```''',inline=False)
     em.add_field(name='<:blurple_settings:937722489004515418> Storage', value=
-                          f''' ```yml
-Total_ram: {round(values24, 2)} GB                          
-Available_Ram : {round(val4, 2)} GB```''',inline=False)   
+                          f''' ```css
+[Total ram:] {round(values24, 2)} GB                          
+[Available Ram :] {round(val4, 2)} GB```''',inline=False)   
 
     em.set_footer(text="Vote here : https://top.gg/bot/916630347746250782/vote ")
     #em.set_image(url="https://i.pinimg.com/originals/49/e7/6e/49e76e0596857673c5c80c85b84394c1.gif") 
@@ -1481,7 +1434,7 @@ async def goal(ctx):
     )    
   goal = 50
   currentg = len(client.guilds)
-  em = discord.Embed(title=f"Invite {client.user.name}",description=f" Current Count {currentg}/{goal}",color=discord.Color.blue())
+  em = discord.Embed(title=f"Invite {client.user.name}",description=f"** {currentg}/{goal}**",color=discord.Color.blue())
   em.set_footer(text="Kindly be kind enough to invite me in a server and contribute and make devs happy xD")
   #em.add_field(name="Goal 1(25 servers) " ,value=f"Achieved on 2nd Feb 2022",inline=False) 
   if goal ==currentg:
@@ -1582,10 +1535,8 @@ async def data(ctx):
     last=str(ctx.command)
     lasta=ctx.author.id
     db.update_one({"id": client.user.id},{"$set": {"tot": tot,"last_command": last,"last_author": lasta}})
-
-    
     #dumbest technique , ik
-    tips = ['Enjoy ','Check out other features','I have tickets too','Check out Security Cog','Any problem , join our support server','Join my support server-https://discord.gg/avpet3NjTE','Vote for me on top.gg','Check out my AI features by sending [p]help AI','Snipe out people hiding by using [p]snipe command','Do you know , I have two developers','Get info on covid by using Covid cog yeh !','Try me new leveling sys by using<prefix>level','Have you used our leveling system? Try <prefix>level<user(optional)> to check out','We have added daily command which gives you some money per day once ','Have you ever robbed someone? || in economy section, dont get bad ideas ||','Try the new Ticket System'] 
+    tips = ['Enjoy ','Check out other features','I have tickets too','Check out Security Cog','Any problem , join our support server','Join my support server-https://discord.gg/avpet3NjTE','Vote for me on top.gg','Check out my AI features by sending [p]help AI','Snipe out people hiding by using [p]snipe command','Four Developers are working for me','Get info on covid by using Covid cog yeh !','Try me new leveling sys by using<prefix>level','Have you used our leveling system? Try <prefix>level<user(optional)> to check out','We have added daily command which gives you some money per day once ','Have you ever robbed someone? || in economy section, dont get bad ideas ||','Try the new Ticket System'] 
     em=discord.Embed(description=f"**Tip**-{random.choice(tips)}",color=discord.Color.dark_theme())
     if random.random()>0.9:
       await ctx.send(embed=em)
@@ -1596,6 +1547,7 @@ async def checkblack(message):
       users_list = json.load(f)
       if message.author.id  in users_list:
           raise discord.ext.commands.CommandError(f'You are blacklisted')
+        
 web.keep_alive()
 try:
     client.run(os.environ['btoken'],reconnect=True)
