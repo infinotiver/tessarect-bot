@@ -13,9 +13,7 @@
 ___
 ##### Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .
 
-⭐ Star us on GitHub — it motivates us a lot!
 
-🔗Always Up of PRs - Contribute now
 </a>
 </p>
 <p align="center">
@@ -27,7 +25,9 @@ ___
   •
   <a href="https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE">License</a>
 </p>
+⭐ Star us on GitHub — it motivates us a lot!
 
+🔗Always Up of PRs - Contribute now
 
   <h6 align="center"> Services Used In the Bot</h6>
   <p align="center">
@@ -69,8 +69,49 @@ ___
   
 <hr>
 
+## About
+
+<table>
+<tr>
+<td>
+  Tessarect Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .
+<tr>
+  <td>
+
+  
+
+ ‣ 150+ Commands
+ ‣ 90% Uptime.
+ ‣ Support Server
+ ‣ Blacklisting System for people misusing bot
+ ‣ User Friendly and good looks
+ ‣ Highly Customizable
+»»————-　　————-««
+Features
+⊱ ────── {.⋅ ✯ ⋅.} ────── ⊰
+👮‍♂️ |  Filters and Moderation Commands
+Moderate your server with Tessarect's advance moderation system which was created to make your server safe from malicious things and use various filters like antiscam  to auto moderator your server . 
+🛠️ | Utility Commands
+Commands to make your work easier and faster example avatar [user] gets the avatar of the mentioned user and more utility features 
+🤣 🚀| AI n Fun Commands
+Enjoy various fun n AI commands such as ascii font , emojify , avatar lookup , info or play tic-tac-toe with someone
+🎵 | Music Commands
+Get to listen some cool music.
+🎟️| Ticket System
+A ticket system is a feature designed to enable your server members to contact staff easily. 
+📓| Note and Todo Commands
+Store your notes or make a advanced todo list with tessarect
+📜| Advanced Logger and Snipe
+Tessarect offers a great range of advanced logger so you can know what's happening in your server and even snipe command 
+🤖 | Starting Up
+Type a!helpor mention the bot to know prefix, do a!stats for getting Tessarect statistics.
+  
+</td>
+</tr>
+</table>  
 <h3 align="center">Top.gg</h3>
-<h6 align="center">Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support .Vote for it NOW !</h6>
+<h6 align="center">Support Tessarect on Top.gg</h6>
+<small>Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support .Vote for it NOW !</small>
 <p align="center">
 <a href="https://top.gg/bot/916630347746250782" >
   <img src="https://top.gg/api/widget/916630347746250782.svg">
@@ -90,18 +131,17 @@ ___
 - [x] Images Commands 
 - [x] AutoMod and filters (added antispam recently)
 - [ ] Advanced Economy Features (in todo list)
-- [ ] Lighter Bot (reduced load on bot)
+- [ ] Lighter Bot and Rewrite (in queue)
 
 ***
 
 
 # Cogs (Plugins)
-**35+ Cogs (plugins) for better experience and more features** 
+**20+ Cogs (plugins) for better experience and more features** 
 
 | Cogs   | Description |
 | ----------- | ----------- |
 | [`aki`](./cogs/aki.py)      | Akinator      |
-| [`blackjack`](./cogs/blackjack.py)  | Bj !       |
 | [`calc`](./cogs/calc.py) | Calculator |
 | [`Covid `](./cogs/covid.py) | Covid Stats |
 | [`developer`](./cogs/dev.py) |  For the Developers of Tessarect to control the bot from within Discord |
@@ -112,8 +152,7 @@ ___
 | [`Github`](./cogs/github.py) | Search for a github repo /user(user coming soon) |
 | [`Giveaways`](./cogs/giveaway.py) | I like Giveaways 🎉 |
 | [`Insult`](./cogs/insult.py) | Roast other People |
-| [`Ip`](./cogs/ip.py) | 🖥 I am very Good at computers and ip , check info about any ip in <mark> this world </mark>|
-| [`Love Calculator`](./cogs/lc.py) | 💕|
+| [`Misc & Ficters`](./cogs/misc.py) | Contains some misc commands and ficters|
 | [`level`](./cogs/level.py) | Levelling Sytem 🥇|
 | [`Loan`](./cogs/loan.py) | 💰 Take Loans |
 | [`Logging`](./cogs/logging.py) | 📜Keep and Eye on your member's activity |
@@ -122,7 +161,7 @@ ___
 | [`Music`](./cogs/music.py) | 🎶 Listen to some Music Dude|
 | [`Setup`](./cogs/setup.py) | The basic Cog for setting and starting up with Tessarect |
 | [`Sniper`](./cogs/snipe.py) | 🔫 Sniper for sniping people who try to hide |
-| [`Much MORE`](./cogs) | 10 + Cogs in the cogs Folder |
+| [`Much More`](./cogs) | Discover more in the cogs Folder |
 ###### And Much more cogs hidden for making your experience Better Note : All cogs arent Listed here go to the cogs folder to see all the cogs
 
 <h4> Dashboard Website ( Under Development ) </h4>
@@ -130,8 +169,21 @@ ___
 https://tessarect.prakarsh17.senarc.org/
 
 ### Do you have an idea for Tessarect ?
-###### Contribute now to tessarect , check out  👇🏻
+The open source community is such a fantastic place to learn, be inspired, and develop because of contributions. Your donations are **extremely**  appreciated.
+
+Fork the repository and submit a pull request if you have any ideas to improve this. Simply opening an issue with the tag "enhancement" is another option.
+Remember to award the project a star! Once more, many thanks!
+
+1. Fork the Project
+2. Create your Feature Branch 
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch 
+5. Open a Pull Request 
+##### Know more
+
 [Contributing Guide](CONTRIBUTING.md)
+
+
 ___
 ## Stargazers
 [![Stargazers repo roster for @prakarsh17/tessarect-bot](https://reporoster.com/stars/dark/prakarsh17/tessarect-bot)](https://github.com/prakarsh17/tessarect-bot/stargazers)
