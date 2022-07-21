@@ -3,15 +3,19 @@
     <img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/tessarectnewround.png" alt="Tessarect logo" title="Tessarect" align="right" height="200" />
 </a>
 
-# Tessarect Discord Bot
+# Tessarect Discord Bot 
+
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Share+Tech+Mono&color=FFFF33&height=100&lines=Beep+Boop+!+Hello+this+is+Tessarect;An+advance+and+powerful+bot+;Developed+chiefly+by+prakarsh17+)](https://git.io/typing-svg)
+
+[![Latest release](https://img.shields.io/github/v/release/aregtech/areg-sdk?label=%20%F0%9F%93%A3%20Latest%20release&style=flat&logoColor=b0c0c0&labelColor=363D44)](https://dsc.gg/tessarect)
+
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/prakarsh17/tessarect-bot.svg)](https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE)
 [![Issues](https://img.shields.io/github/issues/prakarsh17/tessarect-bot.svg?colorB=3333ff)](https://github.com/Gorialis/jishaku/issues)
 [![Commit activity](https://img.shields.io/github/commit-activity/w/prakarsh17/tessarect-bot.svg)](https://github.com/Gorialis/jishaku/commits)
 
 ___
-##### Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .
+##### If you're looking for a reliable and helpful discord bot, look no further than Tessarect. With its advanced moderation system and utility commands, it'll make your life on the server a lot easier.
 
 
 </a>
@@ -25,11 +29,11 @@ ___
   •
   <a href="https://github.com/prakarsh17/tessarect-bot/blob/main/LICENSE">License</a>
 </p>
-⭐ Star us on GitHub — it motivates us a lot!
 
-🔗Always Up of PRs - Contribute now
 
-  <h6 align="center"> Services Used In the Bot</h6>
+  <h6 align="center"> Services Used In the Bot<br>⭐ Star us on GitHub — it motivates us a lot!
+
+🔗Always Up of PRs - Contribute now</h6>
   <p align="center">
   <a href="https://www.mongodb.com/">
     <img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white">
@@ -69,52 +73,32 @@ ___
   
 <hr>
 
-## About
+## Top Contents
+1. [About](#About)
+2. [Top.gg](#Top.gg)
+3. [Features](#Features)
+4. [Cogs](#Cogs)
+
+
+## About 
 
 <table>
 <tr>
 <td>
-  Tessarect Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .
-<tr>
-  <td>
+Tessarect is a developer-friendly discord bot with an extensive range of functions. It is a general-purpose bot that has been continuously developed by 4 developers, and your feedback has been taken into account. It has gained trust of over 130,000 people and is perfect for servers with a  moderation requirement and utility support
 
-  
-
- ‣ 150+ Commands
- ‣ 90% Uptime.
- ‣ Support Server
- ‣ Blacklisting System for people misusing bot
- ‣ User Friendly and good looks
- ‣ Highly Customizable
-»»————-　　————-««
-Features
-⊱ ────── {.⋅ ✯ ⋅.} ────── ⊰
-👮‍♂️ |  Filters and Moderation Commands
-Moderate your server with Tessarect's advance moderation system which was created to make your server safe from malicious things and use various filters like antiscam  to auto moderator your server . 
-🛠️ | Utility Commands
-Commands to make your work easier and faster example avatar [user] gets the avatar of the mentioned user and more utility features 
-🤣 🚀| AI n Fun Commands
-Enjoy various fun n AI commands such as ascii font , emojify , avatar lookup , info or play tic-tac-toe with someone
-🎵 | Music Commands
-Get to listen some cool music.
-🎟️| Ticket System
-A ticket system is a feature designed to enable your server members to contact staff easily. 
-📓| Note and Todo Commands
-Store your notes or make a advanced todo list with tessarect
-📜| Advanced Logger and Snipe
-Tessarect offers a great range of advanced logger so you can know what's happening in your server and even snipe command 
-🤖 | Starting Up
-Type a!helpor mention the bot to know prefix, do a!stats for getting Tessarect statistics.
-  
 </td>
 </tr>
 </table>  
 <h3 align="center">Top.gg</h3>
-<h6 align="center">Support Tessarect on Top.gg</h6>
-<small>Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support .Vote for it NOW !</small>
-<p align="center">
-<a href="https://top.gg/bot/916630347746250782" >
-  <img src="https://top.gg/api/widget/916630347746250782.svg">
+<h6 align="center">Support Tessarect on Top.gg
+Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support .Vote for it Now  !</h6>
+
+
+<a href="https://top.gg/bot/916630347746250782">
+  
+  <img src="https://top.gg/api/widget/916630347746250782.svg" align="right">
+  
 </a>
 
 <hr>
@@ -136,7 +120,7 @@ Type a!helpor mention the bot to know prefix, do a!stats for getting Tessarect s
 ***
 
 
-# Cogs (Plugins)
+# Cogs
 **20+ Cogs (plugins) for better experience and more features** 
 
 | Cogs   | Description |
