@@ -51,12 +51,7 @@ class Tessarect(commands.Cog):
             value=f"Yay Another Server! We Are Now At {len(self.bot.guilds)} Guilds!",
         )
         await self.bot.get_channel(self.logs_channel).send(embed=embed)
-        owner=guild.owner
-        emx = discord.Embed(title='Hello',description=f"Hey {owner.mention} , thank you for adding me to {guild.name} , It is a informative embed for you to start up , you can join our support server [here](https://dsc.gg/tessarectsupport) for any kind of help ",color=discord.Color.gold())
-          
-        emx.add_field(name="Tessarect",value = f'<:arrow_right:940608259075764265> Another general purpose discord bot but with Economy commands and much more Well Attractive , Economy and Leveling Bot with tons of features. Utitlity Bot , Music Bot , Economy Bot , Moderation Bot and much more .')
-        emx.add_field(name="**Seting Up**",value="<:arrow_right:940608259075764265> Type `[p]help`to know all commands ,(that's a lot !) , do `[p]stats` for getting stats .`[p]setup` for basic configuration")
-        await owner.send(embed=emx)
+
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):

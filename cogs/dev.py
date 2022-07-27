@@ -32,6 +32,7 @@ import subprocess
 from subprocess import Popen, PIPE
 import shlex
 import json
+from dislash import slash_command, ActionRow, Button, ButtonStyle, Option, OptionType
 def restart_bot(mode): 
   if mode ==1:
     os.execv(sys.executable, ['python'] + sys.argv)
@@ -59,16 +60,17 @@ class Dev(commands.Cog):
 
         # remove `foo`
         return content.strip("` \n") 
-    @commands.command(help="The main command check that you are a dev soul")    
-    async def devtest(self,ctx,user:discord.Member=None):
+    @slash_command(description="The main command check that you are a dev soul",options=[
+        Option("user", "Enter the user, optional", OptionType.USER, required=False)])   
+    async def devtest(self,inter,user=None):
       if not user:
-        user=ctx.author
+        user=inter.author
       with open("storage/dev.json") as f:
 
         dev_users_list = json.load(f)
       if user.id not in dev_users_list:
 
-          await ctx.send(
+          await inter.send(
               embed=discord.Embed(
                   title="<:Warn:922468797108080660> Permission Denied",
                   description="Dude! that's not a dev",
@@ -77,7 +79,7 @@ class Dev(commands.Cog):
           )          
       else:
         owner='True <:owner:946288312220536863>' if user.id==900992402356043806 else False
-        await ctx.send(
+        await inter.send(
             embed=discord.Embed(
                 title="<a:Tick:922450348730355712> Verified",
                 description=f"Found entry in Database.\n {user.mention} is a developer \n The lord? {owner}",
@@ -85,9 +87,9 @@ class Dev(commands.Cog):
             )
         )        
 
-    @commands.command(help="Lists Some poor souls having dev access for me" ,aliases=['devlist'])
+    @slash_command(description="Lists Some poor souls having dev access for me",aliases=['devlist'])
     @check(devc)
-    async def listdev(self,ctx):
+    async def listdev(self,inter):
         x = discord.Embed(color=0x34363A)
         x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Developer Access")
         with open("storage/dev.json") as f:
@@ -103,11 +105,11 @@ class Dev(commands.Cog):
           pa +=1
         x.description=description
         x.set_footer(text=f"Total users : {pa-1}")
-        await ctx.send(embed=x)
+        await inter.send(embed=x)
 
-    @commands.command(help="Lists Some users who cant even use me",aliases=['blist','blacklisted'])
+    @slash_command(description="Lists Some users who cant even use me",aliases=['blist','blacklisted'])
     @check(devc)
-    async def listblack(self,ctx):
+    async def listblack(self,inter):
         x = discord.Embed(color=0x34363A)
         x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Blacklisted Users")
         with open("storage/black.json") as f:
@@ -121,10 +123,11 @@ class Dev(commands.Cog):
             x.add_field(name='?',value="Couldn't find a user with that id ",inline=False)
           pa +=1
         x.set_footer(text=f"Total users : {pa-1}")
-        await ctx.send(embed=x)        
-    @commands.command(help="Dont have silly juicy ideas used for adding some more devs (imagine my owner is too poor)")
+        await inter.send(embed=x)        
+    @slash_command(description="Dont have silly juicy ideas used for adding some more devs (imagine my owner is too weak)",options=[
+        Option("user", "Enter the user you want to give Dev access", OptionType.USER,required=True)])
     @check(devc)
-    async def adddev(self,ctx, user : discord.Member):
+    async def adddev(self,inter, user : None):
   
 
         with open("storage/dev.json") as f:
@@ -137,55 +140,57 @@ class Dev(commands.Cog):
                 json.dump(dev_users_list, f)
             x = discord.Embed(description=f"{user.mention} has been added!",color=0x34363A)
             x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Developer Added")
-            await ctx.send(embed=x)  
+            await inter.send(embed=x)  
         else:
-          await ctx.send('See Developer , either you are adding a dev again as dev or a bot (bots arent that much cool)') 
-    @commands.command(help="Removes a silly soul having dev access ")
+          await inter.send('See Developer , either you are adding a dev again as dev or a bot (bots arent that much cool)') 
+    @slash_command(description="Remove an user from developer access",options=[
+        Option("user", "Mention person from which you want dev powers snatched 👊🏻", OptionType.USER,required=True)])
     @check(devc)
-    async def removedev(self,ctx, user : discord.Member):
+    async def removedev(self,inter, user : None):
         with open("storage/dev.json") as f:
             dev_users_list = json.load(f)
 
         if user.id in dev_users_list:
             dev_users_list.remove(user.id)
         else:
-            await ctx.send(f"{user.mention} is not in the list, so they cannot be removed!")
+            await inter.send(f"{user.mention} is not in the list, so they cannot be removed!")
             return
 
         with open("storage/dev.json", "w+") as f:
             json.dump(dev_users_list, f)
         x = discord.Embed(description=f"{user.mention} has been removed!",color=0x34363A)
         x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Developer Removed")       
-        await ctx.send(embed=x)                   
-    @commands.command(aliases=["m","evaldev","deveval","eval"],help="Execuete")
+        await inter.send(embed=x)                   
+    @slash_command(description="Eval Code",options=[
+        Option("code", "Code ", OptionType.STRING,required=True)],aliases=["m","evaldev","deveval","eval"],help="Evaluate code")
     @check(devc)  
-    async def python_shell(self, ctx, *, code):
-      if ctx.guild.id !=912569937116147772:
+    async def python_shell(self, inter, *, code):
+      if inter.guild.id !=912569937116147772:
         
         re = discord.Embed(
             title="Unverified Server",
-            description=f"{ctx.author.mention} This command is now only for the main server which is Tessa Bot Developers",
+            description=f"{inter.author.mention} This command is now only for the main server which is Tessa Bot Developers",
             color=discord.Color.blue(),
         )
-        await ctx.send(embed=re)  
+        await inter.send(embed=re)  
         re.title=" Attempt of using deveval outside TBD"
-        re.description=f"{ctx.author.mention} Tried to use dev eval outside TBD but failed \n Requested Code \n `{code}`"
+        re.description=f"{inter.author.mention} Tried to use dev eval outside TBD but failed \n Requested Code \n `{code}`"
         devchannel=self.bot.get_channel(979345665081610271)
         return await devchannel.send(embed=re)
       env = {
-          "ctx": ctx,
+          "ctx": inter,
           "discord": discord,
           "commands": commands,
-          "client":ctx.bot,
+          "client":inter.bot,
           "__import__": __import__,
-          "guild":ctx.guild,
+          "guild":inter.guild,
           "last_result":self._last_result 
           
       }
       code = code.replace("```py", "")
       code = code.replace("```", "")
       if  "client.http.token" in code:
-          return await ctx.reply(f"You can't take my token , huh {ctx.author.name}")
+          return await inter.reply(f"You can't take my token , huh {inter.author.name}")
   
       splitcode = []
       
@@ -217,34 +222,36 @@ class Dev(commands.Cog):
           output = error.__class__.__name__+": "+str(error)
           ecolor = 0xFF0000
       self._last_result = "Last Result="+str(output)
-      embed = discord.Embed(description="```py\n"+str(output)+"\n```",colour=ecolor,timestamp=ctx.message.created_at)
+      embed = discord.Embed(description="```py\n"+str(output)+"\n```",colour=ecolor)
   
   
       embed.set_author(name='Eval',icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp')
-      await ctx.reply(embed=embed)
+      await inter.reply(embed=embed)
 
                
-    @commands.command(name= 'restart',help='Hidden command, youre not supposed to access this.Now off you go. Nothing to see here.',aliases=['reboot'])
+    @slash_command(description="Restart Bot",options=[
+        Option("mode", "Modes of Restart , 1 and 2", OptionType.INTEGER)],help='Restart Bot',aliases=['reboot'])
     @check(devc)
-    async def restart(self,ctx,mode:int=1):
+    async def restart(self,inter,mode:int=1):
       listd=[1,2] 
       if mode not in listd:
         dd = discord.Embed(title='Invalid Input',description=f' Invalid Mode = {mode} \n Accepted mode {listd}',color=discord.Color.red())          
-        await ctx.send(embed=dd)     
+        await inter.send(embed=dd)     
         return
-      otp_success = await assets.reactor.reactor(ctx, self.bot, 'Do you want to continue the restart ', color=0x607d8b,usr=ctx.author)
+      await inter.reply('Restart Starting... Mental Peace')
+      otp_success = await assets.reactor.reactor(inter, self.bot, 'Do you want to continue the restart ', color=0x607d8b,usr=inter.author)
       # random otp generator. if user enters correct otp, returns true. else, returns false
       if not otp_success:
           return 
       if len(self.bot.voice_clients)>0:
-        await ctx.send(embed=discord.Embed(description=f"There are {len(self.bot.voice_clients)} servers listening to music through Tessarect, Do you wanna restart?"))
-        otp_success = await assets.reactor.reactor(ctx, self.bot, 'Do you want to continue the restart process while people are listening to me ', color=0x607d8b,usr=ctx.author)
+        await inter.send(embed=discord.Embed(description=f"There are {len(self.bot.voice_clients)} servers listening to music through Tessarect, Do you wanna restart?"))
+        otp_success = await assets.reactor.reactor(inter, self.bot, 'Do you want to continue the restart process while people are listening to me ', color=0x607d8b,usr=ctx.author)
         if not otp_success:
             return 
       modedict={1:'Simple restart',2:'Advanced Restart'}
       e = discord.Embed(title='Restarting Started',description=f'**Mode = {mode}**\n{modedict[mode]}',color=discord.Color.dark_teal())
       e.add_field(name="Progress",value='11%')
-      x = await ctx.send(embed=e)
+      x = await inter.send(embed=e)
       await asyncio.sleep(1)  
       e.set_field_at(0,name="Progress",value='33%')
       e.color=discord.Color.blurple()
@@ -278,7 +285,7 @@ class Dev(commands.Cog):
                   name= f"🚀 System Reboot "
               ))
       with open("./storage/reboot.json", "w") as rebootFile:
-          json.dump(ctx.message.channel.id, rebootFile) 
+          json.dump(inter.message.channel.id, rebootFile) 
       
            
       restart_bot(mode)  
@@ -286,54 +293,59 @@ class Dev(commands.Cog):
 
 
 
-    @commands.command(name='reload', description="Reload all/one of the bot's cogs.\n"
-                                                 "This is Dev-only, so don't have any Devny ideas.", )
+    @slash_command(name='reload', description="Reload all/one of the bot's cogs.\nThis is Dev-only, so don't have any Devny ideas.",options=[
+        Option("cog", "Enter the cogname ", OptionType.STRING)
+        # By default, Option is optional
+        # Pass required=True to make it a required arg
+    ] )
     @check(devc)
-    async def reload(self, ctx, cog=None):
-        async with ctx.typing():
-            if not cog:
-                embed = discord.Embed(title="Reloading cogs!",timestamp=ctx.message.created_at,color=discord.Color.blue())
-                for ext in os.listdir("./cogs/"):
-                    if ext.endswith(".py") and not ext.startswith("_"):
-                        try:
-                            self.bot.unload_extension(f"cogs.{ext[:-3]}")
-                            self.bot.load_extension(f"cogs.{ext[:-3]}")
-                            embed.add_field(
-                                name=f"Reloaded: `{ext}`", value='\uFEFF', inline=False)
+    async def reload(self, inter, cog=None):
+      
+			await inter.reply('Reloading')
+      if 1==1:
+          if not cog:
+              embed = discord.Embed(title="Reloading cogs!",color=discord.Color.blue())
+              for ext in os.listdir("./cogs/"):
+                  if ext.endswith(".py") and not ext.startswith("_"):
+                      try:
+                          self.bot.unload_extension(f"cogs.{ext[:-3]}")
+                          self.bot.load_extension(f"cogs.{ext[:-3]}")
+                          embed.add_field(
+                              name=f"Reloaded: `{ext}`", value='\uFEFF', inline=False)
 
-                        except Exception as e:
-                            embed.add_field(
-                                name=f"Failed to reload: `{ext}`", value=str(e), inline=False)
+                      except Exception as e:
+                          embed.add_field(
+                              name=f"Failed to reload: `{ext}`", value=str(e), inline=False)
 
-                        await asyncio.sleep(0.5)
-                await ctx.send(embed=embed)
-                return
+                      await asyncio.sleep(0.5)
+              await inter.send(embed=embed)
+              return
 
 
-            embed = discord.Embed(
-                title=f"Reloading {cog}!", timestamp=ctx.message.created_at)
-            #embed.color=discord.Color.green()
-            ext = f"{cog.lower()}.py"
-            if not os.path.exists(f"./cogs/{ext}"):
-                embed.add_field(
-                    name=f"Failed to reload: `{ext}`", value="This cog does not exist.", inline=False)
-                embed.color=discord.Color.red()
+          embed = discord.Embed(
+              title=f"Reloading {cog}!")
+          #embed.color=discord.Color.green()
+          ext = f"{cog.lower()}.py"
+          if not os.path.exists(f"./cogs/{ext}"):
+              embed.add_field(
+                  name=f"Failed to reload: `{ext}`", value="This cog does not exist.", inline=False)
+              embed.color=discord.Color.red()
 
-            elif ext.endswith(".py") and not ext.startswith("_"):
-                try:
-                    self.bot.unload_extension(f"cogs.{ext[:-3]}")
-                    self.bot.load_extension(f"cogs.{ext[:-3]}")
-                    embed.description=f"Reloaded: `{ext}`"
-                    embed.color=discord.Color.dark_theme()
-                except Exception:
-                    desired_trace = traceback.format_exc()
-                    if len(desired_trace) > 2500 :
-                      print(desired_trace)
-                      embed.description=f"Failed to reload: `{ext}`Too Big error , printed instead"
-                    else:
-                      embed.description=f"Failed to reload: `{ext}`"                     
-                    embed.color=discord.Color.red()
-            await ctx.send(embed=embed)
+          elif ext.endswith(".py") and not ext.startswith("_"):
+              try:
+                  self.bot.unload_extension(f"cogs.{ext[:-3]}")
+                  self.bot.load_extension(f"cogs.{ext[:-3]}")
+                  embed.description=f"Reloaded: `{ext}`"
+                  embed.color=discord.Color.dark_theme()
+              except Exception:
+                  desired_trace = traceback.format_exc()
+                  if len(desired_trace) > 2500 :
+                    print(desired_trace)
+                    embed.description=f"Failed to reload: `{ext}`Too Big error , printed instead"
+                  else:
+                    embed.description=f"Failed to reload: `{ext}`"                     
+                  embed.color=discord.Color.red()
+          await inter.send(embed=embed)
 
     @commands.command(name='load', description='Loads a cog. Mention the python file\'s name as `cog_file_name`')
     @check(devc)

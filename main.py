@@ -68,27 +68,7 @@ from discord.ext import  tasks
 import topgg
 import nest_asyncio 
 import glob
-def get_prefix(client, message):
-    try:
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-            return prefixes[str(message.guild.id)]
-        
-    except KeyError: 
-        with open('prefixes.json', 'r') as k:
-            prefixes = json.load(k)
-        prefixes[str(message.guild.id)] = ['a! ']
 
-        with open('prefixes.json', 'w') as j:
-            json.dump(prefixes, j, indent = 4)
-
-        with open('prefixes.json', 'r') as t:
-            prefixes = json.load(t)
-            return prefixes[str(message.guild.id)]
-        
-    except: # I added this when I started getting dm error messages
-        print("Not ok")
-        return ['a!']
 #-----------------------------------------------------------------------------------------------------------------------
 
 r = requests.head(url="https://discord.com/api/v1")
@@ -102,6 +82,23 @@ nest_asyncio.apply()
 mongo_url = os.environ.get("tst")
 cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
 db = cluster["tst"]["data"]
+secondmongo = os.environ.get("tst")
+
+cluster = motor.motor_asyncio.AsyncIOMotorClient(secondmongo)
+
+predb = cluster["tst"]["prefix"]
+async def get_prefix(client, message):
+    stats = await predb.find_one({"guild": message.guild.id})
+    # server_prefix = stats["prefix"]
+    if stats is None:
+        updated = {"guild": message.guild.id, "prefix": "a!"}
+        await predb.insert_one(updated)
+        extras = "a!"
+        return commands.when_mentioned_or(extras)(client, message)
+    else:
+        extras = stats["prefix"]
+        return commands.when_mentioned_or(extras)(client, message)
+			
 intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
     command_prefix= (get_prefix),intents=intents,description="Support server https://discord.gg/avpet3NjTE \n Invite https://dsc.gg/tessarect",case_insensitive=True, help_command=PrettyHelp(index_title="Help <:book:939017828852449310>",no_category="Basic Commands",sort_commands=False,show_index=True))
@@ -226,35 +223,28 @@ async def on_guild_remove(guild):
                 type=discord.ActivityType.watching,
                 name= f"😢 {str(len(client.guilds))} Servers"
             ))
-        
-@client.command(pass_context=True,aliases=['prefix'])
-@commands.has_permissions(administrator=True)
-async def changeprefix(ctx, prefix): #command: a!changeprefix ...
-    #test
-    with open('prefixes.json', 'r') as f:
-        prefixes = json.load(f)
-
-    prefixes[str(ctx.guild.id)] = [prefix]
-
-    with open('prefixes.json', 'w') as f: #writes the new prefix into the .json
-        json.dump(prefixes, f, indent=4)
-
-    await ctx.reply(f'[🟢] Prefix changed to: {prefix}')
-    #test #confirms the prefix it's been changed to
-
 
 
 
 @client.event
-async def on_guild_join(guild): #when the bot joins the guild
-    with open('prefixes.json', 'r') as f: #read the prefix.json file
-        prefixes = json.load(f) #load the json file
+async def on_guild_join(guild):
+    updated = {"guild": guild.id, "prefix": "a!"}
+    predb.insert_one(updated)
+    try:
+        emx = discord.Embed(title='Hello',description=f"Hey {guild.owner.mention} , Thank you for adding me to {guild.name} ,Thank you for including me on your server! I hope you enjoy my company! I now have a new family:)\nIt is an informative embed to get you started, and you can join our support server [here](https://dsc.gg/tessarectsupport) if you need any assistance.",color=discord.Color.gold())
+          
+        emx.add_field(name="Tessarect",value = f'<:arrow_right:940608259075764265> Tessarect is a developer-friendly discord bot with an extensive range of functions. It is a general-purpose bot that has been continuously developed by 4 developers, and your feedback has been taken into account. It has gained trust of over 130,000 people and is perfect for servers with a moderation requirement and utility support')
+        emx.add_field(
+            name="Use a!help  to know more about me",
+            value="To get started use `a!help`( even `@Tessarect help` works ) or `a!setup` to setup few things",
+        )
+        if guild.system_channel:
+            await guild.system_channel.send(embed=emx)
+        else:
+            print("No system channel")
 
-    prefixes[str(guild.id)] = ['a!']#default prefix
-
-    with open('prefixes.json', 'w') as f: #write in the prefix.json "message.guild.id": "a!"
-        json.dump(prefixes, f, indent=4) #the indent is to make everything look a bit neater
-
+    except:
+        raise
 
 
 

@@ -25,9 +25,13 @@ class Snipe(commands.Cog):
                 self.deleted_msgs[ch_id] = []
 
             self.deleted_msgs[ch_id].append(message)
-
-        if len(self.deleted_msgs[ch_id]) > self.snipe_limit:
-            self.deleted_msgs[ch_id].pop(0)
+        try:
+					
+	        if len(self.deleted_msgs[ch_id]) > self.snipe_limit:
+	            self.deleted_msgs[ch_id].pop(0)
+				
+				except:
+					pass
 
     @commands.Cog.listener()
     async def on_message_edit(

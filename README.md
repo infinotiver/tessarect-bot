@@ -75,7 +75,7 @@ ___
 
 ## Top Contents
 1. [About](#About)
-2. [Top.gg](#Top.gg)
+2. [Top.gg](#topgg)
 3. [Features](#Features)
 4. [Cogs](#Cogs)
 
