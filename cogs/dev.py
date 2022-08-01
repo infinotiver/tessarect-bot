@@ -301,7 +301,7 @@ class Dev(commands.Cog):
     @check(devc)
     async def reload(self, inter, cog=None):
       
-			await inter.reply('Reloading')
+      await inter.reply('Reloading')
       if 1==1:
           if not cog:
               embed = discord.Embed(title="Reloading cogs!",color=discord.Color.blue())
