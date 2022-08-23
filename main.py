@@ -80,9 +80,7 @@ nest_asyncio.apply()
 mongo_url = os.environ.get("tst")
 cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
 db = cluster["tst"]["data"]
-secondmongo = os.environ.get("tst")
-
-cluster = motor.motor_asyncio.AsyncIOMotorClient(secondmongo)
+cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
 
 predb = cluster["tst"]["prefix"]
 async def get_prefix(client, message):
@@ -101,12 +99,8 @@ async def get_prefix(client, message):
 intents = discord.Intents.all()
 client =AutoShardedBot(shard_count=5,
 command_prefix= (get_prefix),intents=intents,description="Support server https://discord.gg/avpet3NjTE \n Invite https://dsc.gg/tessarect",case_insensitive=True, help_command=PrettyHelp(index_title="Help <:book:939017828852449310>",no_category="Basic Commands",sort_commands=False,show_index=True))
-
-
 m = '**֎** '
 
-blueokay = '<a:Tick:922450348730355712>'
-bluetrusted=''
 mongo_url = os.environ['enalevel']
 cluster = motor.motor_asyncio.AsyncIOMotorClient(mongo_url)
 ecomoney = cluster["discord"]["terrabux"]
@@ -129,7 +123,7 @@ async def on_ready():
 
   em = discord.Embed(title =f"{client.user.name} Online!",color =discord.Color.green())
   system_latency = round(client.latency * 1000)
-  em.set_thumbnail(url=client.user.avatar_url)
+  em.set_thumbnail(url=client.display_avatar.url)
   em.add_field(name="Ping (ms)",value=system_latency,inline=False)
   em.add_field(name="Servers",value=len(client.guilds),inline=True)
   em.add_field(name="Users",value=len(client.users),inline=True)     
@@ -1372,85 +1366,8 @@ async def goal(ctx):
   
   await ctx.reply(embed=em,components=[row])
 
-def get_quote():
-  res = requests.get("https://zenquotes.io/api/random")
-  jsond= json.loads(res.text)
-  quote = jsond[0]['q']
-  auth = (jsond[0]['a'])
-  return quote, auth
-
-
-@client.command()
-async def quote(ctx):
-  q, a = get_quote()
-  em = discord.Embed(title=a+" Once said.....", description=q, color=discord.Color.blue())
-  await ctx.reply(embed=em)
-''' Need to get this command in dev   
-@client.command()
-@commands.cooldown(1,100,commands.BucketType.guild)
-async def report( ctx, user : discord.Member,*reason):
-em = discord.Embed(title=f'Report {user}?',description="Are you sure you want to report that user , if yes choose report categories else wait for 10 seconds it will automatically go",color=discord.Color.red())
-msg = await ctx.reply(
-    embed=em,
-    components=[
-        SelectMenu(
-            custom_id="choice",
-            placeholder="Choose the needed choices",
-            options=[
-                SelectOption("Used bad words or used bot for illegal stuff ", "value 1"),
-                SelectOption("Used Tessarect currency for buying /trading any other real existence item", "value 2"),
-                SelectOption("Made Tessarect  say foul/swearing words by any means ", "value 3"),
-                SelectOption("Breaking other rules","value 4"),
-                
-                SelectOption("Reporting a staff","value 6"),
-                SelectOption("Appealing reconsideration in previously done ban or some other action","value 7"),
-                SelectOption("*Thuged* (Any kind of CHeating)","value 8"),
-                SelectOption("Something Else to be there in the reason","value 5")               
-            ]
-        )
-    ]
-)
-
-inter = await msg.wait_for_dropdown(timeout=20)
-
-# Send what you received
-if inter.author == ctx.author:
-
-  labelsx = [option.label for option in inter.select_menu.selected_options]
-  await inter.reply(embed=discord.Embed(description='Your report request is being sent to my developers , Kindly keep your dms open for further inquiry if necessary.'))
- 
-channel = client.get_channel(979345665081610271) 
-author = ctx.message.author
-rearray = ' '.join(reason[:]) #converts reason argument array to string
-
-if not rearray: #what to do if there is no reason specified
-    await channel.send(f"{author.mention}({author.id}) has reported {user.mention} ({user.id}), reason: Not provided , Parameters {', '.join(labelsx)}")
- 
-    await ctx.message.delete() #I would get rid of the command input
-else:
-    await channel.send(f"{author} has reported {user.mention} ({user.id}), reason: {rearray}, Parameters {', '.join(labelsx)}")
-
-    await ctx.message.delete() 
-'''
-
-       
-@client.command()
-@commands.cooldown(1, 90, commands.BucketType.user)
-async def nasa( ctx):
-  api = os.environ['apinasa']
-  request = requests.get(f"https://api.nasa.gov/planetary/apod?api_key={api}").json()
-  requestDate = request['date']
-  requestText=request['explanation']
-  requestTitle = request['title']
-  requestHDUrl = request['hdurl']
-  requestUrl = request['url']
-  embednasa = discord.Embed(title = f"** NASA Astronomogy Picture of the Day (APOD)**\n{requestTitle}", description = f"{requestText} ({requestDate})", color=0xFC3D21, url=requestHDUrl)
-
-  embednasa.set_author(name = f"National Aeronautics and Space Administration", icon_url = "https://api.nasa.gov/assets/img/favicons/favicon-192.png")
-  embednasa.set_image(url=requestUrl)
-  embednasa.set_footer(text="Press the blue text to see the full resolution image!")
-  await ctx.reply(embed=embednasa)
-
+#removed quote
+#removed nasa
 @client.after_invoke 
 async def data(ctx):
     stats = await db.find_one({"id": client.user.id})

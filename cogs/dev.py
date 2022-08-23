@@ -160,37 +160,36 @@ class Dev(commands.Cog):
             json.dump(dev_users_list, f)
         x = discord.Embed(description=f"{user.mention} has been removed!",color=0x34363A)
         x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Developer Removed")       
-        await inter.send(embed=x)                   
-    @slash_command(description="Eval Code",options=[
-        Option("code", "Code ", OptionType.STRING,required=True)],aliases=["m","evaldev","deveval","eval"],help="Evaluate code")
+        await inter.send(embed=x) 
+    @commands.command(aliases=["m","evaldev","deveval","eval"],help="Execuete some stuff")
     @check(devc)  
-    async def python_shell(self, inter, *, code):
-      if inter.guild.id !=912569937116147772:
+    async def python_shell(self, ctx, *, code):
+      if ctx.guild.id !=912569937116147772:
         
         re = discord.Embed(
             title="Unverified Server",
-            description=f"{inter.author.mention} This command is now only for the main server which is Tessa Bot Developers",
+            description=f"{ctx.author.mention} This command is now only for the main server which is Tessa Bot Developers",
             color=discord.Color.blue(),
         )
-        await inter.send(embed=re)  
+        await ctx.send(embed=re)  
         re.title=" Attempt of using deveval outside TBD"
-        re.description=f"{inter.author.mention} Tried to use dev eval outside TBD but failed \n Requested Code \n `{code}`"
+        re.description=f"{ctx.author.mention} Tried to use dev eval outside TBD but failed \n Requested Code \n `{code}`"
         devchannel=self.bot.get_channel(979345665081610271)
         return await devchannel.send(embed=re)
       env = {
-          "ctx": inter,
+          "ctx": ctx,
           "discord": discord,
           "commands": commands,
-          "client":inter.bot,
+          "client":ctx.bot,
           "__import__": __import__,
-          "guild":inter.guild,
+          "guild":ctx.guild,
           "last_result":self._last_result 
           
       }
       code = code.replace("```py", "")
       code = code.replace("```", "")
       if  "client.http.token" in code:
-          return await inter.reply(f"You can't take my token , huh {inter.author.name}")
+          return await ctx.reply(f"You can't take my token , huh {ctx.author.name}")
   
       splitcode = []
       
@@ -216,17 +215,21 @@ class Dev(commands.Cog):
   
       try:
           output = (await eval("eval_fn()",env))
-          ecolor = 0x0bda51
-
+          ecolor = 0x00ff00
       except Exception as error:
           output = error.__class__.__name__+": "+str(error)
-          ecolor = 0xFF0000
-      self._last_result = "Last Result="+str(output)
-      embed = discord.Embed(description="```py\n"+str(output)+"\n```",colour=ecolor)
+          ecolor = 0xe60000
+      self._last_result = "Last Result\n"+str(output)
+      embed = discord.Embed(title="Eval",description="```\n"+str(output)+"\n```",colour=ecolor,timestamp=ctx.message.created_at)
   
   
-      embed.set_author(name='Eval',icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp')
-      await inter.reply(embed=embed)
+      embed.set_author(name=ctx.author.display_name,icon_url=ctx.author.avatar_url)
+      await ctx.reply(embed=embed)      
+    @slash_command(description="Eval Code",options=[
+        Option("code", "Code ", OptionType.STRING,required=True)],aliases=["m","evaldev","deveval","eval"],help="Evaluate code")
+    @check(devc)  
+    async def python_shells(self, inter, *, code):
+      await python_shell(self,inter,code)
 
                
     @slash_command(description="Restart Bot",options=[

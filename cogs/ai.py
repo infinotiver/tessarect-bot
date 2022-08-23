@@ -24,7 +24,7 @@ class AI(commands.Cog):
             "<:sucess:935052640449077248> Ai related commands , feel smart by using it"
         )
     @commands.command(
-        name="chat",aliases=['chit','c','talk'] ,help="Chat from bot"
+        name="chat",aliases=['chit','c','talk'] ,help="Chat from bot",parent="Aritifical Intelligence"
     )
     async def chat(self, ctx,*,text):
       key=os.environ['chatbot']
