@@ -140,7 +140,7 @@ class Tessarect(commands.Cog):
           return     
         if hasattr(ctx.command, "on_error"):
             return
-        with open ('storage/errors.json', 'r') as f:
+        with open ("storage/errors.json", "r") as f:
             data = json.load(f)
         error = getattr(error, "original", error)
 

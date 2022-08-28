@@ -28,17 +28,17 @@ class AI(commands.Cog):
     )
     async def chat(self, ctx,*,text):
       key=os.environ['chatbot']
-      page = requests.get(f'https://api.popcat.xyz/chatbot?msg={text}&owner=SniperXi199+and+their+co+devs&botname=Tessarect')
+      page = requests.get(f'https://api.popcat.xyz/chatbot?msg={text}&owner=SniperXi199&botname=Tessarect')
       d = json.loads(page.content)
 
       out=d['response']
       urls=findurl(out)
-      
       em=discord.Embed(description=out,color=0x34363A)
 
       if len(urls)==1:
-        
         em.set_image(url=f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{urls[0]}")
+        em.description=None
+             
       elif len(urls)>1:
         em.add_field(name="Links",value=urls)
       await ctx.send(embed=em)          

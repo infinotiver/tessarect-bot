@@ -118,7 +118,8 @@ Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support
 - [ ] Lighter Bot and Rewrite (in queue)
 
 ***
-
+## Rewrite 
+As you know the current bot version is outdated , we have started rewrite with latest features ! WE dont know when it will be out , it is too early to say ! Be tuned
 
 # Cogs
 **20+ Cogs (plugins) for better experience and more features** 
