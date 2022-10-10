@@ -1,6 +1,6 @@
 import ast
 import datetime
-
+import assets.funcs as funcs
 import discord
 from discord.ext import commands
 def get_time(time):
@@ -131,12 +131,12 @@ class Covid(commands.Cog, description="<:sucess:935052640449077248> Get Covid-19
         if country is None:
             embed = discord.Embed(title="Covid-19 Stats Worldwide",
                                   description=f"Lasted Updated **{updated_date}** at **{updated_time} UTC+0**",
-                                  color=discord.Color.blue())
+                                  color=funcs.theme_color)
             embed.set_thumbnail(url=virus_image_url)
         else:
             embed = discord.Embed(title=f"Covid-19 Stats in {country_name}",
                                   description=f"Updated **{updated_date}** at **{updated_time} UTC+0**",
-                                  color=discord.Color.dark_red())
+                                  color=funcs.theme_color)
             embed.set_thumbnail(url=country_flag_url)
         embed.add_field(name="Total cases", value='{:,}'.format(total_cases), inline=True)
         embed.add_field(name="New Cases Today", value='{:,}'.format(today_cases), inline=True)

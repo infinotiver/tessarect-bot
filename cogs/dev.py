@@ -4,7 +4,6 @@ import discord
 import requests
 from  colorama import Fore , Style
 # Common imports that can be used by the debugger.
-import requests
 import json
 import gc
 import datetime
@@ -13,7 +12,6 @@ import traceback
 import re
 import io
 import asyncio
-import discord
 import random
 import subprocess
 from bs4 import BeautifulSoup
@@ -24,15 +22,14 @@ from discord.ext.commands import check
 import os
 import textwrap
 from contextlib import redirect_stdout
-import asyncio
 import sys
 import assets.otp_assets
 import assets.reactor
 import subprocess
 from subprocess import Popen, PIPE
 import shlex
-import json
 from dislash import slash_command, ActionRow, Button, ButtonStyle, Option, OptionType
+import assets.funcs as funcs
 def restart_bot(mode): 
   if mode ==1:
     os.execv(sys.executable, ['python'] + sys.argv)
@@ -83,14 +80,14 @@ class Dev(commands.Cog):
             embed=discord.Embed(
                 title="<a:Tick:922450348730355712> Verified",
                 description=f"Found entry in Database.\n {user.mention} is a developer \n The lord? {owner}",
-                color=discord.Color.green(),
+                color=funcs.theme_color,
             )
         )        
 
     @slash_command(description="Lists Some poor souls having dev access for me",aliases=['devlist'])
     @check(devc)
     async def listdev(self,inter):
-        x = discord.Embed(color=0x34363A)
+        x = discord.Embed(color=funcs.theme_color)
         x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Developer Access")
         with open("storage/dev.json") as f:
             dev_users_list = json.load(f)
@@ -110,7 +107,7 @@ class Dev(commands.Cog):
     @slash_command(description="Lists Some users who cant even use me",aliases=['blist','blacklisted'])
     @check(devc)
     async def listblack(self,inter):
-        x = discord.Embed(color=0x34363A)
+        x = discord.Embed(color=funcs.theme_color)
         x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Blacklisted Users")
         with open("storage/black.json") as f:
             dev_users_list = json.load(f)
@@ -138,7 +135,7 @@ class Dev(commands.Cog):
 
             with open("storage/dev.json", "w+") as f:
                 json.dump(dev_users_list, f)
-            x = discord.Embed(description=f"{user.mention} has been added!",color=0x34363A)
+            x = discord.Embed(description=f"{user.mention} has been added!",color=funcs.theme_color)
             x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Developer Added")
             await inter.send(embed=x)  
         else:
@@ -158,7 +155,7 @@ class Dev(commands.Cog):
 
         with open("storage/dev.json", "w+") as f:
             json.dump(dev_users_list, f)
-        x = discord.Embed(description=f"{user.mention} has been removed!",color=0x34363A)
+        x = discord.Embed(description=f"{user.mention} has been removed!",color=funcs.theme_color)
         x.set_author(icon_url='https://cdn.discordapp.com/emojis/993859165233631314.webp',name="Developer Removed")       
         await inter.send(embed=x) 
     @commands.command(aliases=["m","evaldev","deveval","eval"],help="Execuete some stuff")
@@ -384,23 +381,26 @@ class Dev(commands.Cog):
                 embed.color=discord.Color.red()
             await ctx.send(embed=embed)
 
-    @commands.command(name="gitpull",help="Pull stuff from my github repo")
+    @slash_command(name="gitpull",description="Pull stuff from my github repo")
     @commands.guild_only()
     @check(devc)
-    async def update(self, ctx):
-        async with ctx.typing():
-            print(sys.argv)
-            print(sys.path)
-            with open("./storage/update.txt", "w") as output:
-                subprocess.call(["git", "pull"], stdout=output)
-            with open("./storage/update.txt", "r") as output:
-                file = discord.File(output)
-        await ctx.send(content="Done! Output in text file", file=file)
-        await asyncio.sleep(1)
-        try:
-            os.remove("./storage/update.txt")
-        except:
-            pass
+    async def update(self, inter):
+      
+      print(sys.argv)
+      print(sys.path)
+      with open("./storage/update.txt", "w") as output:
+          subprocess.call(["git", "pull"], stdout=output)
+      with open("./storage/update.txt", "r") as output:
+          file = discord.File(output)
+      embed=discord.Embed(title="Git Pull ",color=funcs.theme_color)
+      embed.description=str(output)
+      await inter.send(embed=embed, file=file)
+      await asyncio.sleep(1)
+      try:
+          os.remove("./storage/update.txt")
+      except:
+          pass
+
 
     @commands.command(name="loadjsk")
     @check(devc)

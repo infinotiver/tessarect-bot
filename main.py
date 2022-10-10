@@ -149,7 +149,7 @@ async def on_ready():
           channel_id = json.load(readFile)
   
       channel = client.get_channel(channel_id)
-      ex=discord.Embed(title="Successfully Restarted",description="100% \nBeep Beep Boop Beep !, Reboot done  ",color=discord.Color.dark_blue())
+      ex=discord.Embed(title="Successfully Restarted",description="100% \nBeep Beep Boop Beep !, Reboot done  ",color=funcs.theme_color)
       await channel.send(embed=ex)
   
       os.remove("./storage/reboot.json") 

@@ -10,6 +10,7 @@ import requests
 import os
 from discord.ext import commands, tasks
 import re
+import assets.funcs as funcs
 def findurl(string):
   
     # findall() has been used 
@@ -33,7 +34,7 @@ class AI(commands.Cog):
 
       out=d['response']
       urls=findurl(out)
-      em=discord.Embed(description=out,color=0x34363A)
+      em=discord.Embed(description=out,color=funcs.theme_color)
 
       if len(urls)==1:
         em.set_image(url=f"https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{urls[0]}")
@@ -56,7 +57,7 @@ class AI(commands.Cog):
       )
       d=r.json()
       out=d['output']
-      em=discord.Embed(description=out,color=0x34363A)
+      em=discord.Embed(description=out,color=funcs.theme_color)
       await ctx.send(embed=em)    
     @commands.command(
         name="text2image",aliases=['createimage','text2img'] ,help="Creates image from your text , Recommended for Nature related images"
@@ -72,7 +73,7 @@ class AI(commands.Cog):
       )
       d=r.json()
       img=d['output_url']
-      em=discord.Embed(color=0x34363A)
+      em=discord.Embed(color=funcs.theme_color)
       em.set_footer(text="The image may not be as you want , Recommended for Nature related images")
       em.set_image(url=img)
       await ctx.send(embed=em) 
@@ -90,7 +91,7 @@ class AI(commands.Cog):
       )
       d=r.json()
       out=d['output']
-      em=discord.Embed(title="Text Sentitment",description=','.join(out),color=0x34363A)
+      em=discord.Embed(title="Text Sentitment",description=','.join(out),color=funcs.theme_color)
 
       
       await ctx.send(embed=em)
@@ -110,7 +111,7 @@ class AI(commands.Cog):
       )
       d=r.json()
       out=d['output_url']
-      em=discord.Embed(color=0x34363A)
+      em=discord.Embed(color=funcs.theme_color)
       em.set_image(url=out)     
       await ctx.send(embed=em)     
     @commands.command(
@@ -129,7 +130,7 @@ class AI(commands.Cog):
       )
       d=r.json()
       out=d['output_url']
-      em=discord.Embed(color=0x34363A)
+      em=discord.Embed(color=funcs.theme_color)
       em.set_image(url=out)     
       await ctx.send(embed=em)    
        

@@ -25,4 +25,6 @@ def report(text,type=None):
   reports.add(report)
 def show_report():
   return reports
+
+theme_color = 0x3EADCF
   
