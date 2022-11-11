@@ -1,4 +1,6 @@
 
+  <img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/tessarectnewround.png" alt="Tessarect logo" title="Tessarect" align="right" height="50" width="50"/>
+</a>
 <a href="https://discord.com/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands">
     <img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/Tech-modified.png" alt="Tessarect logo" title="Tessarect" align="right" height="200" />
 </a>
@@ -18,7 +20,7 @@ ___
 
 ##### If you're looking for a reliable and helpful discord bot, look no further than Tessarect. With its advanced moderation system and utility commands, it'll make your life on the server a lot easier.
 
-<img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/hero-bg-overlay.jpg" alt="Tessarect overlay" title="Tessarect" align="right" height="200" />
+
 
 <br>
 </p>
@@ -74,6 +76,7 @@ ___
   </p>
   
 <hr>
+<img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/hero-bg-overlay.jpg" alt="Tessarect overlay" title="Tessarect" align="right" width="200" />
 
 ## Top Contents
 1. [About](#About)
