@@ -11,6 +11,15 @@ import os
 from discord.ext import commands, tasks
 import re
 import assets.funcs as funcs
+def chaturl(text):
+  try:
+    key=os.environ['chatbot']
+    page = requests.get(f'https://api.popcat.xyz/chatbot?msg={text}&owner=SniperXi199&botname=Tessarect')
+    d = json.loads(page.content)
+    out=d['response']
+    return out
+  except:
+    return "Error"
 def findurl(string):
   
     # findall() has been used 
@@ -18,21 +27,17 @@ def findurl(string):
     regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
     url = re.findall(regex,string)      
     return [x[0] for x in url]
-class AI(commands.Cog):
+class ArtificalIntel(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = (
-            "<:sucess:935052640449077248> Ai related commands , feel smart by using it"
+            "<:sucess:935052640449077248> Artifical Intelligence related commands , feel smart by using it"
         )
     @commands.command(
         name="chat",aliases=['chit','c','talk'] ,help="Chat from bot",parent="Aritifical Intelligence"
     )
     async def chat(self, ctx,*,text):
-      key=os.environ['chatbot']
-      page = requests.get(f'https://api.popcat.xyz/chatbot?msg={text}&owner=SniperXi199&botname=Tessarect')
-      d = json.loads(page.content)
-
-      out=d['response']
+      out=chaturl(text)
       urls=findurl(out)
       em=discord.Embed(description=out,color=funcs.theme_color)
 
@@ -135,4 +140,4 @@ class AI(commands.Cog):
       await ctx.send(embed=em)    
        
 def setup(bot):
-    bot.add_cog(AI(bot))
+    bot.add_cog(ArtificalIntel(bot))
