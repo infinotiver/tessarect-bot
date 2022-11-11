@@ -124,9 +124,9 @@ Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support
 
 ***
 ## Rewrite 
-As you know the current bot version is outdated , we have started rewrite with latest features ! WE dont know when it will be out , it is too early to say ! Be tuned
-
-# Cogs
+The libraries used in Tessarect ar de outdated . The developers are busy in their life thats why it is taking time to me to rewrite but I have a vision and 
+I am working on it with helps from my fellows time to time . Be tuned
+<!-- # Cogs
 **20+ Cogs (plugins) for better experience and more features** 
 
 | Cogs   | Description |
@@ -155,7 +155,7 @@ As you know the current bot version is outdated , we have started rewrite with l
 ###### And Much more cogs hidden for making your experience Better Note : All cogs arent Listed here go to the cogs folder to see all the cogs
 
 <h4> Dashboard Website ( Under Development ) </h4>
-
+-->
 https://tessarect.prakarsh17.senarc.org/
 
 ### Do you have an idea for Tessarect ?
