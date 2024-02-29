@@ -1,5 +1,4 @@
-
-  <img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/tessarectnewround.png" alt="Tessarect logo" title="Tessarect" align="right" height="50" width="50"/>
+<img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/assets/img/tessarectnewround.png" alt="Tessarect logo" title="Tessarect" align="right" height="50" width="50"/>
 </a>
 <a href="https://discord.com/oauth2/authorize?client_id=916630347746250782&permissions=8&scope=bot&applications.commands">
     <img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/Tech-modified.png" alt="Tessarect logo" title="Tessarect" align="right" height="200" />
@@ -7,7 +6,7 @@
 
 # Tessarect Discord Bot 
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Share+Tech+Mono&color=FFFF33&height=100&lines=Beep+Boop+!+Hello+this+is+Tessarect;An+advance+and+powerful+bot+;Developed+chiefly+by+prakarsh17+)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Share+Tech+Mono&color=f0f0f0&height=100&lines=Beep+Boop+!+Hello+this+is+Tessarect;An+advance+and+powerful+bot+;Developed+chiefly+by+prakarsh17+)](https://git.io/typing-svg)
 
 [![Latest release](https://img.shields.io/github/v/release/aregtech/areg-sdk?label=%20%F0%9F%93%A3%20Latest%20release&style=flat&logoColor=b0c0c0&labelColor=363D44)](https://dsc.gg/tessarect)
 
@@ -18,6 +17,14 @@
 
 ___
 
+**⚠️ Project Rescheduled for Rewrite ⚠️**
+
+This project is currently under development, and a major rewrite is in progress. We are working on enhancing the features, improving code quality, and making the bot even more efficient. During this period, the project may experience changes, and some features might be temporarily unavailable.
+
+We appreciate your understanding and patience as we strive to bring you a better and more robust version of Tessarect. Stay tuned for updates, and thank you for your continued support!
+(see below for details)
+(this rewrite is scheduled but not commited, this project holds a very special place in my heart)
+___
 ##### If you're looking for a reliable and helpful discord bot, look no further than Tessarect. With its advanced moderation system and utility commands, it'll make your life on the server a lot easier.
 
 
@@ -60,9 +67,7 @@ ___
   <a href="google.com">
     <img src="https://img.shields.io/badge/google-4285F4?style=for-the-badge&logo=google&logoColor=white">
   </a>
-  <a href="https://discord.gg/avpet3NjTE">
-    <img src="https://img.shields.io/badge/%3CTessa Bot Developers%3E-%237289DA.svg?style=for-the-badge&logo=discord&logoColor=white">
-  </a>
+ 
 
 
   <h6 align="center">Operating Systems </h6>
@@ -97,14 +102,9 @@ Tessarect is a developer-friendly discord bot with an extensive range of functio
 </table>  
 <h3 align="center">Top.gg</h3>
 <h6 align="center">Support Tessarect on Top.gg
-Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support .Vote for it Now  !</h6>
+Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support .</h6>
 
 
-<a href="https://top.gg/bot/916630347746250782">
-  
-  <img src="https://top.gg/api/widget/916630347746250782.svg" align="right">
-  
-</a>
 
 <hr>
 
@@ -119,14 +119,14 @@ Tessarect got accepted on top.gg on 9 Feb 22 , we thank you all for your support
 - [x] Moderator Commands (More commands Under development)
 - [x] Images Commands 
 - [x] AutoMod and filters (added antispam recently)
-- [ ] Advanced Economy Features (in todo list)
+- [ ] Advanced Economy Features 
 - [ ] Lighter Bot and Rewrite (in queue)
 
 ***
 ## Rewrite 
 The libraries used in Tessarect ar de outdated . The developers are busy in their life thats why it is taking time to me to rewrite but I have a vision and 
 I am working on it with helps from my fellows time to time . Be tuned
-<!-- # Cogs
+
 **20+ Cogs (plugins) for better experience and more features** 
 
 | Cogs   | Description |
@@ -154,9 +154,6 @@ I am working on it with helps from my fellows time to time . Be tuned
 | [`Much More`](./cogs) | Discover more in the cogs Folder |
 ###### And Much more cogs hidden for making your experience Better Note : All cogs arent Listed here go to the cogs folder to see all the cogs
 
-<h4> Dashboard Website ( Under Development ) </h4>
--->
-https://tessarect.prakarsh17.senarc.org/
 
 ### Do you have an idea for Tessarect ?
 The open source community is such a fantastic place to learn, be inspired, and develop because of contributions. Your donations are **extremely**  appreciated.
