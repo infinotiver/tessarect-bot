@@ -81,7 +81,7 @@ ___
   </p>
   
 <hr>
-<img src="https://raw.githubusercontent.com/prakarsh17/TessarectWebsite/main/hero-bg-overlay.jpg" alt="Tessarect overlay" title="Tessarect" align="right" width="200" />
+<img src="https://raw.githubusercontent.com/infinotiver/TessarectWebsite/main/hero-bg-overlay.jpg" alt="Tessarect overlay" title="Tessarect" align="right" width="200" />
 
 ## Top Contents
 1. [About](#About)
@@ -173,13 +173,13 @@ Remember to award the project a star! Once more, many thanks!
 
 ___
 ## Stargazers
-[![Stargazers repo roster for @prakarsh17/tessarect-bot](https://reporoster.com/stars/dark/prakarsh17/tessarect-bot)](https://github.com/prakarsh17/tessarect-bot/stargazers)
+[![Stargazers repo roster for @infinotiver/tessarect-bot](https://reporoster.com/stars/dark/infinotiver/tessarect-bot)](https://github.com/infinotiver/tessarect-bot/stargazers)
 ## Forkers
-[![Forkers repo roster for @prakarsh17/tessarect-bot](https://reporoster.com/forks/dark/prakarsh17/tessarect-bot)](https://github.com/prakarsh17/tessarect-bot/network/members)
+[![Forkers repo roster for @infinotiver/tessarect-bot](https://reporoster.com/forks/dark/infinotiver/tessarect-bot)](https://github.com/infinotiver/tessarect-bot/network/members)
 
 ## Contributors
 
 <h6 align=center>People who made Tessarect Possible</h6>
-  <a href="https://github.com/prakarsh17/tessarect-bot" align=center>
-    <img src="https://contrib.rocks/image?repo=prakarsh17/tessarect-bot" align=center>
+  <a href="https://github.com/infinotiver/tessarect-bot" align=center>
+    <img src="https://contrib.rocks/image?repo=infinotiver/tessarect-bot" align=center>
   </a>
