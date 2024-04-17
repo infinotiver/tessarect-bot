@@ -6,7 +6,7 @@
 
 # Tessarect Discord Bot 
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Share+Tech+Mono&color=f0f0f0&height=100&lines=Beep+Boop+!+Hello+this+is+Tessarect;An+advance+and+powerful+bot+;Developed+chiefly+by+prakarsh17+)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Share+Tech+Mono&color=000000&height=100&lines=Beep+Boop+!+Hello+this+is+Tessarect;An+advance+and+powerful+bot)](https://git.io/typing-svg)
 
 [![Latest release](https://img.shields.io/github/v/release/aregtech/areg-sdk?label=%20%F0%9F%93%A3%20Latest%20release&style=flat&logoColor=b0c0c0&labelColor=363D44)](https://dsc.gg/tessarect)
 
