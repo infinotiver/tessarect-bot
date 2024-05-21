@@ -13,7 +13,7 @@ import time
 import pytz
 from discord.ext import commands
 from discord.utils import get
-from PIL import ImageFont, ImageDraw, Image
+from PIL import  ImageDraw, Image
 #from Tools.utils import   updateConfig
 import datetime
 
@@ -317,7 +317,6 @@ class Security(commands.Cog):
 
         # Add text
         draw = ImageDraw.Draw(image)
-        font = ImageFont.truetype(font="assets/arial.ttf", size=60)
 
         text = ' '.join(
             random.choice(string.ascii_uppercase) for _ in range(6))  # + string.ascii_lowercase + string.digits
@@ -325,7 +324,7 @@ class Security(commands.Cog):
         # Center the text
         W, H = (350, 100)
         w, h = draw.textsize(text, font=font)
-        draw.text(((W - w) / 2, (H - h) / 2), text, font=font, fill=(0, 139, 139))
+        draw.text(((W - w) / 2, (H - h) / 2), text, fill=(0, 139, 139))
 
         # Save
         ID = member.id
